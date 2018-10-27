@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_Viewing" idField="pk" modelAttribute="viewing" path="/viewings" versionField="Version" z="xW8QLRtizFv0yya+3OQvyLEaLD4=">
+        <field:select field="target" id="c_com_etshost_msu_entity_Viewing_target" itemValue="id" items="${entitys}" path="/entitys" z="wyXqzrRwglU+iROpe2lmyFTHBH4="/>
+        <field:input field="endTime" id="c_com_etshost_msu_entity_Viewing_endTime" z="qZUOkTKhdQayWKVUtvPfh6h6pxw="/>
+        <field:select field="user" id="c_com_etshost_msu_entity_Viewing_user" itemValue="id" items="${users}" path="/users" z="+j8cGU+gVbEu1vuhuSXWAAAy0Y0="/>
+    </form:update>
+</div>

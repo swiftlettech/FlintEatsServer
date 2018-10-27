@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_AuthenticationRecord" items="${authenticationrecords}" z="user-managed">
+        <table:table data="${authenticationrecords}" delete="false" id="l_com_etshost_msu_entity_AuthenticationRecord" path="/authenticationrecords" z="user-managed">
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_IPAddress" property="IPAddress" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_failureCount" property="failureCount" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_status" property="status" z="user-managed"/>
+            <table:column date="true" dateTimePattern="${authenticationRecord_createdate_date_format}" id="c_com_etshost_msu_entity_AuthenticationRecord_createDate" property="createDate" z="user-managed"/>
+            <table:column date="true" dateTimePattern="${authenticationRecord_lastmodified_date_format}" id="c_com_etshost_msu_entity_AuthenticationRecord_lastModified" property="lastModified" z="user-managed"/>
+            <!-- Non-Rendered Fields -->
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_name" property="name" render="false" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_latitude" property="latitude" render="false" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_longitude" property="longitude" render="false" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_lat" property="lat" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_lng" property="lng" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_failedUser" property="failedUser" z="ayfZHg6yLUiyFOT9/SWHMCextFw="/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_created" property="created" z="3QRKyEtNQiLaOs1eyFktWsjKhAI="/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_modified" property="modified" z="JtSmlNOsqOi6xNMuFcAe3bEdMvo="/>
+            <table:column id="c_com_etshost_msu_entity_AuthenticationRecord_tags" property="tags" z="5UeadNvTaMw5wBwDhaZKntTQIoc="/>
+        </table:table>
+    </page:list>
+</div>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_AuthWhitelistAddress" items="${authwhitelistaddresses}" z="user-managed">
+        <table:table data="${authwhitelistaddresses}" id="l_com_etshost_msu_entity_AuthWhitelistAddress" path="/authwhitelistaddresses" z="user-managed">
+            <table:column date="true" dateTimePattern="${authWhitelistAddress_createdate_date_format}" id="c_com_etshost_msu_entity_AuthWhitelistAddress_createDate" property="createDate" z="user-managed"/>
+            <table:column date="true" dateTimePattern="${authWhitelistAddress_lastmodified_date_format}" id="c_com_etshost_msu_entity_AuthWhitelistAddress_lastModified" property="lastModified" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthWhitelistAddress_name" property="name" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthWhitelistAddress_status" property="status" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthWhitelistAddress_lat" property="lat" z="user-managed"/>
+            <table:column id="c_com_etshost_msu_entity_AuthWhitelistAddress_lng" property="lng" z="user-managed"/>
+        </table:table>
+    </page:list>
+</div>

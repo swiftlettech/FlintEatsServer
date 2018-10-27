@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Tip" object="${tip}" path="/tips" z="DFxMcr8+6TeLUbgVxwizVD4AnOA=">
+        <field:display field="created" id="s_com_etshost_msu_entity_Tip_created" object="${tip}" z="jJ8UOJ/NF3MXGJKQkLKcueXJ5GA="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_Tip_modified" object="${tip}" z="1V5RCAt6R6f+E4PgkEN7AoLUgI8="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Tip_status" object="${tip}" z="f1Io8l0SSiKBrkLNWfW4xvLtL+4="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_Tip_tags" object="${tip}" z="+LJwPQz3i3NheH9ZxBct+7c0bkE="/>
+        <field:display field="usr" id="s_com_etshost_msu_entity_Tip_usr" object="${tip}" z="ncFyBKt0M9RfQWHNT25QOHqxGOs="/>
+        <field:display field="tipType" id="s_com_etshost_msu_entity_Tip_tipType" object="${tip}" z="WgHncLTY56JZTNXCp20ZC5VyVbk="/>
+        <field:display field="text" id="s_com_etshost_msu_entity_Tip_text" object="${tip}" z="pW4paVAfMvCQ+DhVy1ThRnanGPE="/>
+    </page:show>
+</div>

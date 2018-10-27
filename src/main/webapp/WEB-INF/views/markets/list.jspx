@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Market" items="${markets}" z="X/vyqQ3laa+7CUkm0ZjIqpCWRmU=">
+        <table:table data="${markets}" id="l_com_etshost_msu_entity_Market" path="/markets" z="gvDClzUB4CoX7/9mozXlDdvDKsg=">
+            <table:column id="c_com_etshost_msu_entity_Market_created" property="created" z="P62P9hT9dCwHATzJBtETImbHAzA="/>
+            <table:column id="c_com_etshost_msu_entity_Market_modified" property="modified" z="KbSwYv1IpA4yob/9Q5kagjmoxyQ="/>
+            <table:column id="c_com_etshost_msu_entity_Market_status" property="status" z="aE4wnABKCvkb2lmterkW6qPTcd4="/>
+            <table:column id="c_com_etshost_msu_entity_Market_tags" property="tags" z="Up99pYVA5TT5UgxxGUdqyJYjj4c="/>
+            <table:column id="c_com_etshost_msu_entity_Market_name" property="name" z="Yy72uHlMznVM5I5uWolKO3kb97Y="/>
+            <table:column id="c_com_etshost_msu_entity_Market_address" property="address" z="WUTVk8AV/5QzSRaUE5VP+Waj+zo="/>
+        </table:table>
+    </page:list>
+</div>

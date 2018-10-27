@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_Recipe" modelAttribute="recipe" path="/recipes" versionField="Version" z="6/SlDWQ/UKLWSaipyfouHCGsZoQ=">
+        <field:input field="created" id="c_com_etshost_msu_entity_Recipe_created" z="w+3TCnPbt1ytZUKbeD2FabgXQ10="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Recipe_modified" z="2iqUh7LqDhwUH06m379+sj60WZw="/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Recipe_status" items="${statuses}" path="statuses" z="XkEATVtFGyxngTpemgbnHxygnqE="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Recipe_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="1Y+khMQC9xmYJi2/J+4iYJ+ezqs="/>
+        <field:select field="usr" id="c_com_etshost_msu_entity_Recipe_usr" itemValue="id" items="${users}" path="/users" z="F+v3yli4OWTMASZDqtvuuavkpVM="/>
+        <field:input field="servings" id="c_com_etshost_msu_entity_Recipe_servings" z="efWtXoyudj/h9wtK9WFQHF1iXOk="/>
+        <field:input field="directions" id="c_com_etshost_msu_entity_Recipe_directions" z="HHAd0pkPU9Mm1QZTOSN0b/YEiws="/>
+    </form:update>
+</div>

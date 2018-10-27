@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_Avatar" modelAttribute="avatar" path="/avatars" versionField="Version" z="user-managed">
+        <field:input field="originalFileName" id="c_com_etshost_msu_entity_Avatar_originalFileName" required="true" z="user-managed"/>
+        <field:input field="contentType" id="c_com_etshost_msu_entity_Avatar_contentType" required="true" z="user-managed"/>
+        <field:input field="dataSize" id="c_com_etshost_msu_entity_Avatar_dataSize" validationMessageCode="field_invalid_integer" z="user-managed"/>
+        <field:input field="data" id="c_com_etshost_msu_entity_Avatar_data" required="true" z="user-managed"/>
+        <field:datetime dateTimePattern="${avatar_createdate_date_format}" field="createDate" id="c_com_etshost_msu_entity_Avatar_createDate" z="Ufa5f2SXKjR5mH6QOOY+3EQmTqw="/>
+        <field:datetime dateTimePattern="${avatar_lastmodified_date_format}" field="lastModified" id="c_com_etshost_msu_entity_Avatar_lastModified" z="gxUsRI2d6XBEqlPpW/wPO5A0/A8="/>
+        <field:input field="name" id="c_com_etshost_msu_entity_Avatar_name" z="hXVrOFdRkt8wvWUCuYsoUWI0Gto="/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Avatar_status" items="${statustypes}" path="statustypes" z="user-managed"/>
+        <field:input field="sha1sum" id="c_com_etshost_msu_entity_Avatar_sha1sum" z="user-managed"/>
+        <field:input field="latitude" id="c_com_etshost_msu_entity_Avatar_latitude" z="MHob+/ptsB+3diI5QLvIGZvTvx4="/>
+        <field:input field="longitude" id="c_com_etshost_msu_entity_Avatar_longitude" z="Z0cwRKlIG7QQ7bxn9NR8s45I//Y="/>
+        <field:input field="created" id="c_com_etshost_msu_entity_Avatar_created" z="yBsvSb+lbwc5BJLrM6oU+LML1ZI="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Avatar_modified" z="DGqH7rSYS4ZS72ZLvkkGUGZdXhg="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Avatar_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="QY60JhBnF1F1oOaXmN9uDeJJHZQ="/>
+        <field:simple field="badges" id="c_com_etshost_msu_entity_Avatar_badges" messageCode="entity_reference_not_managed" messageCodeAttribute="User" z="0ZDswzW9SzSC/m+D2eIZEf5Osc0="/>
+    </form:update>
+</div>

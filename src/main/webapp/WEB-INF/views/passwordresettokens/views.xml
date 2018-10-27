@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition extends="default" name="passwordresettokens/list">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/list.jspx"/>
+    </definition>
+<definition extends="default" name="passwordresettokens/show">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/show.jspx"/>
+    </definition>
+<definition extends="default" name="passwordresettokens/create">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/create.jspx"/>
+    </definition>
+<definition extends="default" name="passwordresettokens/update">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/update.jspx"/>
+    </definition>
+</tiles-definitions>

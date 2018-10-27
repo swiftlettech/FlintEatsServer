@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/security
+		http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/security/oauth2
+		http://www.springframework.org/schema/security/spring-security-oauth2.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- HTTP security configuration -->
+	<sec:http use-expressions="true" create-session="ifRequired">
+		<!-- Configure these elements to secure URIs in your application -->
+		<sec:intercept-url pattern="/authenticationrecords/**" access="hasAuthority('admin')" />
+		<sec:intercept-url pattern="/avatars/**" access="hasAuthority('admin')" />
+		<sec:intercept-url pattern="/users/**" access="hasAuthority('login')" />
+		<sec:intercept-url pattern="/markets/**" access="hasAuthority('login')" />
+		<sec:intercept-url pattern="/password**" access="hasAuthority('admin')" />
+		<sec:intercept-url pattern="/auth**" access="permitAll" />
+		<sec:intercept-url pattern="/oauth**" access="permitAll" />
+		
+		<sec:intercept-url pattern="/extract**" access="hasAuthority('admin')" />
+		<sec:intercept-url pattern="/resources/**" access="permitAll" />
+		<sec:intercept-url pattern="/**" access="permitAll" />
+		
+		<sec:http-basic entry-point-ref="customBasicAuthenticationEntryPoint"/>
+		<sec:form-login login-processing-url="/resources/j_spring_security_check"
+			username-parameter="j_username" password-parameter="j_password"
+			login-page="/login"
+			default-target-url="/auth/success"
+			authentication-failure-url="/auth/failure" />
+		<sec:logout logout-url="/resources/j_spring_security_logout" />
+		<sec:csrf disabled="true" />
+
+
+	</sec:http>
+	<sec:global-method-security pre-post-annotations="enabled"/>
+	
+	<!-- Configure Authentication mechanism -->
+	<beans:bean id="userBaseDetailsService" class="com.etshost.msu.bean.UserDetailsServiceImpl" />
+	<beans:bean id="ipAuthenticationProvider" class="com.etshost.msu.bean.IpAuthProvider">
+		<beans:property name="userDetailsService" ref="userBaseDetailsService"/>
+	</beans:bean>
+	<beans:bean id="customBasicAuthenticationEntryPoint" class="com.etshost.msu.auth.CustomBasicAuthenticationEntryPoint">
+		<beans:constructor-arg value="RealmName" />
+	</beans:bean>
+	<sec:authentication-manager alias="authenticationManager">
+		<!-- SHA-256 values can be produced using
+				'echo -n your_desired_password | sha256sum'
+			(using normal *nix environments) -->
+		<sec:authentication-provider>
+			<sec:user-service>
+				<sec:user name="admin" password="" authorities="admin, login" />
+				<sec:user name="msu" password="" authorities="admin, login" />
+				<sec:user name="noauth" password="" authorities="noauth" />
+			</sec:user-service>
+		</sec:authentication-provider>
+		<sec:authentication-provider ref="ipAuthenticationProvider" />
+	</sec:authentication-manager>
+</beans:beans>

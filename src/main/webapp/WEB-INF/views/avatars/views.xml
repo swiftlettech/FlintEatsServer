@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition extends="default" name="avatars/list">
+        <put-attribute name="body" value="/WEB-INF/views/avatars/list.jspx"/>
+    </definition>
+<definition extends="default" name="avatars/show">
+        <put-attribute name="body" value="/WEB-INF/views/avatars/show.jspx"/>
+    </definition>
+<definition extends="default" name="avatars/create">
+        <put-attribute name="body" value="/WEB-INF/views/avatars/create.jspx"/>
+    </definition>
+
+<definition extends="default" name="avatars/update">
+        <put-attribute name="body" value="/WEB-INF/views/avatars/update.jspx"/>
+    </definition>
+</tiles-definitions>

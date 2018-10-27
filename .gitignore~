@@ -1,0 +1,4 @@
+.DS_STORE
+database.properties
+oauth.properties
+applicationContext-security.xml

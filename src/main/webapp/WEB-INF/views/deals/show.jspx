@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Deal" object="${deal}" path="/deals" z="lp18jjc7u4Q5mW1DooLfW+6Zaos=">
+        <field:display field="created" id="s_com_etshost_msu_entity_Deal_created" object="${deal}" z="4KsFnaY2yP9uxaeNMDyPFywyqAU="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_Deal_modified" object="${deal}" z="jjNU0T/TkehPul+U5XjgW1c8r1U="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Deal_status" object="${deal}" z="lJ0wVQOR+uvmUOWQQq3pOx30It8="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_Deal_tags" object="${deal}" z="UXpzlXNLEoqObKneb5a399lFapM="/>
+        <field:display field="usr" id="s_com_etshost_msu_entity_Deal_usr" object="${deal}" z="iYB3+hWg05tMSB8z138+0v3MlaE="/>
+        <field:display field="market" id="s_com_etshost_msu_entity_Deal_market" object="${deal}" z="D3kKMkJHUnkMCIMYIfNgj+IX1Ac="/>
+        <field:display field="text" id="s_com_etshost_msu_entity_Deal_text" object="${deal}" z="aQMZcs+cQotFuf00mZTi7uAq/TY="/>
+    </page:show>
+</div>

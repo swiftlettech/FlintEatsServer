@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Viewing" object="${viewing}" path="/viewings" z="emKwG6E+xVIicnhDNWUS7aIGxQ8=">
+        <field:display field="target" id="s_com_etshost_msu_entity_Viewing_target" object="${viewing}" z="D5mMSIBZmtZyFHeNUcBnB+RdhkQ="/>
+        <field:display field="endTime" id="s_com_etshost_msu_entity_Viewing_endTime" object="${viewing}" z="qiqWeA7SRp0Jbd9Vav0HHhZXcwM="/>
+        <field:display field="user" id="s_com_etshost_msu_entity_Viewing_user" object="${viewing}" z="5f92QP9ViHALvF2hNA4FPSAj0e0="/>
+        <field:display field="startTime" id="s_com_etshost_msu_entity_Viewing_startTime" object="${viewing}" z="t+YV3GJfbWu/p+rHJAvBNQVdvaQ="/>
+    </page:show>
+</div>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_etshost_msu_entity_AuthWhitelistAddress" modelAttribute="authWhitelistAddress" path="/authwhitelistaddresses" render="${empty dependencies}" z="user-managed">
+        <field:datetime dateTimePattern="${authWhitelistAddress_createdate_date_format}" field="createDate" id="c_com_etshost_msu_entity_AuthWhitelistAddress_createDate" z="user-managed"/>
+        <field:datetime dateTimePattern="${authWhitelistAddress_lastmodified_date_format}" field="lastModified" id="c_com_etshost_msu_entity_AuthWhitelistAddress_lastModified" z="user-managed"/>
+        <field:input field="name" id="c_com_etshost_msu_entity_AuthWhitelistAddress_name" z="user-managed"/>
+        <field:select field="status" id="c_com_etshost_msu_entity_AuthWhitelistAddress_status" items="${statustypes}" path="statustypes" z="user-managed"/>
+        <field:input field="ipAddress" id="c_com_etshost_msu_entity_AuthWhitelistAddress_ipAddress" z="user-managed"/>
+        <field:input field="lat" id="c_com_etshost_msu_entity_AuthWhitelistAddress_lat" validationMessageCode="field_invalid_number" z="user-managed"/>
+        <field:input field="lng" id="c_com_etshost_msu_entity_AuthWhitelistAddress_lng" validationMessageCode="field_invalid_number" z="user-managed"/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_etshost_msu_entity_AuthWhitelistAddress" render="${not empty dependencies}" z="user-managed"/>
+</div>

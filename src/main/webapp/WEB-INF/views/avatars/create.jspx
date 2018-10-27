@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:multi id="fc_com_etshost_msu_entity_Avatar" modelAttribute="avatar" path="/avatars" render="${empty dependencies}" z="user-managed">
+        <field:input field="name" id="c_com_etshost_msu_entity_Avatar_name" z="user-managed"/>
+        <field:file field="data" id="c_com_etshost_msu_entity_Avatar_data" z="user-managed"/>
+        <!-- Non-rendered Fields -->
+        <field:input field="originalFileName" id="c_com_etshost_msu_entity_Avatar_originalFileName" render="false" z="user-managed"/>
+        <field:input field="contentType" id="c_com_etshost_msu_entity_Avatar_contentType" render="false" z="user-managed"/>
+        <field:input field="dataSize" id="c_com_etshost_msu_entity_Avatar_dataSize" render="false" validationMessageCode="field_invalid_integer" z="user-managed"/>
+        <field:datetime dateTimePattern="${avatar_createdate_date_format}" field="createDate" id="c_com_etshost_msu_entity_Avatar_createDate" render="false" z="user-managed"/>
+        <field:datetime dateTimePattern="${avatar_lastmodified_date_format}" field="lastModified" id="c_com_etshost_msu_entity_Avatar_lastModified" render="false" z="user-managed"/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Avatar_status" items="${statustypes}" path="statustypes" render="false" z="user-managed"/>
+        <field:input field="sha1sum" id="c_com_etshost_msu_entity_Avatar_sha1sum" render="false" z="user-managed"/>
+        <field:input field="latitude" id="c_com_etshost_msu_entity_Avatar_latitude" render="false" z="user-managed"/>
+        <field:input field="longitude" id="c_com_etshost_msu_entity_Avatar_longitude" render="false" z="user-managed"/>
+        <field:simple field="users" id="c_com_etshost_msu_entity_Avatar_users" messageCode="entity_reference_not_managed" messageCodeAttribute="User Base" z="user-managed"/>
+        <field:input field="lat" id="c_com_etshost_msu_entity_Avatar_lat" validationMessageCode="field_invalid_number" z="user-managed"/>
+        <field:input field="lng" id="c_com_etshost_msu_entity_Avatar_lng" validationMessageCode="field_invalid_number" z="user-managed"/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Avatar_modified" z="DGqH7rSYS4ZS72ZLvkkGUGZdXhg="/>
+        <field:input field="created" id="c_com_etshost_msu_entity_Avatar_created" z="yBsvSb+lbwc5BJLrM6oU+LML1ZI="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Avatar_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="QY60JhBnF1F1oOaXmN9uDeJJHZQ="/>
+        <field:simple field="badges" id="c_com_etshost_msu_entity_Avatar_badges" messageCode="entity_reference_not_managed" messageCodeAttribute="User" z="0ZDswzW9SzSC/m+D2eIZEf5Osc0="/>
+    </form:multi>
+    <form:dependency dependencies="${dependencies}" id="d_com_etshost_msu_entity_Avatar" render="${not empty dependencies}" z="user-managed"/>
+</div>

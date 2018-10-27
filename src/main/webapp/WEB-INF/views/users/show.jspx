@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_User" object="${user}" path="/users" z="/KlJiP401AnkRyG41tXNhJnoAxU=">
+        <field:display field="email" id="s_com_etshost_msu_entity_User_email" object="${user}" z="j16l7rsXHN1xeueRI2lYQ9Q+1Ds="/>
+        <field:display field="password" id="s_com_etshost_msu_entity_User_password" object="${user}" render="false" z="user-managed"/>
+        <field:display date="true" dateTimePattern="${user_lastlogin_date_format}" field="lastLogin" id="s_com_etshost_msu_entity_User_lastLogin" object="${user}" z="Sx8A8MZRhGJoyTOXljPUTXJBLxY="/>
+        <field:display date="true" dateTimePattern="${user_privacyacceptdate_date_format}" field="privacyAcceptDate" id="s_com_etshost_msu_entity_User_privacyAcceptDate" object="${user}" z="76c2UFG2MFRmmN+CrDHYIkr0HI4="/>
+        <field:display date="true" dateTimePattern="${user_passwordlastset_date_format}" field="passwordLastSet" id="s_com_etshost_msu_entity_User_passwordLastSet" object="${user}" z="AKF/MPv/edkGlN7ESUSdU3OLO2U="/>
+        <field:display field="followees" id="s_com_etshost_msu_entity_User_followees" object="${user}" z="msH5VBWD4RGrbD5hyOtODgTr460="/>
+        <field:display field="followers" id="s_com_etshost_msu_entity_User_followers" object="${user}" z="kZTPzAZkGHlHcVUODRpBEptQNHs="/>
+        <field:display field="roles" id="s_com_etshost_msu_entity_User_roles" object="${user}" z="U4BN533ISdhLP/byoEgQQJ0kNNM="/>
+        <field:display field="badges" id="s_com_etshost_msu_entity_User_badges" object="${user}" z="AQYDm3vZujScmpgXrhY8Gf5+26M="/>
+        <field:display field="created" id="s_com_etshost_msu_entity_User_created" object="${user}" z="OsLLEWr5tD+MZIAmbNHnL+ogcqs="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_User_modified" object="${user}" z="ZsPWv+SajO/mzRqctDBbYSF3azw="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_User_status" object="${user}" z="05GsFTy1zvB7fCmDfBoLcP3Rvkc="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_User_tags" object="${user}" z="K0dHN+2kS6+rSyPm74EkXoOPqFA="/>
+        <field:display field="firstName" id="s_com_etshost_msu_entity_User_firstName" object="${user}" z="sF9OIHVuFvPC2OUBeQlyNdgyeW4="/>
+        <field:display field="lastName" id="s_com_etshost_msu_entity_User_lastName" object="${user}" z="0ZRqv3WaNm9iBajUIxk39JQCjJ0="/>
+        <field:display field="avatar" id="s_com_etshost_msu_entity_User_avatar" object="${user}" z="0ovQVifjXY4D5yuoy1bMPQ+OY7Y="/>
+    </page:show>
+</div>

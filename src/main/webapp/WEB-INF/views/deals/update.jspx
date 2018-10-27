@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_Deal" modelAttribute="deal" path="/deals" versionField="Version" z="HR9FrirHze9df6nUKiTjRzyGdZo=">
+        <field:input field="created" id="c_com_etshost_msu_entity_Deal_created" z="+TTtb/jYZjaeYzXZulHHTalsFIA="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Deal_modified" z="ZXjbCzTLKTtF4DPaugf+OoMgoI4="/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Deal_status" items="${statuses}" path="statuses" z="jMzsWl/5ciXifNSPLuU1Yk1fXhc="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Deal_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="WiuTM8YsUp3QrKoAZRBVKi5wHNk="/>
+        <field:select field="usr" id="c_com_etshost_msu_entity_Deal_usr" itemValue="id" items="${users}" path="/users" z="mcGjZVnBxkE3drFZf/GtIc8SV9A="/>
+        <field:select field="market" id="c_com_etshost_msu_entity_Deal_market" itemValue="id" items="${markets}" path="/markets" z="CdDosSUtukDhL0dGdDvutVXysUs="/>
+        <field:input field="text" id="c_com_etshost_msu_entity_Deal_text" z="GcrBx4vieUnbZVgdGbprUC2vfzw="/>
+    </form:update>
+</div>

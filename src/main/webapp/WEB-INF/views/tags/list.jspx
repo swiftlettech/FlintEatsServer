@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Tag" items="${tags}" z="bHjoUx29wyQysHk+YWfeigNh45I=">
+        <table:table data="${tags}" id="l_com_etshost_msu_entity_Tag" path="/tags" z="tgQfWHG1CygAXN5QtK/DBx+PD7Y=">
+            <table:column id="c_com_etshost_msu_entity_Tag_created" property="created" z="e4eE3LK9dlA1RN3Kq7ZuRCbLdDs="/>
+            <table:column id="c_com_etshost_msu_entity_Tag_modified" property="modified" z="DN/yUJ/8kG2c1jwAcVVqpf4edTg="/>
+            <table:column id="c_com_etshost_msu_entity_Tag_status" property="status" z="RDhtbqsOnN1vzfxLhF2uyi56SZU="/>
+            <table:column id="c_com_etshost_msu_entity_Tag_tags" property="tags" z="oSXiITqrefXa1YTGrKFBVo8oINg="/>
+            <table:column id="c_com_etshost_msu_entity_Tag_usr" property="usr" z="mtTzf6fWor1Px+sl9Cv1EVosXSg="/>
+            <table:column id="c_com_etshost_msu_entity_Tag_name" property="name" z="qxsyjKUtnwVNIh4YStcYmGMRuio="/>
+        </table:table>
+    </page:list>
+</div>

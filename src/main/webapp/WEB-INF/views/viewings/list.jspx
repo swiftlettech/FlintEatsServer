@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Viewing" items="${viewings}" z="IHOjsUlG7kbZnfzjSCX4fiVZgdk=">
+        <table:table data="${viewings}" id="l_com_etshost_msu_entity_Viewing" path="/viewings" typeIdFieldName="pk" z="pDbJOmPc5DLyuGezUwDhiK6RAIg=">
+            <table:column id="c_com_etshost_msu_entity_Viewing_target" property="target" z="0qgWfQkmc7UAPGHzc3vtHEazIFI="/>
+            <table:column id="c_com_etshost_msu_entity_Viewing_endTime" property="endTime" z="WXCDj+Vq/HbZVARCQ8BjYE/CR18="/>
+            <table:column id="c_com_etshost_msu_entity_Viewing_user" property="user" z="nX89EKvBYnEQM2m0tB9CkcADUug="/>
+            <table:column id="c_com_etshost_msu_entity_Viewing_startTime" property="startTime" z="I5JpE+o7Nmw+Zefruf03bQWKpHU="/>
+        </table:table>
+    </page:list>
+</div>

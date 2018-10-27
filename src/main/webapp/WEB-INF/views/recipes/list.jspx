@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Recipe" items="${recipes}" z="E3VT2mepHnOQH9mRfdxjxS5JQCU=">
+        <table:table data="${recipes}" id="l_com_etshost_msu_entity_Recipe" path="/recipes" z="tPSRYKQqc2NfNJEgxPEwL49Oykk=">
+            <table:column id="c_com_etshost_msu_entity_Recipe_created" property="created" z="ACIww7lsTewwFmTID0ihxHXh4iM="/>
+            <table:column id="c_com_etshost_msu_entity_Recipe_modified" property="modified" z="QkR+i/QY05CZnETGOtDVOjUmEWo="/>
+            <table:column id="c_com_etshost_msu_entity_Recipe_status" property="status" z="Amj1qXX30OP0QVrbEWoulCoycgs="/>
+            <table:column id="c_com_etshost_msu_entity_Recipe_tags" property="tags" z="DMHBR+th96AuWcsLwGgcxXXT/A8="/>
+            <table:column id="c_com_etshost_msu_entity_Recipe_usr" property="usr" z="gLFsHNJ46WXlg+nW8r51dOlDq0Q="/>
+            <table:column id="c_com_etshost_msu_entity_Recipe_servings" property="servings" z="2Lb5wH3nU+Pj116apeJRvqG+3Vo="/>
+        </table:table>
+    </page:list>
+</div>

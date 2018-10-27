@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Review" object="${review}" path="/reviews" z="kHfoJtv3xAiMrjVycziz7KE0pcs=">
+        <field:display field="created" id="s_com_etshost_msu_entity_Review_created" object="${review}" z="1q/7TNifyNJZNW3EziuUPU6oXkE="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_Review_modified" object="${review}" z="Dg5CgRcJ9xvmEnkjJL/q+VXtbQ4="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Review_status" object="${review}" z="aJpKnQTsDZQYgX3R+4caIqJd0YM="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_Review_tags" object="${review}" z="famEmeMjgfZ70inLn0hkOJD0q70="/>
+        <field:display field="usr" id="s_com_etshost_msu_entity_Review_usr" object="${review}" z="BoL3siThSiOxdlPGA1v2+pdzdik="/>
+        <field:display field="text" id="s_com_etshost_msu_entity_Review_text" object="${review}" z="I7UkKhmzNzJDVFVB6CNBpbfb6k4="/>
+        <field:display field="target" id="s_com_etshost_msu_entity_Review_target" object="${review}" z="+7MDzOVCkvqEwRaZunoTv+PlpsM="/>
+    </page:show>
+</div>

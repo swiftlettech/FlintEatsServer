@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show delete="false" id="ps_com_etshost_msu_entity_AuthenticationRecord" object="${authenticationrecord}" path="/authenticationrecords" z="user-managed">
+        <field:display date="true" dateTimePattern="${authenticationRecord_createdate_date_format}" field="createDate" id="s_com_etshost_msu_entity_AuthenticationRecord_createDate" object="${authenticationrecord}" z="user-managed"/>
+        <field:display date="true" dateTimePattern="${authenticationRecord_lastmodified_date_format}" field="lastModified" id="s_com_etshost_msu_entity_AuthenticationRecord_lastModified" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="name" id="s_com_etshost_msu_entity_AuthenticationRecord_name" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="status" id="s_com_etshost_msu_entity_AuthenticationRecord_status" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="failureCount" id="s_com_etshost_msu_entity_AuthenticationRecord_failureCount" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="IPAddress" id="s_com_etshost_msu_entity_AuthenticationRecord_IPAddress" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="failedUser" id="s_com_etshost_msu_entity_AuthenticationRecord_failedUser" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="latitude" id="s_com_etshost_msu_entity_AuthenticationRecord_latitude" object="${authenticationrecord}" render="false" z="user-managed"/>
+        <field:display field="longitude" id="s_com_etshost_msu_entity_AuthenticationRecord_longitude" object="${authenticationrecord}" render="false" z="user-managed"/>
+        <field:display field="lat" id="s_com_etshost_msu_entity_AuthenticationRecord_lat" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="lng" id="s_com_etshost_msu_entity_AuthenticationRecord_lng" object="${authenticationrecord}" z="user-managed"/>
+        <field:display field="ipAddress" id="s_com_etshost_msu_entity_AuthenticationRecord_ipAddress" object="${authenticationrecord}" z="40Rd91My7kQM4KriDRl19V7Y0AE="/>
+        <field:display field="created" id="s_com_etshost_msu_entity_AuthenticationRecord_created" object="${authenticationrecord}" z="Vdn2YpNiqKarVKAOxSjIHl4iCoY="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_AuthenticationRecord_modified" object="${authenticationrecord}" z="WM4SKikui1nFiiqsZlGt9XRIGrA="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_AuthenticationRecord_tags" object="${authenticationrecord}" z="Fnim5BL4XLCmxGYj+jO9D+jMV8E="/>
+    </page:show>
+</div>

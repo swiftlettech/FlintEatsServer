@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Badge" object="${badge}" path="/badges" z="lwepwXcSZtciICYoRtsAkDQ1XBc=">
+        <field:display field="created" id="s_com_etshost_msu_entity_Badge_created" object="${badge}" z="WIOxAwks0OpL7J0drsQbx0sPS0o="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_Badge_modified" object="${badge}" z="cppvT1ugdlp0yNzMkOcl8mexPfU="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Badge_status" object="${badge}" z="ifPg8pqUW2BJCIJruFLl7mrRdmE="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_Badge_tags" object="${badge}" z="f3xxlc+wNwJDieGsYcVUMgoHQlE="/>
+        <field:display field="users" id="s_com_etshost_msu_entity_Badge_users" object="${badge}" z="WBe42c5GfEHzB/ddD2SPaGGclq8="/>
+        <field:display field="avatar" id="s_com_etshost_msu_entity_Badge_avatar" object="${badge}" z="baEP0LDYbidWen6ITe5FsUhEym8="/>
+    </page:show>
+</div>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_AuthenticationRecord" modelAttribute="authenticationRecord" path="/authenticationrecords" versionField="Version" z="user-managed">
+        <field:datetime dateTimePattern="${authenticationRecord_createdate_date_format}" field="createDate" id="c_com_etshost_msu_entity_AuthenticationRecord_createDate" z="user-managed"/>
+        <field:datetime dateTimePattern="${authenticationRecord_lastmodified_date_format}" field="lastModified" id="c_com_etshost_msu_entity_AuthenticationRecord_lastModified" z="user-managed"/>
+        <field:input field="name" id="c_com_etshost_msu_entity_AuthenticationRecord_name" z="user-managed"/>
+        <field:select field="status" id="c_com_etshost_msu_entity_AuthenticationRecord_status" items="${statustypes}" path="statustypes" z="user-managed"/>
+        <field:input field="failureCount" id="c_com_etshost_msu_entity_AuthenticationRecord_failureCount" z="user-managed"/>
+        <field:input field="IPAddress" id="c_com_etshost_msu_entity_AuthenticationRecord_IPAddress" z="user-managed"/>
+        <field:select field="failedUser" id="c_com_etshost_msu_entity_AuthenticationRecord_failedUser" itemValue="id" items="${users}" path="/users" z="user-managed"/>
+        <field:input field="lat" id="c_com_etshost_msu_entity_AuthenticationRecord_lat" validationMessageCode="field_invalid_number" z="user-managed"/>
+        <field:input field="lng" id="c_com_etshost_msu_entity_AuthenticationRecord_lng" validationMessageCode="field_invalid_number" z="user-managed"/>
+        <field:input field="ipAddress" id="c_com_etshost_msu_entity_AuthenticationRecord_ipAddress" z="k3wolVXJY7ws5nJ24ROIJt0wT4E="/>
+        <field:input field="created" id="c_com_etshost_msu_entity_AuthenticationRecord_created" z="0dQIyQ4Z9awQq55KNVZLXjZYyK4="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_AuthenticationRecord_modified" z="3E2ABrE464xjTpZC2yZsMPthNXM="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_AuthenticationRecord_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="laYt4MLRtai/jVQVh9fmDBX1S34="/>
+    </form:update>
+</div>

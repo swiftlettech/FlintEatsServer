@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition extends="default" name="authwhitelistaddresses/list">
+        <put-attribute name="body" value="/WEB-INF/views/authwhitelistaddresses/list.jspx"/>
+    </definition>
+<definition extends="default" name="authwhitelistaddresses/show">
+        <put-attribute name="body" value="/WEB-INF/views/authwhitelistaddresses/show.jspx"/>
+    </definition>
+<definition extends="default" name="authwhitelistaddresses/create">
+        <put-attribute name="body" value="/WEB-INF/views/authwhitelistaddresses/create.jspx"/>
+    </definition>
+<definition extends="default" name="authwhitelistaddresses/update">
+        <put-attribute name="body" value="/WEB-INF/views/authwhitelistaddresses/update.jspx"/>
+    </definition>
+</tiles-definitions>

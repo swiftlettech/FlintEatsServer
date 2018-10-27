@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create compositePkField="pk" id="fc_com_etshost_msu_entity_Viewing" modelAttribute="viewing" path="/viewings" render="${empty dependencies}" z="z93N+Ve2ryMl3+Vt7i5KgiQSo/A=">
+        <field:input disableFormBinding="true" field="pk.serialVersionUID" id="c_com_etshost_msu_entity_Viewing_pk_serialVersionUID" z="WFFlTtwCYo7J3baB1GNjwVY5U50="/>
+        <field:input disableFormBinding="true" field="pk.userId" id="c_com_etshost_msu_entity_Viewing_pk_userId" validationMessageCode="field_invalid_integer" z="cl+O9/g4Jd00Boby/6Jh2hayXh8="/>
+        <field:input disableFormBinding="true" field="pk.targetId" id="c_com_etshost_msu_entity_Viewing_pk_targetId" validationMessageCode="field_invalid_integer" z="MDApRYjGa3iOBMQIUM6XXuCRBYw="/>
+        <field:select field="target" id="c_com_etshost_msu_entity_Viewing_target" itemValue="id" items="${entitys}" path="/entitys" z="wyXqzrRwglU+iROpe2lmyFTHBH4="/>
+        <field:input field="endTime" id="c_com_etshost_msu_entity_Viewing_endTime" z="qZUOkTKhdQayWKVUtvPfh6h6pxw="/>
+        <field:select field="user" id="c_com_etshost_msu_entity_Viewing_user" itemValue="id" items="${users}" path="/users" z="+j8cGU+gVbEu1vuhuSXWAAAy0Y0="/>
+        <field:input disableFormBinding="true" field="pk.startTime" id="c_com_etshost_msu_entity_Viewing_pk_startTime" z="QraHWAYbaiB5bu6zO8vBY2f3oxo="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_etshost_msu_entity_Viewing" render="${not empty dependencies}" z="+KT1L6MsSEAjY+PaK+3oxe4mGK0="/>
+</div>

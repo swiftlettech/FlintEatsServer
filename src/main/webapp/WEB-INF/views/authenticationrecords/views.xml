@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition extends="default" name="authenticationrecords/list">
+        <put-attribute name="body" value="/WEB-INF/views/authenticationrecords/list.jspx"/>
+    </definition>
+<definition extends="default" name="authenticationrecords/show">
+        <put-attribute name="body" value="/WEB-INF/views/authenticationrecords/show.jspx"/>
+    </definition>
+<definition extends="default" name="authenticationrecords/create">
+        <put-attribute name="body" value="/WEB-INF/views/authenticationrecords/create.jspx"/>
+    </definition>
+<definition extends="default" name="authenticationrecords/update">
+        <put-attribute name="body" value="/WEB-INF/views/authenticationrecords/update.jspx"/>
+    </definition>
+<definition extends="default" name="authenticationrecords/findAuthenticationRecordsByIpAddressEquals">
+        <put-attribute name="body" value="/WEB-INF/views/authenticationrecords/findAuthenticationRecordsByIpAddressEquals.jspx"/>
+    </definition>
+</tiles-definitions>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_etshost_msu_entity_Tip" modelAttribute="tip" path="/tips" render="${empty dependencies}" z="Li2IJFYkP4Q8P7gARxZfm+ECQfY=">
+        <field:input field="created" id="c_com_etshost_msu_entity_Tip_created" z="9uqcpYZmAR9M1hsB3DpzX1nlbyE="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Tip_modified" z="0yChcDVRcMiemyeym3GsPbE/gvk="/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Tip_status" items="${statuses}" path="statuses" z="49kfm0LTDyyocYRA4hBkxbeMqlM="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Tip_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="thK40jlQrCfSrH0p3Cb0YYKIIog="/>
+        <field:select field="usr" id="c_com_etshost_msu_entity_Tip_usr" itemValue="id" items="${users}" path="/users" z="nXgCYrFVa1rhkJ0PVuTiV9ObXBs="/>
+        <field:input field="tipType" id="c_com_etshost_msu_entity_Tip_tipType" z="giOH58ATDTp4T8HX5Ew2DiNcxRc="/>
+        <field:input field="text" id="c_com_etshost_msu_entity_Tip_text" z="B1XWr4u6s1zkuc1ia/SI/EU77Ik="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_etshost_msu_entity_Tip" render="${not empty dependencies}" z="KwtF3m9h/tGOMf/5xdiPAKZT1qU="/>
+</div>

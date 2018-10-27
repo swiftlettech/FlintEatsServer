@@ -1,0 +1,11 @@
+facebook.apiKey= #FB API KEY
+facebook.apiSecret= #FB API Secret
+facebook.validateUrl=
+
+google.apiKey= #Google API KEY
+google.apiSecret= #Google API Secret
+google.validateUrl= #validation url 
+
+twitter.apiKey= #Twitter API KEY
+twitter.apiSecret= #Twitter API Secret
+twitter.validateUrl= #Twitter validation

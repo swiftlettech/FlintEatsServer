@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Product" object="${product}" path="/products" z="user-managed">
+        <field:display date="true" dateTimePattern="${product_createdate_date_format}" field="createDate" id="s_com_etshost_msu_entity_Product_createDate" object="${product}" z="user-managed"/>
+        <field:display date="true" dateTimePattern="${product_lastmodified_date_format}" field="lastModified" id="s_com_etshost_msu_entity_Product_lastModified" object="${product}" z="user-managed"/>
+        <field:display field="name" id="s_com_etshost_msu_entity_Product_name" object="${product}" z="user-managed"/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Product_status" object="${product}" z="user-managed"/>
+        <field:display field="plu" id="s_com_etshost_msu_entity_Product_plu" object="${product}" z="user-managed"/>
+        <field:display field="description" id="s_com_etshost_msu_entity_Product_description" object="${product}" z="user-managed"/>
+        <field:display field="vendor" id="s_com_etshost_msu_entity_Product_vendor" object="${product}" z="user-managed"/>
+        <field:display field="earnEnabled" id="s_com_etshost_msu_entity_Product_earnEnabled" object="${product}" z="user-managed"/>
+        <field:display field="spendEnabled" id="s_com_etshost_msu_entity_Product_spendEnabled" object="${product}" z="user-managed"/>
+        <field:display field="taxable" id="s_com_etshost_msu_entity_Product_taxable" object="${product}" z="user-managed"/>
+        <field:display field="price" id="s_com_etshost_msu_entity_Product_price" object="${product}" z="user-managed"/>
+        <field:display field="avatar" id="s_com_etshost_msu_entity_Product_avatar" object="${product}" z="user-managed"/>
+        <field:display field="lat" id="s_com_etshost_msu_entity_Product_lat" object="${product}" z="user-managed"/>
+        <field:display field="lng" id="s_com_etshost_msu_entity_Product_lng" object="${product}" z="user-managed"/>
+    </page:show>
+</div>

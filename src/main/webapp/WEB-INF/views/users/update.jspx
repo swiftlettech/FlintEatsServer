@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_User" modelAttribute="user" path="/users" versionField="Version" z="ykGSZ/+tjHQt8kbONMpJXuP5G64=">
+        <field:input field="created" id="c_com_etshost_msu_entity_User_created" render="false" z="user-managed"/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_User_modified" render="false" z="user-managed"/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_User_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" render="false" z="user-managed"/>
+        <field:input field="email" id="c_com_etshost_msu_entity_User_email" validationMessageCode="field_invalid_email" validationRegex="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}|^$" z="tbraTcNv6qY/ReH9yXMPfyWwPJc="/>
+        <field:input field="password" id="c_com_etshost_msu_entity_User_password" render="false" z="user-managed"/>
+        <field:datetime dateTimePattern="${user_lastlogin_date_format}" field="lastLogin" id="c_com_etshost_msu_entity_User_lastLogin" render="false" z="user-managed"/>
+        <field:datetime dateTimePattern="${user_privacyacceptdate_date_format}" field="privacyAcceptDate" id="c_com_etshost_msu_entity_User_privacyAcceptDate" render="false" z="user-managed"/>
+        <field:datetime dateTimePattern="${user_passwordlastset_date_format}" field="passwordLastSet" id="c_com_etshost_msu_entity_User_passwordLastSet" render="false" z="user-managed"/>
+        <field:select field="followees" id="c_com_etshost_msu_entity_User_followees" itemValue="id" items="${users}" multiple="true" path="/users" z="qtDje6idy6vB9CUEeve5EhjfKiY="/>
+        <field:select field="followers" id="c_com_etshost_msu_entity_User_followers" itemValue="id" items="${users}" multiple="true" path="/users" z="zAFh1OvDRK2keEf1snLSS9h4Jf4="/>
+        <field:select field="roles" id="c_com_etshost_msu_entity_User_roles" itemValue="id" items="${roles}" multiple="true" path="/roles" z="I6FdPRtva37fvAt7sk6rx8RN3BU="/>
+        <field:select field="badges" id="c_com_etshost_msu_entity_User_badges" itemValue="id" items="${badges}" multiple="true" path="/badges" z="GyfMaNF+ASiNYN6HOb/TZPstruM="/>
+        <field:simple field="ugc" id="c_com_etshost_msu_entity_User_ugc" messageCode="entity_reference_not_managed" messageCodeAttribute="U G C" render="false" z="user-managed"/>
+        <field:select field="status" id="c_com_etshost_msu_entity_User_status" items="${statuses}" path="statuses" z="vdPpviexU+DcJdyrplH7h9wFNGs="/>
+        <field:input field="firstName" id="c_com_etshost_msu_entity_User_firstName" z="o881z+81p/QEBOVzx04Do7Ey/vc="/>
+        <field:input field="lastName" id="c_com_etshost_msu_entity_User_lastName" z="SDYP1s/6o/dd5t/fAw7x/51ffHw="/>
+        <field:input field="avatar" id="c_com_etshost_msu_entity_User_avatar" z="IA73iclmbMo93Q6kwdX+tn3qjlo="/>
+    </form:update>
+</div>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_Food" modelAttribute="food" path="/foods" versionField="Version" z="4T8jqfV/UoJTTFkcwgypBqQGWZg=">
+        <field:input field="created" id="c_com_etshost_msu_entity_Food_created" z="ffi/+jQZC0j8Ygycyz5Yx14LDwY="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Food_modified" z="E01j16F2AdEiBucypuEYeHlXPUc="/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Food_status" items="${statuses}" path="statuses" z="0+21UW0Xa8Cnb082IVy3yVWgLHI="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Food_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="z8ZHl0gZwNoyse3t2SazlWVUyuw="/>
+        <field:input field="name" id="c_com_etshost_msu_entity_Food_name" z="SHTO7JKy6m5Yzh9QvLZ9CDwUwZw="/>
+        <field:simple field="properties" id="c_com_etshost_msu_entity_Food_properties" messageCode="entity_reference_not_managed" messageCodeAttribute="Food Property" z="q7o4sNR0LFCq6DeQldyY+76GtX8="/>
+    </form:update>
+</div>

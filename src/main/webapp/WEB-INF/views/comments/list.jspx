@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Comment" items="${comments}" z="ptmFytz1ykSSOtO8mCUsOMeNqRM=">
+        <table:table data="${comments}" id="l_com_etshost_msu_entity_Comment" path="/comments" z="RQmmCMohrJoyrVgrFosQFtqN31g=">
+            <table:column id="c_com_etshost_msu_entity_Comment_created" property="created" z="bVgYAfT1eJxIZDVnqHj7A4yGBAI="/>
+            <table:column id="c_com_etshost_msu_entity_Comment_modified" property="modified" z="iO/KCd8XvSwvlsw0QOvzt/R5KzI="/>
+            <table:column id="c_com_etshost_msu_entity_Comment_status" property="status" z="XMr9fnHEo4QQd561vfCgQS9YiTk="/>
+            <table:column id="c_com_etshost_msu_entity_Comment_tags" property="tags" z="l1LpZi3Ep/Xny7WDKHkoqOyQhCA="/>
+            <table:column id="c_com_etshost_msu_entity_Comment_target" property="target" z="Wx/XCULLz4OK051Rwq2uyBGsNcM="/>
+            <table:column id="c_com_etshost_msu_entity_Comment_usr" property="usr" z="PYmzCZLXIe3zp5dNetnRc8oq9dM="/>
+        </table:table>
+    </page:list>
+</div>

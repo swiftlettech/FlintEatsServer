@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_etshost_msu_entity_Comment" modelAttribute="comment" path="/comments" versionField="Version" z="RgpcXj6vRjKH8JESF4C3bOvFZGA=">
+        <field:input field="created" id="c_com_etshost_msu_entity_Comment_created" z="GWdSRdqG4R9//OnZDxAF4zZwUXo="/>
+        <field:input field="modified" id="c_com_etshost_msu_entity_Comment_modified" z="IQR8kdbejeTiJB1n1nuFh9RcH68="/>
+        <field:select field="status" id="c_com_etshost_msu_entity_Comment_status" items="${statuses}" path="statuses" z="puYAuXvsdJRn6KO7NHZQ+osRCAg="/>
+        <field:select field="tags" id="c_com_etshost_msu_entity_Comment_tags" itemValue="id" items="${tags}" multiple="true" path="/tags" z="OAZ4nuTvM4gDVvto1LXheX3YdHY="/>
+        <field:select field="target" id="c_com_etshost_msu_entity_Comment_target" itemValue="id" items="${entitys}" path="/entitys" z="bzqc8t+0ViaNalhf90l9kfd4Of8="/>
+        <field:input field="text" id="c_com_etshost_msu_entity_Comment_text" z="s5zk1dlREpWX/MMPwroFU/78RK8="/>
+        <field:select field="usr" id="c_com_etshost_msu_entity_Comment_usr" itemValue="id" items="${users}" path="/users" z="u4ZUdg9UnsdC8IiXQdFPkNzIwFk="/>
+    </form:update>
+</div>

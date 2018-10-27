@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_PasswordResetToken" object="${passwordresettoken}" path="/passwordresettokens" z="user-managed">
+        <field:display date="true" dateTimePattern="${passwordResetToken_createdate_date_format}" field="createDate" id="s_com_etshost_msu_entity_PasswordResetToken_createDate" object="${passwordresettoken}" z="user-managed"/>
+        <field:display date="true" dateTimePattern="${passwordResetToken_lastmodified_date_format}" field="lastModified" id="s_com_etshost_msu_entity_PasswordResetToken_lastModified" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="name" id="s_com_etshost_msu_entity_PasswordResetToken_name" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="status" id="s_com_etshost_msu_entity_PasswordResetToken_status" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="token" id="s_com_etshost_msu_entity_PasswordResetToken_token" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="user" id="s_com_etshost_msu_entity_PasswordResetToken_user" object="${passwordresettoken}" z="user-managed"/>
+        <field:display date="true" dateTimePattern="${passwordResetToken_expirydate_date_format}" field="expiryDate" id="s_com_etshost_msu_entity_PasswordResetToken_expiryDate" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="lat" id="s_com_etshost_msu_entity_PasswordResetToken_lat" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="lng" id="s_com_etshost_msu_entity_PasswordResetToken_lng" object="${passwordresettoken}" z="user-managed"/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_PasswordResetToken_modified" object="${passwordresettoken}" z="2mcFYsFcPiCZko311sP9J0zFB4w="/>
+        <field:display field="created" id="s_com_etshost_msu_entity_PasswordResetToken_created" object="${passwordresettoken}" z="1HcnQCSK8sB7EAv3LwBj9Kjh6yI="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_PasswordResetToken_tags" object="${passwordresettoken}" z="MRwCxGXcLqe9hGko9G/u20QPNvY="/>
+        <field:display field="usr" id="s_com_etshost_msu_entity_PasswordResetToken_usr" object="${passwordresettoken}" z="xVdjnAku0Cjug5vKGLcTKHNLi5A="/>
+    </page:show>
+</div>

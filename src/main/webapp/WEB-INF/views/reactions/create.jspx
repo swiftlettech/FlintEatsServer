@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create compositePkField="pk" id="fc_com_etshost_msu_entity_Preference" modelAttribute="preference" path="/reactions" render="${empty dependencies}" z="P6ulh2aqjCQqPE6ijyT/ShuhP2Y=">
+        <field:input disableFormBinding="true" field="pk.serialVersionUID" id="c_com_etshost_msu_entity_Preference_pk_serialVersionUID" z="Yh1nyCschupOlzA4B6tPdJ/0xXY="/>
+        <field:input disableFormBinding="true" field="pk.userId" id="c_com_etshost_msu_entity_Preference_pk_userId" validationMessageCode="field_invalid_integer" z="we5dGnJRPH2Bz+uLSJjkNfKoWik="/>
+        <field:input disableFormBinding="true" field="pk.targetId" id="c_com_etshost_msu_entity_Preference_pk_targetId" validationMessageCode="field_invalid_integer" z="AKy1cVvFcj9Tn8wBHgPLWvK/PsQ="/>
+        <field:input disableFormBinding="true" field="pk.startTime" id="c_com_etshost_msu_entity_Preference_pk_startTime" z="YXbGw7GTFDCgfI3kEqIHLTYUIuw="/>
+        <field:select field="user" id="c_com_etshost_msu_entity_Preference_user" itemValue="id" items="${users}" path="/users" z="tv9IH4KpPWQDu8YFfwkYcFY3hQU="/>
+        <field:select field="target" id="c_com_etshost_msu_entity_Preference_target" itemValue="id" items="${ugcs}" path="/ugcs" z="VSNzcpiOCLnYmYZIwMJq3+m1ifI="/>
+        <field:input field="endTime" id="c_com_etshost_msu_entity_Preference_endTime" z="biMPNs0+IIV8frxoE9Bo+XEtW6I="/>
+        <field:input field="value" id="c_com_etshost_msu_entity_Preference_value" z="uJYdA8I4rECtde5eah/ZiQYIOuk="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_etshost_msu_entity_Preference" render="${not empty dependencies}" z="c6K5br8MZ57qEO2Jmk9s4Twm7kw="/>
+</div>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_FoodProperty" object="${foodproperty}" path="/foodpropertys" z="v0St/VRj7MHI3n1MRFHxvXIs174=">
+        <field:display field="created" id="s_com_etshost_msu_entity_FoodProperty_created" object="${foodproperty}" z="oB/TNVViaUf6NqmWACG6tpj75+o="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_FoodProperty_modified" object="${foodproperty}" z="RAv6CZ3ulNuio/Snt8Sb/jWBXW0="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_FoodProperty_status" object="${foodproperty}" z="RzEeHXxIF3kRPn/UFOa68qCpT7c="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_FoodProperty_tags" object="${foodproperty}" z="/lIoORGlTid/ejNb4NQaVxUqe0Q="/>
+        <field:display field="food" id="s_com_etshost_msu_entity_FoodProperty_food" object="${foodproperty}" z="Ogk76eXyvJF9E2Aqp9T39QFV4zo="/>
+        <field:display field="propertyType" id="s_com_etshost_msu_entity_FoodProperty_propertyType" object="${foodproperty}" z="39e5ktq9pvmC22U5Mhw451uXnZM="/>
+        <field:display field="value" id="s_com_etshost_msu_entity_FoodProperty_value" object="${foodproperty}" z="dR83qAUmbisvdpSPwrjQIM8N/Z8="/>
+    </page:show>
+</div>

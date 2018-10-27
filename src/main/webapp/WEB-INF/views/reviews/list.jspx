@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Review" items="${reviews}" z="uQzBrrI8ci0PutLYXB30O2IM/ME=">
+        <table:table data="${reviews}" id="l_com_etshost_msu_entity_Review" path="/reviews" z="DR5Tr4Xr1Br0XVcaccLAr05IQO4=">
+            <table:column id="c_com_etshost_msu_entity_Review_created" property="created" z="A+Vk/rkfmagAUt2pnf353rAv64o="/>
+            <table:column id="c_com_etshost_msu_entity_Review_modified" property="modified" z="WD4B7RXYRS7i0FG5X0dzd9CyF00="/>
+            <table:column id="c_com_etshost_msu_entity_Review_status" property="status" z="K4x/kXQDpdhakpSMxKC9NiSSf/8="/>
+            <table:column id="c_com_etshost_msu_entity_Review_tags" property="tags" z="M4QKed4R34lJ8kg1ZjL/Oqg8B34="/>
+            <table:column id="c_com_etshost_msu_entity_Review_usr" property="usr" z="zLH2cQcgS8MOChYH9wBuG79LdiY="/>
+            <table:column id="c_com_etshost_msu_entity_Review_target" property="target" z="RBxVA8UxJlFb8QXs2w46jCHseKk="/>
+        </table:table>
+    </page:list>
+</div>

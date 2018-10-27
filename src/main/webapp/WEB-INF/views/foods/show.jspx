@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Food" object="${food}" path="/foods" z="uUniH/HdVoxZ38mE4aV0+orU8do=">
+        <field:display field="created" id="s_com_etshost_msu_entity_Food_created" object="${food}" z="dvNLRoraK3TMVqBFutkk038a6AA="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_Food_modified" object="${food}" z="CETO92ELwcj6gcTYuz5lXhKUXjQ="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Food_status" object="${food}" z="lbqFbNHBoQUzb+49oQ38Q1mOxAc="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_Food_tags" object="${food}" z="3QZxkJWBb+9mk+4RdKatCFSucX4="/>
+        <field:display field="name" id="s_com_etshost_msu_entity_Food_name" object="${food}" z="5IXlCgDCv5+cGgdOHf3Z7CMST30="/>
+    </page:show>
+</div>

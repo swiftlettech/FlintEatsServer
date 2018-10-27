@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_etshost_msu_entity_Market" object="${market}" path="/markets" z="lMxUEErLb9HdEotBs/HkGTjmC/k=">
+        <field:display field="created" id="s_com_etshost_msu_entity_Market_created" object="${market}" z="ISFI1+0k7cYmY2UDhtTwOKs+jfs="/>
+        <field:display field="modified" id="s_com_etshost_msu_entity_Market_modified" object="${market}" z="My9O2uiSfRhzyOic1DCyheUouE8="/>
+        <field:display field="status" id="s_com_etshost_msu_entity_Market_status" object="${market}" z="b4Aa3jUkt751VwBqvSUVlC3oe6s="/>
+        <field:display field="tags" id="s_com_etshost_msu_entity_Market_tags" object="${market}" z="8z32CeBtQ+1GVUCko9pQVRe0zJM="/>
+        <field:display field="name" id="s_com_etshost_msu_entity_Market_name" object="${market}" z="zEuogj+SkMiOAIX0rCYbwrOqjY4="/>
+        <field:display field="address" id="s_com_etshost_msu_entity_Market_address" object="${market}" z="kP5LVORSey2cBBDxSe9a8YxZiqo="/>
+        <field:display field="hours" id="s_com_etshost_msu_entity_Market_hours" object="${market}" z="NxasaK1tz4h06OBYQSBogus2ZJk="/>
+        <field:display field="phone" id="s_com_etshost_msu_entity_Market_phone" object="${market}" z="ah5wjr74TxRHooPoVMbciA8CcyA="/>
+        <field:display field="url" id="s_com_etshost_msu_entity_Market_url" object="${market}" z="vLOtB0ZBkxLhNTdl3tCkQg08Unc="/>
+    </page:show>
+</div>

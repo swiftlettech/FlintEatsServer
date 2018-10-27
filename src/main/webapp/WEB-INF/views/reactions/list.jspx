@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Preference" items="${preferences}" z="u1yB/GvcTHISRZ3n4VRil5mNhiU=">
+        <table:table data="${preferences}" id="l_com_etshost_msu_entity_Preference" path="/reactions" typeIdFieldName="pk" z="5/SDc9eYc7rrysPmbzAFsqWoQqU=">
+            <table:column id="c_com_etshost_msu_entity_Preference_user" property="user" z="hI8yM7j+GFA/0mhEVvJuz7NBPZU="/>
+            <table:column id="c_com_etshost_msu_entity_Preference_target" property="target" z="18hnyv0FE7EM39HJKlXPEv2f2qg="/>
+            <table:column id="c_com_etshost_msu_entity_Preference_startTime" property="startTime" z="27sdaHYEfTVL8fH+7sk1vyj99II="/>
+            <table:column id="c_com_etshost_msu_entity_Preference_endTime" property="endTime" z="hkbbil7dbSc9EVDoFQgkFTcLYSY="/>
+            <table:column id="c_com_etshost_msu_entity_Preference_value" property="value" z="gP2SvgJ3CfCNqXswG10Ho6zW9+E="/>
+        </table:table>
+    </page:list>
+</div>

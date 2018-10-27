@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_etshost_msu_entity_Badge" items="${badges}" z="nud+7x5PPOewgILJl6aHtXB9aQ0=">
+        <table:table data="${badges}" id="l_com_etshost_msu_entity_Badge" path="/badges" z="B9ussm2+cTSugc2Q9YjMzMjgSJ4=">
+            <table:column id="c_com_etshost_msu_entity_Badge_created" property="created" z="lO7ICrNRuwmmRxS/turAWtGLBC8="/>
+            <table:column id="c_com_etshost_msu_entity_Badge_modified" property="modified" z="N4l7pz7uk7Gk1typP5cvJHE/HKM="/>
+            <table:column id="c_com_etshost_msu_entity_Badge_status" property="status" z="2BihxRP2yztQRgvrRKVARxrbYo0="/>
+            <table:column id="c_com_etshost_msu_entity_Badge_tags" property="tags" z="VRBlu/jl9DVapdDLC935sSOkH0A="/>
+            <table:column id="c_com_etshost_msu_entity_Badge_users" property="users" z="HMw0V4fy73pFvCDXt8T/zV4ofpo="/>
+            <table:column id="c_com_etshost_msu_entity_Badge_avatar" property="avatar" z="j5bwzg8IkTly1fR+TWj/Dlxt0Qw="/>
+        </table:table>
+    </page:list>
+</div>
