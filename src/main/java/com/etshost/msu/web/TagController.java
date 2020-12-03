@@ -41,7 +41,7 @@ public class TagController {
 	 * @return		ID of Tag
 	 */
 	@RequestMapping(value = "/add/{id}", method = RequestMethod.POST, produces = "application/json")
-	public String add(@RequestBody Tag tag, @RequestParam long id) {
+	public String add(@RequestBody Tag tag, @PathVariable("id") long id) {
 		Entity e = Entity.findEntity(id);
 		e.getTags().add(tag);
 		e.merge();

@@ -2,3 +2,4 @@
 database.properties
 oauth.properties
 applicationContext-security.xml
+/target/

@@ -419,8 +419,8 @@ public class User extends Entity {
         return this.getRoles().contains(role);
     }
     
-    @JSON(name = "isAdmin")
-    public boolean isAdmin() {
+    @JSON(name = "admin")
+    public boolean admin() {
     	return this.hasRole("admin");
     }
     

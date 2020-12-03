@@ -101,7 +101,7 @@ privileged aspect UserDataOnDemand_Roo_DataOnDemand {
     }
     
     public void UserDataOnDemand.setPhone(User obj, int index) {
-        String phone = "phone_" + index;
+        String phone = Integer.toString(index);
         obj.setPhone(phone);
     }
     
