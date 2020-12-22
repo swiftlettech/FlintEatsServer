@@ -198,6 +198,7 @@ public class Tip extends UGC {
 		org.apache.lucene.search.Query luceneQuery = qb
 			    .keyword()
 			    .fuzzy()
+                .withPrefixLength(3)
 			    .onField("text")
 				.matching(q)
 				.createQuery();

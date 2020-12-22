@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.Badge;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -27,12 +26,12 @@ privileged aspect Badge_Roo_Json {
         .use(null, Badge.class).deserialize(json);
     }
     
-    public static String Badge.toJsonArray(Collection<Badge> collection) {
+    public static String Badge.toJsonArray(Collection<Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Badge.toJsonArray(Collection<Badge> collection, String[] fields) {
+    public static String Badge.toJsonArray(Collection<Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

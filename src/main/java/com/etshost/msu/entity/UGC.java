@@ -72,8 +72,8 @@ public abstract class UGC extends Entity {
     
     public static String toJsonArrayUGC(Collection<? extends UGC> collection) {
         return new JSONSerializer()
-        		.include("class", "market.id", "market.name", "usr.id", "usr.username", "usr.avatar64")
-		        .exclude("*.class", "*.logger", "market.*", "usr.*")
+        		.include("class", "market.id", "market.name", "usr.id", "usr.username", "usr.avatar64","tags.name","tags.id")
+		        .exclude("*.class", "*.logger", "market.*", "usr.*","tags.*")
 		        .serialize(collection);
     }
     

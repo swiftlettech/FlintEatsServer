@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.Preference;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -17,12 +16,12 @@ privileged aspect Preference_Roo_Json {
         .use(null, Preference.class).deserialize(json);
     }
     
-    public static String Preference.toJsonArray(Collection<Preference> collection) {
+    public static String Preference.toJsonArray(Collection<Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Preference.toJsonArray(Collection<Preference> collection, String[] fields) {
+    public static String Preference.toJsonArray(Collection<Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

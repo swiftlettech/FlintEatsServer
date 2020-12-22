@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.Policy;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -17,12 +16,12 @@ privileged aspect Policy_Roo_Json {
         .use(null, Policy.class).deserialize(json);
     }
     
-    public static String Policy.toJsonArray(Collection<Policy> collection) {
+    public static String Policy.toJsonArray(Collection<Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Policy.toJsonArray(Collection<Policy> collection, String[] fields) {
+    public static String Policy.toJsonArray(Collection<Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

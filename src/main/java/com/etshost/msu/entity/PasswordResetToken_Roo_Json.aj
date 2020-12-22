@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.PasswordResetToken;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -27,12 +26,12 @@ privileged aspect PasswordResetToken_Roo_Json {
         .use(null, PasswordResetToken.class).deserialize(json);
     }
     
-    public static String PasswordResetToken.toJsonArray(Collection<PasswordResetToken> collection) {
+    public static String PasswordResetToken.toJsonArray(Collection<Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String PasswordResetToken.toJsonArray(Collection<PasswordResetToken> collection, String[] fields) {
+    public static String PasswordResetToken.toJsonArray(Collection<Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

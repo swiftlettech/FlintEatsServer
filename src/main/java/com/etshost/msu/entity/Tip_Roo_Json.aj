@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.Tip;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -17,12 +16,12 @@ privileged aspect Tip_Roo_Json {
         .use(null, Tip.class).deserialize(json);
     }
     
-    public static String Tip.toJsonArray(Collection<Tip> collection) {
+    public static String Tip.toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Tip.toJsonArray(Collection<Tip> collection, String[] fields) {
+    public static String Tip.toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

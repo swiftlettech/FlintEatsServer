@@ -167,29 +167,43 @@ public class AuthController {
 	 */
 	@RequestMapping(value = "/init", method = RequestMethod.GET, produces = "application/json")
 	public String init(HttpServletRequest request, HttpServletResponse response) {
-		Role admin = new Role();
-		admin.setName("admin");
-		admin.persist();
-		Role login = new Role();
-		login.setName("login");
-		login.persist();
+//		Role admin = new Role();
+//		admin.setName("admin");
+//		admin.persist();
+//		Role login = new Role();
+//		login.setName("login");
+//		login.persist();
+
+		Role admin = Role.findRoleByName("admin");
+		Role login = Role.findRoleByName("login");
+
+
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(admin);
 		roles.add(login);
-		
+
 		User user = new User();
-		user.setUsername("admin");
-		user.setEmail("admin@etshost.com");
-		user.setPassword("EtS2437!");
+		user.setUsername("admin2");
+			user.setEmail("admin2@flinteats.org");
+		user.setPassword("lji123");
 		user.setRoles(roles);
 		user.persist();
-		
-		User user2 = new User();
-		user2.setUsername("msu");
-		user2.setEmail("msu@etshost.com");
-		user2.setPassword("a8f0ddb94b0f14afb703a462c352200a8cef9cc3118e9ca77dd4b5aaa4ebf63e");
-		user2.setRoles(roles);
-		user2.persist();
+
+
+
+//		User user = new User();
+//		user.setUsername("admin");
+//		user.setEmail("admin@etshost.com");
+//		user.setPassword("EtS2437!");
+//		user.setRoles(roles);
+//		user.persist();
+//
+//		User user2 = new User();
+//		user2.setUsername("msu");
+//		user2.setEmail("msu@etshost.com");
+//		user2.setPassword("a8f0ddb94b0f14afb703a462c352200a8cef9cc3118e9ca77dd4b5aaa4ebf63e");
+//		user2.setRoles(roles);
+//		user2.persist();
 		return user.getId().toString();
 	}
 	

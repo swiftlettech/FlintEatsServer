@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.Review;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -17,12 +16,12 @@ privileged aspect Review_Roo_Json {
         .use(null, Review.class).deserialize(json);
     }
     
-    public static String Review.toJsonArray(Collection<Review> collection) {
+    public static String Review.toJsonArray(Collection<Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Review.toJsonArray(Collection<Review> collection, String[] fields) {
+    public static String Review.toJsonArray(Collection<Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

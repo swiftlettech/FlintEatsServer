@@ -5,20 +5,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 
+import org.apache.lucene.search.Explanation;
 import org.hibernate.envers.Audited;
+import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
@@ -300,36 +296,49 @@ public class Deal extends UGC {
     
     @SuppressWarnings("unchecked")
 	public static List<Deal> search(String q) {
-    	Logger logger = LoggerFactory.getLogger(Deal.class);
-		EntityManager em = Entity.entityManager();
-		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+        Logger logger = LoggerFactory.getLogger(Deal.class);
+        EntityManager em = Entity.entityManager();
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
 
-		logger.debug("searching Deals for: {}", q);
+        logger.debug("searching Deals for: {}", q);
 
-		QueryBuilder qb = fullTextEntityManager
-				.getSearchFactory()
-				.buildQueryBuilder()
-				.forEntity(Deal.class)
-				.get();
-		org.apache.lucene.search.Query luceneQuery = qb
-			    .keyword()
-			    .fuzzy()
-			    .onFields("title", "price", "text")
-				.matching(q)
-				.createQuery();
-		
-//		logger.debug("luceneQuery: {}", luceneQuery.toString());
+        QueryBuilder qb = fullTextEntityManager
+                .getSearchFactory()
+                .buildQueryBuilder()
+                .forEntity(Deal.class)
+                .get();
+        org.apache.lucene.search.Query luceneQuery = qb
+                .keyword()
+                .fuzzy()
+                .withPrefixLength(3)
+                .onFields("title", "text")
+                .matching(q)
+                .createQuery();
 
+        logger.debug("luceneQuery: {}", luceneQuery.toString());
 
-		// wrap Lucene query in a javax.persistence.Query
+        //the is for debugging only
+//        org.hibernate.search.jpa.FullTextQuery jpaQuery =
+//                fullTextEntityManager.createFullTextQuery(luceneQuery, Deal.class).setProjection(
+//                        FullTextQuery.DOCUMENT_ID,
+//                        FullTextQuery.EXPLANATION,
+//                        FullTextQuery.THIS
+//                );
+
+        // wrap Lucene query in a javax.persistence.Query
 		javax.persistence.Query jpaQuery =
 		    fullTextEntityManager.createFullTextQuery(luceneQuery, Deal.class);
-//		logger.debug("jpaQuery: {}", jpaQuery.toString());
-		
+        logger.debug("jpaQuery: {}", jpaQuery.toString());
+        @SuppressWarnings("unchecked") List<Object[]> results = jpaQuery.getResultList();
+//        for (Object[] result : results) {
+//            Explanation e = (Explanation) result[1];
+//            logger.debug(e.toString());
+//        }
 
-		// execute search
-		logger.debug("results size: {}", jpaQuery.getResultList().size());
-		List<?> result = jpaQuery.getResultList();
-		return (List<Deal>)result;
+
+        // execute searc
+        logger.debug("results size: {}", jpaQuery.getResultList().size());
+        List<Deal> result = jpaQuery.getResultList();
+        return result;
     }
 }

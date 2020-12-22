@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.Market;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -17,12 +16,12 @@ privileged aspect Market_Roo_Json {
         .use(null, Market.class).deserialize(json);
     }
     
-    public static String Market.toJsonArray(Collection<Market> collection) {
+    public static String Market.toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Market.toJsonArray(Collection<Market> collection, String[] fields) {
+    public static String Market.toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

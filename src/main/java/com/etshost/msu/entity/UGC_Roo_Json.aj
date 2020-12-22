@@ -3,10 +3,9 @@
 
 package com.etshost.msu.entity;
 
-import com.etshost.msu.entity.UGC;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -27,12 +26,12 @@ privileged aspect UGC_Roo_Json {
         .use(null, UGC.class).deserialize(json);
     }
     
-    public static String UGC.toJsonArray(Collection<UGC> collection) {
+    public static String UGC.toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String UGC.toJsonArray(Collection<UGC> collection, String[] fields) {
+    public static String UGC.toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

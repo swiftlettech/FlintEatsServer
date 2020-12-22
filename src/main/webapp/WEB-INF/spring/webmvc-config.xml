@@ -53,10 +53,10 @@
 	<mvc:view-controller path="/dataAccessFailure" />
 	<mvc:view-controller path="/accessDenied" />
 
-	<!-- Resolves localized messages*.properties and application.properties 
+	<!-- Resolves localized messages*.properties and database.properties
 		files in the application to allow for internationalization. The messages*.properties 
 		files translate Roo generated messages which are part of the admin interface, 
-		the application.properties resource bundle localizes all application specific 
+		the database.properties resource bundle localizes all application specific
 		messages such as entity names and menu items. -->
 	<bean
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"

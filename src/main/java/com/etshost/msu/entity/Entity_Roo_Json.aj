@@ -27,12 +27,12 @@ privileged aspect Entity_Roo_Json {
         .use(null, Entity.class).deserialize(json);
     }
     
-    public static String Entity.toJsonArray(Collection<Entity> collection) {
+    public static String Entity.toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String Entity.toJsonArray(Collection<Entity> collection, String[] fields) {
+    public static String Entity.toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

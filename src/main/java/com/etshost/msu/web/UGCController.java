@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.etshost.msu.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,19 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.etshost.msu.entity.Deal;
-import com.etshost.msu.entity.Entity;
-import com.etshost.msu.entity.Tag;
-import com.etshost.msu.entity.Tip;
-import com.etshost.msu.entity.UGC;
-import com.etshost.msu.entity.User;
+import javax.persistence.NamedStoredProcedureQuery;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.UGC} class.
  */
 @RequestMapping("/ugc")
 @RestController
-public class UGCController {
+public class 	UGCController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public String feed(int draw, int page) {
@@ -79,60 +75,91 @@ public class UGCController {
 	
 	@RequestMapping(value = "/feed", method = RequestMethod.GET, produces = "application/json")
 	public String feed(
-			@RequestParam(name = "draw", defaultValue = "-1") int draw,
 			@RequestParam(name = "q", required = false) String q,
-			@RequestParam(name = "page", defaultValue = "0") int page) {
-		if (q == null) {
-			return this.feed(draw, page);
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name= "length", defaultValue = "10") int length,
+			@RequestParam(name = "kind", required = false) List<String> types,
+			@RequestParam(name="tags",required = false) List<String> tag_ids,
+			@RequestParam(name="markets",required = false) List<String> market_ids)
+	{
+
+		List<Market> markets = new ArrayList<Market>();
+		List<Tag> tags = new ArrayList<Tag>();
+		if (market_ids!=null) {
+			market_ids.forEach(id -> {
+				try {
+					Market m = Market.findMarket(Long.parseLong(id));
+					if (m != null) markets.add(m);
+				} catch (NumberFormatException n) {
+					this.logger.debug("Invalid market id: "+id);
+				}
+			});
+			this.logger.debug("Found markets: "+markets);
 		}
 
-		List<Tag> result = Tag.search(q);
+		if (tag_ids!=null) {
+			tag_ids.forEach(id -> {
+				try {
+					Tag t = Tag.findTag(Long.parseLong(id));
+					if (t != null) tags.add(t);
+				} catch (NumberFormatException n) {
+					this.logger.debug("Invalid tag id: "+id);
+				}
+			});
+			this.logger.debug("Found tags: "+tags);
+		}
+
+
 		Set<UGC> ugcResultSet = new HashSet<UGC>();
 
-		for (Tag tag : result) {
-			Set<Entity> targets = tag.getTargets();
-			this.logger.debug("tag {} has {} targets", tag.getName(), targets.size());
-			for (Entity target : targets) {
-				if (target instanceof UGC) {
-					this.logger.debug("adding target");
-					ugcResultSet.add((UGC)target);
-				}
+
+		if (types==null || types.contains("deal")) {
+			if (q!=null) {
+				ugcResultSet.addAll(Deal.search(q));
+			} else {
+				ugcResultSet.addAll(Deal.findAllDeals());
+			}
+
+			if (!markets.isEmpty()) {
+				ugcResultSet.removeIf(d -> !markets.contains(((Deal)d).getMarket()));
 			}
 		}
-		this.logger.debug("Added {} targets", ugcResultSet.size());
 
-		ugcResultSet.addAll(Deal.search(q));
-		ugcResultSet.addAll(Tip.search(q));
+		if (types==null || types.contains("tip")) {
+			if (q!=null) {
+				ugcResultSet.addAll(Tip.search(q));
+			} else {
+				ugcResultSet.addAll(Tip.findAllTips());
+			}
+		}
 
-		List<UGC> ugcResultList = new ArrayList<UGC>();
-		ugcResultList.addAll(ugcResultSet);
+		if (!tags.isEmpty()) {
+			ugcResultSet.removeIf(d -> {
+				Set<Tag> hastags = new HashSet<>(d.getTags());
+				hastags.retainAll(tags);
+				return hastags.isEmpty();
+			});
+		}
+
+		List<UGC> ugcResultList = new ArrayList<UGC>(ugcResultSet);
 		//TODO: sort this differently?
 		ugcResultList.sort((ugc1, ugc2) -> ugc2.getCreated().compareTo(ugc1.getCreated()));
 		
-		List<UGC> subList = new ArrayList<UGC>();
+		List<UGC> subList;
 		try {
-			int start = Math.min(page * 10, ugcResultList.size());
-			int end = Math.min((page + 1) * 10 - 1, ugcResultList.size());
+			int start = Math.min(page * length, ugcResultList.size());
+			int end = Math.min((page + 1) * length - 1, ugcResultList.size());
 			subList = ugcResultList.subList(start, end);
 		} catch (IndexOutOfBoundsException e) {
 			return "[]";
 		}
-		
-		int length = subList.size();
+
 		this.logger.debug("serializing {} items", length);
 		String ugcJson = UGC.toJsonArrayUGC(subList);
-		if (draw < 0) {
-			return ugcJson;
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append("{\"draw\":");
-		sb.append(draw);
-		sb.append(",\"feed\":");
-		sb.append(ugcJson);
-		sb.append("}");
-		this.logger.debug("returning {} items", length);
 
-		return sb.toString();
+		return ugcJson;
+
+		//return sb.toString();
 
 	}
 	
@@ -154,7 +181,8 @@ public class UGCController {
 
 	
 	@RequestMapping(value = "/feed/{id}/{fave}", method = RequestMethod.GET, produces = "application/json")
-	public String userFeed(@PathVariable("id") long id, @PathVariable("fave") boolean faves) {
+	public String userFeed(@PathVariable("id") long id, @PathVariable("fave") boolean faves,
+						   @RequestParam(name = "page", required = false) int page) {
 		User user = User.findUser(id);
 		if (user == null) {
 			return "[]";
