@@ -84,13 +84,14 @@ public class Tip extends UGC {
     
     public String toJson() {
         return new JSONSerializer()
-        		.exclude("logger").serialize(this);
+				.include("tags.id", "tags.name")
+        		.exclude("logger", "tags.*").serialize(this);
     }
     
     public static String toJsonArrayTip(Collection<Tip> collection) {
         return new JSONSerializer()
-        		.include("class", "usr.id", "usr.name", "usr.avatar64")
-		        .exclude("*.class", "*.logger")
+        		.include("class", "usr.id", "usr.name", "usr.username", "usr.avatar64", "tags.id", "tags.name")
+		        .exclude("*.class", "*.logger", "tags.*")
 		        .serialize(collection);
     }
     

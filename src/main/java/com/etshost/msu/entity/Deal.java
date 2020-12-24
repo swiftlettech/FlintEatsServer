@@ -172,14 +172,15 @@ public class Deal extends UGC {
     
     public String toJson() {
         return new JSONSerializer()
-        		.exclude("logger").serialize(this);
+				.include("tags.id", "tags.name")
+        		.exclude("logger", "tags.*").serialize(this);
     }
     
     public static String toJsonArrayDeal(Collection<Deal> collection) {
         return new JSONSerializer()
         		.include("class", "market.id", "market.name", 
-        				"usr.id", "usr.username")
-		        .exclude("*.class", "*.logger", "market.*", "usr.*")
+        				"usr.id", "usr.username", "usr.name", "usr.avatar64", "tags.id", "tags.name")
+		        .exclude("*.class", "*.logger", "market.*", "tags.*")
 		        .serialize(collection);
     }
     
