@@ -118,23 +118,24 @@ public class DealController {
 	 * @param deal	updated Deal
 	 * @return		ID of updated Deal
 	 */
-	@PreAuthorize("hasAuthority('admin')")
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
 	public String update(@PathVariable("id") long id, @RequestBody Deal deal) {
 		if (deal.getId() != id) {
 			return "ID error";
 		}
 		
-		/*
-		JsonArray errors = new JsonArray();
-		if (errors.size() > 0) {
-			return errors.toString();
+		User currentUser = User.getLoggedInUser();
+        Deal oldDeal = Deal.findDeal(id);
+		Logger logger = LoggerFactory.getLogger(User.class);
+		logger.debug("Old deal User: {}", oldDeal.getUsr());
+		if(oldDeal.getUsr().getId() != currentUser.getId() && !currentUser.admin()) {
+			return "No Permission";
 		}
-		*/
-        final Deal oldDeal = Deal.findDeal(deal.getId());
+
         deal.setVersion(oldDeal.getVersion());
         deal.setCreated(oldDeal.getCreated());
         deal.setStatus(oldDeal.getStatus());
+        deal.setUsr(oldDeal.getUsr());
 		// merge and return id
 		deal.merge();
 		return deal.getId().toString();
