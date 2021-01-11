@@ -282,4 +282,37 @@ public class AuthController {
 		return null;
 	}
 
+	/**
+	 * For testing purposes.
+	 * XXX: REMOVE FOR PRODUCTION
+	 * @exclude
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/devlogin", method = RequestMethod.GET, produces = "application/json")
+	public String devlogin(HttpServletRequest request, HttpServletResponse response) {
+		//perform login
+		UserDetailsServiceImpl userDetailsService = new UserDetailsServiceImpl();
+		UserDetails userDetails = null;
+		try {
+			userDetails = userDetailsService.loadUserByUsername("admin2");
+		} catch (Exception e) {
+			this.logger.debug(e.toString());
+		}
+		if (userDetails == null) {
+			this.logger.debug("user is null: {}", "admin2");
+			return null;
+		}
+
+		Authentication authToken =
+				new UsernamePasswordAuthenticationToken(userDetails.getUsername(),
+						userDetails.getPassword(),
+						userDetails.getAuthorities());
+		SecurityContextHolder.getContext().setAuthentication(authToken);
+		User u  = User.getLoggedInUser();
+		// return user id
+		return u.getId().toString();
+	}
+
 }

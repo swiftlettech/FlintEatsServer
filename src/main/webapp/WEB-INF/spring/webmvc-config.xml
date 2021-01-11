@@ -116,4 +116,5 @@
 			</list>
 		</property>
 	</bean>
+	<sec:global-method-security pre-post-annotations="enabled"/>
 </beans>

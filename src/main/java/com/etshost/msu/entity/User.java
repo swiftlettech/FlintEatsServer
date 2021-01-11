@@ -48,6 +48,7 @@ import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -517,6 +518,12 @@ public class User extends Entity {
         if (authentication == null) {
         	return null;
         }
+
+        SimpleGrantedAuthority anon = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
+        if (authentication.getAuthorities().contains(anon)) {
+            return null;
+        }
+
         return User.findUsersByUsernameEqualsNoCase(authentication.getName()).getSingleResult();
     }
     

@@ -1,12 +1,16 @@
 package com.etshost.msu.web;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Instant;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.etshost.msu.bean.DealBean;
+import com.etshost.msu.bean.IndexedUGCBean;
+import com.etshost.msu.bean.TipBean;
+import com.etshost.msu.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,10 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.etshost.msu.entity.Tip;
-import com.etshost.msu.entity.User;
-import com.etshost.msu.entity.Viewing;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.Tip} class.
@@ -153,6 +153,47 @@ public class TipController {
 		new Viewing(user, tip).persist();
 		tip.merge(); //update updated time
 		return tip.toJson();
+	}
+
+	@PreAuthorize("@creatorChecker.check(#id)")
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
+	public String update(@PathVariable("id") long id, @RequestBody TipBean tip) {
+		if (tip.getId() != id || Tip.findTip(tip.getId())==null) {
+			return "ID error";
+		}
+
+		final Tip oldTip =Tip.findTip(tip.getId());
+		Tip.TipType ntype = null;
+
+		if (tip.getTipType() != null) {
+
+			try {
+				ntype = Tip.TipType.valueOf(tip.getTipType().toUpperCase());
+			} catch (IllegalArgumentException | NullPointerException e) {
+				this.logger.error(e.toString());
+			}
+		}
+		if (ntype != null && !ntype.equals(oldTip.getTipType())) {
+			oldTip.setTipType(ntype);
+		}
+
+		if (tip.getText() != null && !tip.getText().equals(oldTip.getText())) {
+			oldTip.setText(tip.getText());
+		}
+
+		if (tip.getTags() != null) {
+			Set<Tag> tags = new HashSet<Tag>();
+			for (IndexedUGCBean u : tip.getTags()) {
+				tags.add(Tag.findTag(u.id));
+			}
+			if (!tags.equals(oldTip.getTags())) {
+				oldTip.setTags(tags);
+			}
+		}
+
+		oldTip.setModified(Instant.now());
+		oldTip.persist();
+		return tip.getId().toString();
 	}
 	
 	@RequestMapping(value = "/search", method = RequestMethod.GET, produces = "application/json")
