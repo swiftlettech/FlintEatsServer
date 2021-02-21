@@ -1,15 +1,17 @@
 package com.etshost.msu.entity;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
+import flexjson.JSON;
 import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
@@ -20,6 +22,7 @@ import org.hibernate.search.annotations.Store;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
@@ -60,12 +63,19 @@ public class Tip extends UGC {
 
 	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)	
     private String text;
+
+    @JSON(include = false)
+    private byte[] image;
 	
 	@JsonCreator
-	public static Tip factory(@JsonProperty("text") String text, @JsonProperty("tags") Set<Tag> tags) {
+	public static Tip factory(
+	        @JsonProperty("text") String text,
+            @JsonProperty("tags") Set<Tag> tags,
+            @JsonProperty("image") String image64) {
 		Logger logger = LoggerFactory.getLogger(Tip.class);
 		logger.debug("factory. tags: {}", tags);
 		Tip tip = new Tip();
+        tip.setImageBase64(image64);
 		tip.setText(text);
 		tip.setTags(tags);
 		return tip;
@@ -181,6 +191,66 @@ public class Tip extends UGC {
         }
         return entityManager().createQuery(jpaQuery, Tip.class)
         		.setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+    public void setImageBase64(String image64) {
+        try {
+            byte[] image = Base64.getMimeDecoder().decode(image64);
+            this.setImage(image);
+        } catch (Exception e) {
+            this.logger.error(e.toString());
+        }
+    }
+
+    @JSON(include = false)
+    public byte[] getImage() {
+        return this.image;
+    }
+
+    @JSON(include = false)
+    public String getImageBase64() {
+        if (this.image == null) {
+            return null;
+        }
+        String image64 = Base64.getEncoder().encodeToString(this.image);
+        return image64;
+    }
+
+    @JSON(name = "image64")
+    public String getImageBase64Scaled() {
+        if (this.image == null) {
+            return null;
+        }
+        final InputStream in = new ByteArrayInputStream(this.image);
+        BufferedImage image;
+        BufferedImage imageScaled;
+
+        // read in the image
+        try {
+            image = ImageIO.read(in);
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block. Come up with better return.
+            e.printStackTrace();
+            return null;
+        }
+        if (image == null) {
+            return null;
+        }
+
+        imageScaled = Scalr.resize(image, 360);
+
+        // write the image
+        final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(imageScaled, "png", output);
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            // Come up with better return
+            return null;
+        }
+        String image64 = Base64.getEncoder().encodeToString(output.toByteArray());
+        return image64;
     }
     
     @SuppressWarnings("unchecked")

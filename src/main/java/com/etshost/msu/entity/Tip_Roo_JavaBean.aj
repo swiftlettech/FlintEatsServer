@@ -22,5 +22,10 @@ privileged aspect Tip_Roo_JavaBean {
     public void Tip.setText(String text) {
         this.text = text;
     }
-    
+
+    public void Tip.setImage(byte[] image) {
+        this.image = image;
+    }
+
+
 }

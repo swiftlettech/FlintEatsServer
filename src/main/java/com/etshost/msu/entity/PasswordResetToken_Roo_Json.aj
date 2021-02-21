@@ -26,12 +26,12 @@ privileged aspect PasswordResetToken_Roo_Json {
         .use(null, PasswordResetToken.class).deserialize(json);
     }
     
-    public static String PasswordResetToken.toJsonArray(Collection<Entity> collection) {
+    public static String PasswordResetToken.toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
         .exclude("*.class").serialize(collection);
     }
     
-    public static String PasswordResetToken.toJsonArray(Collection<Entity> collection, String[] fields) {
+    public static String PasswordResetToken.toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
         .include(fields).exclude("*.class").serialize(collection);
     }

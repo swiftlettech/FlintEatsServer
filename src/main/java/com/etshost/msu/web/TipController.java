@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.etshost.msu.bean.DealBean;
 import com.etshost.msu.bean.IndexedUGCBean;
 import com.etshost.msu.bean.TipBean;
+import com.etshost.msu.bean.UGCCreatorCheck;
 import com.etshost.msu.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Transactional
 public class TipController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
+	@Autowired
+	protected UGCCreatorCheck creatorChecker;
+
 	/**
 	 * Creates a new Tip from the JSON description
 	 * @param tip	Tip to create
@@ -179,6 +184,10 @@ public class TipController {
 
 		if (tip.getText() != null && !tip.getText().equals(oldTip.getText())) {
 			oldTip.setText(tip.getText());
+		}
+
+		if (tip.getImage() != null && !Arrays.equals(tip.getImage(),oldTip.getImage())) {
+			oldTip.setImage(tip.getImage());
 		}
 
 		if (tip.getTags() != null) {

@@ -18,6 +18,8 @@ public class TipBean {
 
     public List<IndexedUGCBean> tags;
 
+    public byte[] image;
+
     public List<IndexedUGCBean> getTags() {
         return tags;
     }
@@ -26,7 +28,13 @@ public class TipBean {
         this.tags = tags;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
 
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public String getTipType() {
         return tipType;
