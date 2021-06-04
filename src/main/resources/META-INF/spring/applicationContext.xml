@@ -86,8 +86,8 @@
         <!-- SMTP settings -->
         <property name="host" value="smtp.gmail.com" />
         <property name="port" value="587" />
-        <property name="username" value="shojuacrie" />
-        <property name="password" value='FcJi7701' />
+        <property name="username" value="fill me in" />
+        <property name="password" value='fill me in' />
 
         <property name="javaMailProperties">
             <!-- additional properties specific to JavaMail -->
