@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="msu:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>msu</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="msu-1.0.0.20201202.war">
+      <element id="artifact" artifact-name="msu:war exploded" />
+    </root>
+  </artifact>
+</component>
