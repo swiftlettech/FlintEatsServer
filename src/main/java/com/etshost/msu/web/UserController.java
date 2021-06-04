@@ -83,14 +83,15 @@ public class UserController {
 	 * @return ID if success; error if failed
 	 */
 	@RequestMapping(value = "/me/password", method = RequestMethod.POST, produces = "application/json")
-	public String passwordChange(@RequestBody String password) {
+	public List<String> passwordChange(@RequestBody String password) {
+		//TODO  Fix the passwordChange logic to return consistent stuff.
 		User user = User.getLoggedInUser();
 		if (user == null) {
-			return "User not found.";
+			return null;
 		}
 		
-		String result = user.changePassword(password);
-		if (NumberUtils.isNumber(result)) {
+		List<String> result = user.changePassword(password);
+		if (result.isEmpty()) {
 			user.merge();
 		}
 		return result;
@@ -422,14 +423,14 @@ public class UserController {
 	 */
 	@PreAuthorize("hasAuthority('admin')")
 	@RequestMapping(value = "/{id}/password", method = RequestMethod.POST, produces = "application/json")
-	public String passwordChange(@PathVariable("id") long id, @RequestBody String password) {
+	public List<String> passwordChange(@PathVariable("id") long id, @RequestBody String password) {
 		User user = User.findUser(id);
 		if (user == null) {
-			return "User not found.";
+			return null;
 		}
 		
-		String result = user.changePassword(password);
-		if (NumberUtils.isNumber(result)) {
+		List<String> result = user.changePassword(password);
+		if (result.isEmpty()) {
 			user.merge();
 		}
 		return result;

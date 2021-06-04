@@ -28,7 +28,7 @@ import com.etshost.msu.entity.User;
 @RestController
 public class CommentController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	/**
 	 * Creates a new Comment from the JSON description
 	 * @param comment	Comment to create
@@ -36,7 +36,7 @@ public class CommentController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
 	public String create(@RequestBody Comment comment) {
-		
+
 		comment.setUsr(User.getLoggedInUser());
 		/*
 		JsonArray errors = new JsonArray();
@@ -49,7 +49,7 @@ public class CommentController {
 		comment.persist();
 		return comment.getId().toString();
 	}
-	
+
 	/**
 	 * Returns JSON list of Comments
 	 * @param start			index of first item

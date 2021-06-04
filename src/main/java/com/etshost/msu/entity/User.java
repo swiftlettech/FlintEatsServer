@@ -247,19 +247,7 @@ public class User extends Entity {
         setPassword(UUID.randomUUID().toString());
     }
     
-    /*
-    
-	@JsonCreator
-	public static User factory(@JsonProperty("username") String username, 
-			@JsonProperty("email") String email, @JsonProperty("password") String password) {
-		User user = new User();
-		if (email.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}|^$")) {
-			user.setEmail(email);
-		}
-		user.setPassword(password);
-		return user;
-	}
-	*/
+
 
     @JSON(include = false)
     public PasswordResetToken createPasswordResetToken() {
@@ -358,7 +346,7 @@ public class User extends Entity {
         }
     }
 
-    public String changePassword(final String password) {
+    public List<String> changePassword(final String password) {
     	/*
         if (password.equals(this.getPassword())) {
             return "New password must be different from old password.";
@@ -394,7 +382,7 @@ public class User extends Entity {
         }
         */
         this.setPassword(password);
-        return this.getId().toString();
+        return new ArrayList();
     }
     
     public List<UGC> getFaves() {

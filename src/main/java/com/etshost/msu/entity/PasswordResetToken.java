@@ -9,8 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -36,40 +39,7 @@ public class PasswordResetToken extends Entity {
 	@DateTimeFormat(style = "MM")
     private Instant expiryDate;
 
-    public void sendTokenEmail(final String url, final String token, final String email) {
-        if (email == null) {
-            return;
-        }
-        String resetUrl = url + token;
-        MailSender mailSender = new JavaMailSenderImpl();
-        MimeMessage message = ((JavaMailSenderImpl) mailSender).createMimeMessage();
-        ((JavaMailSenderImpl) mailSender).setHost("imap.etshost.com");
-        ((JavaMailSenderImpl) mailSender).setPort(465);
-        ((JavaMailSenderImpl) mailSender).setUsername("chass@etshost.com");
-        ((JavaMailSenderImpl) mailSender).setPassword("EtS0199!");
-        final Properties props = ((JavaMailSenderImpl) mailSender).getJavaMailProperties();
-        props.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.setProperty("mail.smtp.socketFactory.fallback", "false");
-        props.setProperty("mail.send.protocol", "smtps");
-        ((JavaMailSenderImpl) mailSender).setJavaMailProperties(props);
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, false, "utf-8");
-            helper.setSubject("Double Up Food Bucks Password Reset");
-            helper.setFrom("dufb@etshost.com");
-            helper.setTo(email);
-            helper.setCc("dufb@etshost.com");
-            String body = "Hello Double Up user,"
-            		+ "<br><br>A password reset request has been initiated on your account."
-            		+ "To reset your password, please follow the link below:"
-            		+ "<br><br><a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
-            		+"<br><br>If you did not make a password reset request, you can ignore this email.";
-            message.setContent(body, "text/html");
-            ((JavaMailSenderImpl) mailSender).send(message);
-        } catch (MessagingException e) {
-            // simply log it and go on...
-            this.logger.info(e.getMessage());
-        }
-    }
+
 
     public void sendTokenEmailRegister(final String url, final String token, final String email) {
         if (email == null) {
