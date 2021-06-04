@@ -148,7 +148,7 @@ public class 	UGCController {
 		List<UGC> subList;
 		try {
 			int start = Math.min(page * length, ugcResultList.size());
-			int end = Math.min((page + 1) * length - 1, ugcResultList.size());
+			int end = Math.min((page + 1) * length, ugcResultList.size());
 			subList = ugcResultList.subList(start, end);
 		} catch (IndexOutOfBoundsException e) {
 			return "[]";
