@@ -24,7 +24,8 @@ privileged aspect PasswordResetToken_Roo_JavaBean {
     public void PasswordResetToken.setUsr(User usr) {
         this.usr = usr;
     }
-    
+
+
     public Instant PasswordResetToken.getExpiryDate() {
         return this.expiryDate;
     }

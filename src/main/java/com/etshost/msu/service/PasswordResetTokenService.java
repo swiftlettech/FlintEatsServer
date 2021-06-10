@@ -5,6 +5,7 @@ import com.etshost.msu.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,12 @@ public class PasswordResetTokenService {
 
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Value("${password.change.url}")
+    private String passwordChangeUrl;
+
 
     public void sendTokenEmail(final String url, PasswordResetToken token) {
+
 
         String resetUrl = url +"/"+token.getToken();
         MimeMessage message = mailSender.createMimeMessage();
@@ -38,6 +43,7 @@ public class PasswordResetTokenService {
                     + "<br><br><a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
                     +"<br><br>If you did not make a password reset request, you can ignore this email.";
             message.setContent(body, "text/html");
+            this.logger.info("Configured url is "+passwordChangeUrl);
             mailSender.send(message);
         } catch (MessagingException e) {
             // simply log it and go on...
@@ -55,6 +61,19 @@ public class PasswordResetTokenService {
         return !isTokenFound(passToken) ? "invalid"
                 : isTokenExpired(passToken) ? "expired"
                 : null;
+    }
+
+    public void expireToken(String token) {
+        PasswordResetToken passToken = null;
+
+        try {
+            passToken = PasswordResetToken.findPasswordResetTokensByTokenEquals(token).getSingleResult();
+            passToken.setExpiryDate(Instant.now());
+            passToken.merge();
+        } catch (Exception e) {
+            this.logger.info(e.getMessage());
+        }
+
     }
 
     public Optional<User> getUserByPasswordResetToken(String token) {

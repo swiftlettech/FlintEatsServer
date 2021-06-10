@@ -8,15 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
@@ -61,6 +53,8 @@ import com.google.gson.JsonObject;
 
 import flexjson.JSON;
 import flexjson.JSONSerializer;
+
+import static java.util.Collections.*;
 
 
 /**
@@ -347,10 +341,11 @@ public class User extends Entity {
     }
 
     public List<String> changePassword(final String password) {
-    	/*
+    	List<String> errors = new ArrayList<String>();
+        /*
         if (password.equals(this.getPassword())) {
             return "New password must be different from old password.";
-        }
+        }*/
         // check for password complexity
         // this is a simple DIY solution; consider vt-password if more functionality is needed
         // password must meet at least two criteria
@@ -358,31 +353,41 @@ public class User extends Entity {
         // contains number
         if (password.matches(".*\\d.*")) {
             met++;
+        } else {
+            errors.add("Does not contain a number");
         }
         // contains letter (lowercase)
         if (password.matches(".*[a-z].*")) {
             met++;
+        } else {
+            errors.add("Does not contain a lowercase letter");
         }
         // contains letter (uppercase)
         if (password.matches(".*[A-Z].*")) {
             met++;
+        } else {
+            errors.add("Does not contain an uppercase letter");
         }
         // contains special character (non-letter, non-number)
         if (password.matches(".*[^a-zA-Z0-9].*")) {
             met++;
+        } else {
+            errors.add("Does not contain a special character");
+        }
+
+        boolean length = true;
+        if (!password.matches(".{8,}")) {
+            errors.add("Is not at least 8 characters");
+            length = false;
         }
         // met 2+ criteria, and is 8+ characters
-        if (!password.matches(".{8,}") || met < 2) {
-            return "Password does not meet complexity requirements.<br />"
-            		+ "Must be at least 8 characters and contain at least two of the following:<br />"
-            		+ "- Uppercase letter<br />"
-            		+ "- Lowercase letter<br />"
-            		+ "- Number<br />"
-            		+ "- Special character";
+        if (length || met < 2) {
+            return errors;
+        } else {
+
+            this.setPassword(password);
         }
-        */
-        this.setPassword(password);
-        return new ArrayList();
+        return EMPTY_LIST;
     }
     
     public List<UGC> getFaves() {

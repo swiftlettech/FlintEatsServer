@@ -41,6 +41,7 @@ public class PasswordResetToken extends Entity {
 
 
 
+
     public void sendTokenEmailRegister(final String url, final String token, final String email) {
         if (email == null) {
             return;

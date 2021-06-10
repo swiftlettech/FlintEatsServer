@@ -15,19 +15,23 @@
         <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/update.jspx"/>
     </definition>
 
-    <definition extends="public" name="passwordresettokens/resetPassword">
-        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/resetPassword.jsp"/>
+    <definition extends="external" name="passwordresettokens/resetPassword">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/resetPassword.jspx"/>
     </definition>
 
-    <definition extends="public" name="passwordresettokens/changePassword">
-        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/changePassword.jsp"/>
+    <definition extends="external" name="passwordresettokens/changePassword">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/changePassword.jspx"/>
     </definition>
 
-    <definition extends="public" name="passwordresettokens/tokenError">
+    <definition extends="external" name="passwordresettokens/tokenError">
         <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/passwordResetError.jsp"/>
     </definition>
 
-    <definition extends="public" name="passwordresettokens/confirm">
+    <definition extends="external" name="passwordresettokens/confirm">
         <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/confirm.jsp"/>
+    </definition>
+
+    <definition extends="external" name="passwordresettokens/passwordResetSucceess">
+        <put-attribute name="body" value="/WEB-INF/views/passwordresettokens/passwordResetSuccess.jsp"/>
     </definition>
 </tiles-definitions>

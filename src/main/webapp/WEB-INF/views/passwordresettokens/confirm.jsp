@@ -4,6 +4,7 @@
 <title>This is a welcome page</title>
 </head>
 <body>
-<h1>Confirmation email on its way</h1>
+A password reset link has been sent to email associated with your account.  If you do not receive your password reset email,
+within 24 hours, please check your spam filter.  Email questions to <a href="mailto://admin@flinteats.org">admin@flinteats.org</a>.
 </body>
 </html>

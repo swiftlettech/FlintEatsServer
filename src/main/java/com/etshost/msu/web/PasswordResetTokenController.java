@@ -71,15 +71,16 @@ public class PasswordResetTokenController {
     }
 
 
-    @RequestMapping(path = "/changePassword", method = RequestMethod.POST)
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
     public ModelAndView changePassword(@RequestParam("password") String password,
+                                       @RequestParam("new_password_two") String password2,
                                        @RequestParam("token") String token) {
 
         String result = prtService.validatePasswordResetToken(token);
         ModelAndView mav = null;
         if (result != null) {
             mav = new ModelAndView("passwordresettokens/changePassword");
-            mav.addObject("token", result);
+            mav.addObject("token_error", result);
         } else {
 
             Optional<User> user = prtService.getUserByPasswordResetToken(token);
@@ -88,13 +89,15 @@ public class PasswordResetTokenController {
                 if (!errors.isEmpty()) {
                     mav = new ModelAndView("passwordresettokens/changePassword");
                     mav.addObject("password", errors);
+                    mav.addObject("token", token);
                 } else {
                     mav = new ModelAndView("passwordresettokens/passwordResetSucceess");
+                    prtService.expireToken(token);
                 }
 
             } else {
                 mav = new ModelAndView("passwordresettokens/changePassword");
-                mav.addObject("password", "invalid");
+                mav.addObject("token_error", "invalid");
 
             }
         }

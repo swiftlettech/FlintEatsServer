@@ -1,0 +1,81 @@
+<html xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:tiles="http://tiles.apache.org/tags-tiles" xmlns:spring="http://www.springframework.org/tags"
+      xmlns:util="urn:jsptagdir:/WEB-INF/tags/util">
+
+<jsp:output doctype-root-element="HTML" doctype-system="about:legacy-compat"/>
+
+<jsp:directive.page contentType="text/html;charset=UTF-8"/>
+<jsp:directive.page pageEncoding="UTF-8"/>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=8"/>
+    <!-- copies from load-scripts tag -->
+    <!--<spring:theme code="styleSheet" var="roo_css" />-->
+    <!--<spring:url value="/${roo_css}" var="roo_css_url" />-->
+    <spring:url value="/resources/dojo/dojo.js" var="dojo_url" />
+    <spring:url value="/resources/dijit/themes/tundra/tundra.css" var="tundra_url" />
+    <spring:url value="/resources/spring/Spring.js" var="spring_url" />
+    <spring:url value="/resources/spring/Spring-Dojo.js" var="spring_dojo_url" />
+    <spring:url value="/resources/images/favicon.ico" var="favicon" />
+    <spring:url value="/resources/dojox/form/resources/CheckedMultiSelect.css" var="CheckedMultiSelect_url" />
+    <spring:url value="/resources/org/kryogenix/sorttable.js" var="sorttable_url" />
+    <spring:url var="eats_style" value="/resources/styles/eats.css" />
+    <spring:url var="logo_image" value="/resources/images/Flint-Eats-Logo_png.png" />
+    <link rel="stylesheet" type="text/css" href="${CheckedMultiSelect_url}" />
+    <link rel="stylesheet" type="text/css" href="${tundra_url}" />
+    <link rel="stylesheet" type="text/css" href="${eats_style}" />
+
+    <!--<link rel="stylesheet" type="text/css" media="screen" href="${roo_css_url}" />-->
+    <link rel="SHORTCUT ICON" href="${favicon}" />
+
+    <!-- Get the user local from the page context (it was set by Spring MVC's locale resolver) -->
+    <c:set var="userLocale">
+        <c:set var="plocale">${pageContext.response.locale}</c:set>
+        <c:out value="${fn:replace(plocale, '_', '-')}" default="en" />
+    </c:set>
+
+    <script type="text/javascript">var djConfig = {parseOnLoad: false, isDebug: false, locale: '${fn:toLowerCase(userLocale)}'};</script>
+
+    <script src="${dojo_url}" type="text/javascript"><!-- required for FF3 and Opera --></script>
+    <script src="${spring_url}" type="text/javascript"><!-- /required for FF3 and Opera --></script>
+    <script src="${spring_dojo_url}" type="text/javascript"><!-- required for FF3 and Opera --></script>
+    <script src="${sorttable_url}" type="text/javascript"></script>
+    <script language="JavaScript" type="text/javascript">dojo.require("dojo.parser");</script>
+
+    <!-- DONE: copies from load-scripts tag -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"/>
+
+
+    <spring:message code="application_name" var="app_name" htmlEscape="false"/>
+    <title><spring:message code="welcome_h3" arguments="${app_name}"/></title>
+</head>
+
+<body class="tundra spring">
+<div id="wrapper" class="container">
+
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom row">
+        <a href="https://flinteats.org" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <div class="col-md-2">
+            <img src="${logo_image}"  alt="Flint Eats Logo" width="120px"/>
+            </div>
+            <div class="col-md-8 align-bottom">
+            <h1 class="display-5 align-bottom">Password Management Page for FlintEats App</h1>
+            </div>
+        </a>
+    </header>
+    <div class="row">
+    <div id="main" class="col-md-8">
+        <tiles:insertAttribute name="body"/>
+    </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+
+</html>
