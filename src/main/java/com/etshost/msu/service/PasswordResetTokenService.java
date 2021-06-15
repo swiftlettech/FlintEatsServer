@@ -38,8 +38,9 @@ public class PasswordResetTokenService {
             helper.setSubject("FlintEats password reset request");
             helper.setTo(token.getUsr().getEmail());
             String body = "Hello FlintEats user,"
-                    + "<br><br>A password reset request has been initiated on your account."
-                    + "To reset your password, please follow the link below:"
+                    + "<br><br>A password reset request has been initiated on your account.  Your username is:"
+                    + "<br><br>"+token.getUsr().getUsername()
+                    + "<br><br>To reset your password, please follow the link below:"
                     + "<br><br><a href=\"" + resetUrl + "\">" + resetUrl + "</a>"
                     +"<br><br>If you did not make a password reset request, you can ignore this email.";
             message.setContent(body, "text/html");

@@ -92,6 +92,7 @@ public class PasswordResetTokenController {
                     mav.addObject("token", token);
                 } else {
                     mav = new ModelAndView("passwordresettokens/passwordResetSucceess");
+                    //user.get().merge();
                     prtService.expireToken(token);
                 }
 

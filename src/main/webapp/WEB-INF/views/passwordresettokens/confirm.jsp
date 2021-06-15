@@ -5,6 +5,6 @@
 </head>
 <body>
 A password reset link has been sent to email associated with your account.  If you do not receive your password reset email,
-within 24 hours, please check your spam filter.  Email questions to <a href="mailto://admin@flinteats.org">admin@flinteats.org</a>.
+within 24 hours, please check your spam filter.  Email questions to <a href="mailto://flinteats@gmail.com">flinteats@gmail.com</a>.
 </body>
 </html>

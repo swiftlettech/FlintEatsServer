@@ -357,16 +357,10 @@ public class User extends Entity {
             errors.add("Does not contain a number");
         }
         // contains letter (lowercase)
-        if (password.matches(".*[a-z].*")) {
+        if (password.matches(".*[a-z].*") && password.matches(".*[A-Z].*")) {
             met++;
         } else {
-            errors.add("Does not contain a lowercase letter");
-        }
-        // contains letter (uppercase)
-        if (password.matches(".*[A-Z].*")) {
-            met++;
-        } else {
-            errors.add("Does not contain an uppercase letter");
+            errors.add("Does not contain a mix of lowercase and uppercase letters");
         }
         // contains special character (non-letter, non-number)
         if (password.matches(".*[^a-zA-Z0-9].*")) {
@@ -381,11 +375,12 @@ public class User extends Entity {
             length = false;
         }
         // met 2+ criteria, and is 8+ characters
-        if (length || met < 2) {
+        if (!length || met < 2) {
             return errors;
         } else {
 
             this.setPassword(password);
+            this.merge();
         }
         return EMPTY_LIST;
     }
