@@ -501,6 +501,10 @@ public class UserController {
 		if (user == null) {
 			return "0";
 		}
-		return user.toJson();
+		if(User.getLoggedInUser().getUsername() == user.getUsername()) {
+			return user.toJsonSelf();
+		} else {
+			return user.toJson();
+		}
 	}
 }

@@ -126,10 +126,10 @@ public class User extends Entity {
 	private Instant irbAccept;
 
     
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "followers")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "followers")
     private Set<User> followees = new HashSet<User>();
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<User> followers = new HashSet<User>();
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -493,10 +493,16 @@ public class User extends Entity {
     	}
     }
     
-    public String toJson() {
+    public String toJsonSelf() {
         return new JSONSerializer()
         		.include("id")
         		.exclude("logger", "password", "*.class").serialize(this);
+    }
+    
+    public String toJson() {
+        return new JSONSerializer()
+        		.include("id", "username", "avatar64")
+        		.exclude("logger", "password", "email", "phone", "*.class").serialize(this);
     }
     
     public static String toJsonArrayUser(Collection<User> collection) {
