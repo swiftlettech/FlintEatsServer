@@ -1,0 +1,7 @@
+ALTER TABLE IF EXISTS public.viewing DROP CONSTRAINT IF EXISTS fk5mubrok09hr56b4henqquog7s;
+
+ALTER TABLE IF EXISTS public.viewing
+    ADD CONSTRAINT fk5mubrok09hr56b4henqquog7s FOREIGN KEY (user_id)
+    REFERENCES public.usr (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;

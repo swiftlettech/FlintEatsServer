@@ -7,7 +7,7 @@
 	<groupId>com.etshost.msu</groupId>
 	<artifactId>msu</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.0.20201202</version>
+	<version>1.1.0.20220526</version>
 	<name>msu</name>
 	<profiles>
 		<profile>
@@ -52,12 +52,12 @@
 		<repository>
 			<id>spring-maven-release</id>
 			<name>Spring Maven Release Repository</name>
-			<url>https://maven.springframework.org/release</url>
+			<url>https://repo.spring.io/release</url>
 		</repository>
 		<repository>
 			<id>spring-maven-milestone</id>
 			<name>Spring Maven Milestone Repository</name>
-			<url>https://maven.springframework.org/milestone</url>
+			<url>https://repo.spring.io/milestone</url>
 		</repository>
 		<repository>
 			<id>spring-roo-repository</id>
@@ -69,12 +69,12 @@
 		<pluginRepository>
 			<id>spring-maven-release</id>
 			<name>Spring Maven Release Repository</name>
-			<url>https://maven.springframework.org/release</url>
+			<url>https://repo.spring.io/release</url>
 		</pluginRepository>
 		<pluginRepository>
 			<id>spring-maven-milestone</id>
 			<name>Spring Maven Milestone Repository</name>
-			<url>https://maven.springframework.org/milestone</url>
+			<url>https://repo.spring.io/milestone</url>
 		</pluginRepository>
 		<pluginRepository>
 			<id>spring-roo-repository</id>
@@ -517,6 +517,11 @@
 			<artifactId>jaxb-runtime</artifactId>
 			<version>2.3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>5.2.4</version>
+		</dependency>
     </dependencies>
 	<build>
 		<plugins>
@@ -683,6 +688,22 @@
 					<username>maven</username>
 					<password>LYOKO</password>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<version>1.7.6</version>
+				<configuration>
+					<container>
+					<containerId>tomcat9x</containerId>
+					<type>embedded</type>
+					</container>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>8.5.1</version> 
 			</plugin>
 		</plugins>
 	</build>

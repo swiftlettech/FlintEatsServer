@@ -49,6 +49,19 @@ public class UserController {
 	}	
 	
 	/**
+	 * Deletes a user and all of their data
+	 * @return Boolean success or failure
+	 */
+	@RequestMapping(value = "/me", method = RequestMethod.DELETE, produces = "application/json")
+	public boolean delete() {
+		User user = User.getLoggedInUser();
+
+		// Delete the user, cascades to all records associated to the user
+		user.delete();
+		return true;
+	}
+	
+	/**
 	 * Updates the logged in user's avatar
 	 * @param avatar64	base64-encoded avatar
 	 * @return		ID of updated User
@@ -225,7 +238,7 @@ public class UserController {
 
 		return reacts.toString();
 	}
-	
+
 	/**
 	 * Get user avatars of ids
 	 * @param ids	IDs of User to get

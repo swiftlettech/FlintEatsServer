@@ -83,10 +83,16 @@
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
+    <bean id="flyway" class="com.etshost.msu.bean.Migration" init-method="repairAndMigrate" >
+        <property name="locations" value="classpath:db/migration,classpath:src/main/resources/db/migration" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="validateOnMigrate" value="false"/>
+    </bean> 
+
     <import resource="javaMail.xml" />
     <!--<bean class="org.springframework.mail.SimpleMailMessage" id="simpleMailMessage"/>-->
     <tx:annotation-driven mode="aspectj" transaction-manager="transactionManager"/>
-    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory">
+    <bean class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" id="entityManagerFactory" depends-on="flyway">
         <property name="persistenceUnitName" value="persistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>

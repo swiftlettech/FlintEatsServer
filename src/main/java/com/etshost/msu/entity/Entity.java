@@ -87,6 +87,12 @@ public abstract class Entity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "target")
     private Set<Comment> comments = new HashSet<Comment>();
     
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "target")
+    private Set<Reaction> reactions = new HashSet<Reaction>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "target")
+    private Set<Viewing> views = new HashSet<Viewing>();
+
 	@JsonCreator
 	public static Entity factory(long id) {
 		return Entity.findEntity(id);

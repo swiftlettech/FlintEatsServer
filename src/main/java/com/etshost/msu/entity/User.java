@@ -23,6 +23,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.Audited;
 import org.imgscalr.Scalr;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
@@ -139,6 +141,13 @@ public class User extends Entity {
     // UGC
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usr")
     private Set<UGC> ugc = new HashSet<UGC>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usr")
+    private Set<Reaction> reactions = new HashSet<Reaction>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usr")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Viewing> views = new HashSet<Viewing>();
 
     public User() {
         super();

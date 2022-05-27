@@ -13,7 +13,7 @@
 				to modify an existing database; value="create-drop" means the same as "create" 
 				but also drops tables when Hibernate closes; value="validate" makes no changes 
 				to the database -->
-			<property name="hibernate.hbm2ddl.auto" value="update"/>
+			<property name="hibernate.hbm2ddl.auto" value="none"/>
 			<property name="hibernate.connection.charSet" value="UTF-8"/>
 			<property name="hibernate.jdbc.use_streams_for_binary" value="false"/>
 

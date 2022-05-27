@@ -1,0 +1,7 @@
+ALTER TABLE IF EXISTS public.reaction DROP CONSTRAINT IF EXISTS fknb8ljy2hmm01nlow888wtbwbn;
+
+ALTER TABLE IF EXISTS public.reaction
+    ADD CONSTRAINT fknb8ljy2hmm01nlow888wtbwbn FOREIGN KEY (user_id)
+    REFERENCES public.usr (id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE CASCADE;
