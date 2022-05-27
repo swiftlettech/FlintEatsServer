@@ -87,6 +87,7 @@
         <property name="locations" value="classpath:db/migration,classpath:src/main/resources/db/migration" />
         <property name="dataSource" ref="dataSource" />
         <property name="validateOnMigrate" value="false"/>
+        <property name="baselineOnMigrate" value="true"/>
     </bean> 
 
     <import resource="javaMail.xml" />
