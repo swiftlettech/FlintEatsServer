@@ -94,7 +94,7 @@ public class Tip extends UGC {
     
     public String toJson() {
         return new JSONSerializer()
-				.include("tags.id", "tags.name")
+				.include("tags.id", "tags.name", "tipType")
         		.exclude("logger", "tags.*").serialize(this);
     }
     
