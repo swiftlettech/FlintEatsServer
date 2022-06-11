@@ -252,20 +252,20 @@ public class Market extends Entity {
     // pulled from Roo file due to bug [ROO-3570]
     public static List<Market> findMarketEntries(int firstResult, int maxResults,
     		String sortFieldName, String sortOrder) {
-    	if (sortFieldName == null || sortOrder == null) {
+        String jpaQuery = "SELECT o FROM Market o";
+        if (maxResults < 0) {
+            return entityManager().createQuery(jpaQuery, Market.class)
+                    .setFirstResult(firstResult).getResultList();
+        }
+        if (sortFieldName == null || sortOrder == null) {
     		return Market.findMarketEntries(firstResult, maxResults);
     	}
-        String jpaQuery = "SELECT o FROM Market o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)
         		|| Entity.fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
             if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
                 jpaQuery = jpaQuery + " " + sortOrder;
             }
-        }
-        if (maxResults < 0) {
-        	return entityManager().createQuery(jpaQuery, Market.class)
-        			.setFirstResult(firstResult).getResultList();
         }
         return entityManager().createQuery(jpaQuery, Market.class)
         		.setFirstResult(firstResult).setMaxResults(maxResults).getResultList();

@@ -3,11 +3,19 @@ package com.etshost.msu.entity;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvNumber;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
@@ -15,6 +23,7 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
 
 import flexjson.JSONDeserializer;
@@ -23,22 +32,36 @@ import flexjson.JSONSerializer;
 @Analyzer(impl = org.apache.lucene.analysis.standard.StandardAnalyzer.class)
 @Audited
 @javax.persistence.Entity
+@Configurable
 @Indexed
+//@RooJavaBean
+//@RooJson
+//@RooToString
+@Transactional
 public class FoodPantrySite extends Entity {
 
-	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)	
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
+    @CsvBindByName(column = "Name", required = true)
     private String name;
 
+    @CsvBindByName(column = "Address", required = true)
     private String address;
 
+    @CsvBindByName(column = "Phone_1")
     private String phone;
     
+    @CsvBindByName(column = "Schedule")
     private String schedule;
 
+    @CsvBindByName(column = "Additional")
     private String notes;
 
+    @CsvBindByName(column = "Y", required = true)
+    @CsvNumber("#.##########")
     private Double lat;
     
+    @CsvBindByName(column = "X", required = true)
+    @CsvNumber("#.##########")
     private Double lng;
 
 
@@ -106,45 +129,45 @@ public class FoodPantrySite extends Entity {
 
 	@JsonCreator
 	public static FoodPantrySite factory(
-			@JsonProperty("id") Long id,
-			@JsonProperty("name") String name,
-			@JsonProperty("address") String address,
-			@JsonProperty("phone") String phone,
-			@JsonProperty("schedule") String schedule,
-			@JsonProperty("notes") String notes,
-			@JsonProperty("lat") Double lat,
-			@JsonProperty("lng") Double lng
-			) {
+        @JsonProperty("id") Long id,
+        @JsonProperty("name") String name,
+        @JsonProperty("address") String address,
+        @JsonProperty("phone") String phone,
+        @JsonProperty("schedule") String schedule,
+        @JsonProperty("notes") String notes,
+        @JsonProperty("lat") Double lat,
+        @JsonProperty("lng") Double lng
+    ) {
         FoodPantrySite foodPantrySite = null;
-		if (id != null) {
-			foodPantrySite = FoodPantrySite.findFoodPantrySite(id);
-			if (foodPantrySite == null) {
-				return foodPantrySite;
-			}
-		} else {
-			foodPantrySite = new FoodPantrySite();
-		}
-		if (name != null) {
-			foodPantrySite.setName(name);
-		}
-		if (address != null) {
-			foodPantrySite.setAddress(address);
-		}
-		if (schedule != null) {
-			foodPantrySite.setSchedule(schedule);
-		}
-		if (notes != null) {
-			foodPantrySite.setNotes(notes);
-		}
-		if (phone != null) {
-			foodPantrySite.setPhone(phone);
-		}
-		if (lat != null
-				&& lng != null) {
-			foodPantrySite.setCoordinates(lat, lng);
-		}
-		return foodPantrySite;
-	}
+        if (id != null) {
+            foodPantrySite = FoodPantrySite.findFoodPantrySite(id);
+            if (foodPantrySite == null) {
+                return foodPantrySite;
+            }
+        } else {
+            foodPantrySite = new FoodPantrySite();
+        }
+        if (name != null) {
+            foodPantrySite.setName(name);
+        }
+        if (address != null) {
+            foodPantrySite.setAddress(address);
+        }
+        if (schedule != null) {
+            foodPantrySite.setSchedule(schedule);
+        }
+        if (notes != null) {
+            foodPantrySite.setNotes(notes);
+        }
+        if (phone != null) {
+            foodPantrySite.setPhone(phone);
+        }
+        if (lat != null
+                && lng != null) {
+            foodPantrySite.setCoordinates(lat, lng);
+        }
+        return foodPantrySite;
+    }
 
     // To String
     public String toString() {
@@ -191,14 +214,35 @@ public class FoodPantrySite extends Entity {
         return merged;
     }
 
+    @Transactional
+    public static List<FoodPantrySite> replaceFoodPantrySiteEntries(List<FoodPantrySite> sites) {
+        Logger logger = LoggerFactory.getLogger(FoodPantrySite.class);
+        List<FoodPantrySite> existing = findAllFoodPantrySites();
+        existing.forEach((site) -> {
+            logger.debug(site.toString());
+            site.delete();
+            //site.persist();
+        });
+        sites.forEach((site) -> {
+            logger.debug(site.toString());
+            site.persist();
+        });
+        return findAllFoodPantrySites();
+    }
+
 
     // Finders
     public static List<FoodPantrySite> findFoodPantrySiteEntries(int firstResult, int maxResults,
     		String sortFieldName, String sortOrder) {
-    	if (sortFieldName == null || sortOrder == null) {
+        Logger logger = LoggerFactory.getLogger(FoodPantrySite.class);
+        String jpaQuery = "SELECT o FROM FoodPantrySite o";
+        if (maxResults < 0) {
+        	return entityManager().createQuery(jpaQuery, FoodPantrySite.class)
+                .setFirstResult(firstResult).getResultList();
+        }
+        if (sortFieldName == null || sortOrder == null) {
     		return FoodPantrySite.findFoodPantrySiteEntries(firstResult, maxResults);
     	}
-        String jpaQuery = "SELECT o FROM FoodPantrySite o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)
         		|| Entity.fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
@@ -206,12 +250,8 @@ public class FoodPantrySite extends Entity {
                 jpaQuery = jpaQuery + " " + sortOrder;
             }
         }
-        if (maxResults < 0) {
-        	return entityManager().createQuery(jpaQuery, FoodPantrySite.class)
-        			.setFirstResult(firstResult).getResultList();
-        }
         return entityManager().createQuery(jpaQuery, FoodPantrySite.class)
-        		.setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+            .setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
 
@@ -223,8 +263,8 @@ public class FoodPantrySite extends Entity {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .include("*")//"name", "address", "phone", "schedule", "notes", "lat", "lng")
-        .exclude("*.class").serialize(collection);
+        .include("name", "address", "phone", "schedule", "notes", "lat", "lng")
+        .exclude("*.class", "*.logger").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
