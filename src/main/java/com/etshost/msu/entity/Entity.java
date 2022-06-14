@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,6 +44,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import flexjson.JSON;
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 
 /**
  * Base class for all managed objects in package.
@@ -437,6 +440,99 @@ public abstract class Entity {
             }
         }
         return entityManager().createQuery(jpaQuery, Entity.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+	// Imported from JavaBean
+	public Logger getLogger() {
+        return this.logger;
+    }
+    
+    public Long getId() {
+        return this.id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    public Instant getCreated() {
+        return this.created;
+    }
+    
+    public void setCreated(Instant created) {
+        this.created = created;
+    }
+    
+    public Instant getModified() {
+        return this.modified;
+    }
+    
+    public void setModified(Instant modified) {
+        this.modified = modified;
+    }
+    
+    public Status getStatus() {
+        return this.status;
+    }
+    
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+    
+    public Integer getVersion() {
+        return this.version;
+    }
+    
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+    
+    public Set<Tag> getTags() {
+        return this.tags;
+    }
+    
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+    
+    public Set<Comment> getComments() {
+        return this.comments;
+    }
+    
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+    
+
+	// Imported from Json
+	public String toJson() {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(this);
+    }
+    
+    public String toJson(String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(this);
+    }
+    
+    public static Entity fromJsonToEntity(String json) {
+        return new JSONDeserializer<Entity>()
+        .use(null, Entity.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<Entity> fromJsonArrayToEntitys(String json) {
+        return new JSONDeserializer<List<Entity>>()
+        .use("values", Entity.class).deserialize(json);
     }
 
 }
