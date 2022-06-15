@@ -8,6 +8,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.FoodPantrySite} class.
@@ -42,6 +44,16 @@ public class FoodPantrySiteController {
         
 		return FoodPantrySite.toJsonArray(results);
 	}
+
+	@RequestMapping(
+		value = { "/list"}, 
+		method = RequestMethod.GET, produces = "text/html")
+	public ModelAndView listPage(ModelMap model) {
+		ModelAndView mav = new ModelAndView("foodpantrysites/list");
+		mav.addObject("foodpantrysites", FoodPantrySite.findAllFoodPantrySites());
+		return mav;
+	}
+  
 	
 	/**
 	 * Upload a CSV list of FoodPantrySites
@@ -53,18 +65,30 @@ public class FoodPantrySiteController {
 	 * @return				JSON array of results
 	 */
 	@Transactional
+	@PreAuthorize("hasAuthority('admin')")
 	@RequestMapping(value = "/upload", method = RequestMethod.POST, produces = "application/json")
-    public String upload(@RequestParam("file") MultipartFile file) {
+    public ModelAndView upload(@RequestParam("file") MultipartFile file) {
         List<FoodPantrySite> sites;
         try(InputStreamReader isr = new InputStreamReader(file.getInputStream())) {
             sites = new CsvToBeanBuilder(isr)
                 .withType(FoodPantrySite.class).build().parse();
-            return FoodPantrySite.toJsonArray(FoodPantrySite.replaceFoodPantrySiteEntries(sites));
+			FoodPantrySite.replaceFoodPantrySiteEntries(sites);
         } catch (Exception e) {
             //TODO: handle exception
             logger.error(e.toString());
-            return e.toString();
-        }
+        } finally {
+			ModelAndView mav = new ModelAndView("foodpantrysites/list");
+			mav.addObject("foodpantrysites", FoodPantrySite.findAllFoodPantrySites());
+			return mav;
+		}
     }
+	@PreAuthorize("hasAuthority('admin')")
+	@RequestMapping(
+		value = { "/upload"}, 
+		method = RequestMethod.GET, produces = "text/html")
+	public ModelAndView uploadPage(ModelMap model) {
+		ModelAndView mav = new ModelAndView("foodpantrysites/upload");
+		return mav;
+	}
 
 }

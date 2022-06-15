@@ -24,6 +24,10 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.roo.addon.javabean.RooJavaBean;
+import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
+import org.springframework.roo.addon.json.RooJson;
+import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import flexjson.JSONDeserializer;
@@ -34,10 +38,11 @@ import flexjson.JSONSerializer;
 @javax.persistence.Entity
 @Configurable
 @Indexed
-//@RooJavaBean
-//@RooJson
-//@RooToString
+@RooJavaBean
+@RooJson
+@RooToString
 @Transactional
+@RooJpaActiveRecord
 public class FoodPantrySite extends Entity {
 
 	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)

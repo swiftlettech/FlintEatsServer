@@ -11,6 +11,7 @@ import org.springframework.format.support.FormattingConversionServiceFactoryBean
 import org.springframework.roo.addon.web.mvc.controller.converter.RooConversionService;
 
 import com.etshost.msu.entity.AuthenticationRecord;
+import com.etshost.msu.entity.FoodPantrySite;
 import com.etshost.msu.entity.Market;
 import com.etshost.msu.entity.Role;
 import com.etshost.msu.entity.User;
@@ -35,6 +36,13 @@ public class ApplicationConversionServiceFactoryBean extends
 		@Override
 		public String convert(final Market market) {
 			return new StringBuilder().append(market.getId()).toString();
+		}
+	}
+
+	static class FoodPantrySiteConverter implements Converter<FoodPantrySite, String> {
+		@Override
+		public String convert(final FoodPantrySite fps) {
+			return new StringBuilder().append(fps.getId()).toString();
 		}
 	}
 
@@ -90,6 +98,16 @@ public class ApplicationConversionServiceFactoryBean extends
 			public com.etshost.msu.entity.Market convert(
 					final java.lang.Long id) {
 				return Market.findMarket(id);
+			}
+		};
+	}
+
+	public Converter<Long, FoodPantrySite> getIdToFoodPantrySiteConverter() {
+		return new org.springframework.core.convert.converter.Converter<java.lang.Long, com.etshost.msu.entity.FoodPantrySite>() {
+			@Override
+			public com.etshost.msu.entity.FoodPantrySite convert(
+					final java.lang.Long id) {
+				return FoodPantrySite.findFoodPantrySite(id);
 			}
 		};
 	}

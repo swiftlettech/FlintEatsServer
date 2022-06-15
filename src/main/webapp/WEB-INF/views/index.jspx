@@ -10,5 +10,8 @@
     <p>
       <spring:message code="welcome_text" />
     </p>
+    <p>
+      Quick Link: <a href="foodpantrysites/upload">Upload Food Pantry Sites</a>
+    </p>
   </util:panel>
 </div>
