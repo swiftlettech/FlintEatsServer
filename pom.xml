@@ -7,7 +7,7 @@
 	<groupId>com.etshost.msu</groupId>
 	<artifactId>msu</artifactId>
 	<packaging>war</packaging>
-	<version>1.1.0.20220607</version>
+	<version>1.1.0.20220614</version>
 	<name>msu</name>
 	<profiles>
 		<profile>
@@ -47,7 +47,7 @@
 		
 		<org.apache.axis.version>1.4</org.apache.axis.version>
 		<org.apache.tiles.version>3.0.7</org.apache.tiles.version>
-	</properties>
+ 	</properties>
 	<repositories>
 		<repository>
 			<id>spring-maven-release</id>
@@ -759,6 +759,27 @@
 					</execution>
 				</executions>
 			</plugin>
+<!--			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+							<echo>Print Database properties</echo>
+								<echo>hostname: "${database.url}"</echo>
+								<echo>username: "${database.username}"</echo>
+								<echo>password: "${database.password}"</echo>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>-->
 		</plugins>
 	</build>
 </project>
