@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +55,20 @@ public class FoodPantrySiteController {
 		return mav;
 	}
   
-	
+	/**
+	 * Returns JSON representation of FoodPantrySite with the given ID
+	 * @param id	ID of FoodPantrySite to view 
+	 * @return		JSON of FoodPantrySite
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
+	public String view(@PathVariable("id") long id) {
+		FoodPantrySite fps = FoodPantrySite.findFoodPantrySite(id);
+		if (fps == null) {
+			return "0";
+		}
+		return fps.toJson();
+	}
+		
 	/**
 	 * Upload a CSV list of FoodPantrySites
      * Replaces all pantries with those in the list
