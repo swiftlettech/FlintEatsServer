@@ -254,7 +254,7 @@ public class Deal extends UGC {
         if (market == null) throw new IllegalArgumentException("The market argument is required");
         EntityManager em = Deal.entityManager();
         TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Deal AS o"
-        		+ " WHERE o.endDate < :endDate"
+        		+ " WHERE o.endDate > :endDate"
         		+ " AND o.market = :market", Long.class);
         q.setParameter("endDate", Instant.now());
         q.setParameter("market", market);
@@ -265,7 +265,7 @@ public class Deal extends UGC {
         if (market == null) throw new IllegalArgumentException("The market argument is required");
         EntityManager em = Deal.entityManager();
         TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o"
-        		+ " WHERE o.endDate < :endDate"
+        		+ " WHERE o.endDate > :endDate"
         		+ " AND o.market = :market"
         		+ " ORDER BY o.endDate ASC", Deal.class);
         q.setParameter("endDate", Instant.now());

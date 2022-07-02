@@ -15,6 +15,8 @@ import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +36,9 @@ import com.etshost.msu.entity.Market;
 @RestController
 public class MarketController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private Market repository;
 	
 	/**
 	 * Creates a new Market from the JSON description
@@ -69,8 +74,12 @@ public class MarketController {
 			@RequestParam(name = "length", defaultValue = "-1") int length,
 			@RequestParam(name = "orderField", required = false) String orderField,
 			@RequestParam(name = "orderDir", defaultValue = "ASC") String orderDir) {
-		List<Market> results = Market.findMarketEntries(start, length, orderField, orderDir);
-		return Market.toJsonArrayMarket(results);
+		if(length < 0) {
+			return repository.findAllMarketsJson();
+		} else {
+			List<Market> results = Market.findMarketEntries(start, length, orderField, orderDir);
+			return Market.toJsonArrayMarket(results);
+		}
 	}
 	
 	/**

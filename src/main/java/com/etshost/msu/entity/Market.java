@@ -16,6 +16,7 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
@@ -270,4 +271,19 @@ public class Market extends Entity {
         return entityManager().createQuery(jpaQuery, Market.class)
         		.setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
+
+    public static List<Market> findAllMarkets() {
+        return entityManager()
+            .createQuery("SELECT o FROM Market o", Market.class)
+            .getResultList();
+    }
+
+    @Cacheable(value = "marketsCache")
+    public String findAllMarketsJson() {
+        return toJsonArrayMarket(
+            entityManager()
+            .createQuery("SELECT o FROM Market o", Market.class)
+            .getResultList());        
+    }
+    
 }

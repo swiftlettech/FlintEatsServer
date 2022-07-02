@@ -15,10 +15,6 @@ privileged aspect Market_Roo_Jpa_ActiveRecord {
         return entityManager().createQuery("SELECT COUNT(o) FROM Market o", Long.class).getSingleResult();
     }
     
-    public static List<Market> Market.findAllMarkets() {
-        return entityManager().createQuery("SELECT o FROM Market o", Market.class).getResultList();
-    }
-    
     public static List<Market> Market.findAllMarkets(String sortFieldName, String sortOrder) {
         String jpaQuery = "SELECT o FROM Market o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {

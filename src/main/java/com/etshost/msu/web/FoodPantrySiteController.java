@@ -8,6 +8,7 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -26,6 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 public class FoodPantrySiteController {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private FoodPantrySite repository;
 	
 	/**
 	 * Returns JSON list of FoodPantrySites
@@ -41,9 +45,12 @@ public class FoodPantrySiteController {
 			@RequestParam(name = "length", defaultValue = "-1") int length,
 			@RequestParam(name = "orderField", required = false) String orderField,
 			@RequestParam(name = "orderDir", defaultValue = "ASC") String orderDir) {
-		List<FoodPantrySite> results = FoodPantrySite.findFoodPantrySiteEntries(start, length, orderField, orderDir);
-        
-		return FoodPantrySite.toJsonArray(results);
+		if(length < 0) {
+			return repository.findAllFoodPantrySitesJson();
+		} else {
+			List<FoodPantrySite> results = repository.findFoodPantrySiteEntries(start, length, orderField, orderDir);
+        	return FoodPantrySite.toJsonArray(results);
+		}
 	}
 
 	@RequestMapping(

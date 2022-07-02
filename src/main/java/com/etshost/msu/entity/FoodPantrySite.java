@@ -24,6 +24,7 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
@@ -190,7 +191,15 @@ public class FoodPantrySite extends Entity {
     public static List<FoodPantrySite> findAllFoodPantrySites() {
         return entityManager().createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class).getResultList();
     }
-    
+
+    @Cacheable("foodPantrySitesCache")
+    public String findAllFoodPantrySitesJson() {
+        return toJsonArray(
+                entityManager()
+                .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
+                .getResultList());
+    }
+
     public static List<FoodPantrySite> findAllFoodPantrySites(String sortFieldName, String sortOrder) {
         String jpaQuery = "SELECT o FROM FoodPantrySite o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
@@ -237,7 +246,7 @@ public class FoodPantrySite extends Entity {
 
 
     // Finders
-    public static List<FoodPantrySite> findFoodPantrySiteEntries(int firstResult, int maxResults,
+    public List<FoodPantrySite> findFoodPantrySiteEntries(int firstResult, int maxResults,
     		String sortFieldName, String sortOrder) {
         Logger logger = LoggerFactory.getLogger(FoodPantrySite.class);
         String jpaQuery = "SELECT o FROM FoodPantrySite o";
@@ -268,13 +277,13 @@ public class FoodPantrySite extends Entity {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .include("name", "address", "phone", "schedule", "notes", "lat", "lng")
+        .include("name", "address", "phone", "schedule", "notes", "lat", "lng", "class")
         .exclude("*.class", "*.logger").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "*.logger").serialize(collection);
     }
     
     public static Collection<FoodPantrySite> fromJsonArrayToFoodPantrySites(String json) {
