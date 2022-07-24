@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS public.recipestep
     step_order integer,
     title VARCHAR(45),
     instructions TEXT,
-    step_image bytea,
+    image bytea,
     time_minutes integer,
     CONSTRAINT recipestep_pkey PRIMARY KEY (id),
     CONSTRAINT fk_recipestep_ugc_id FOREIGN KEY (id)
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS public.recipestep_aud
     step_order integer,
     title VARCHAR(45),
     instructions TEXT,
-    step_image bytea,
+    image bytea,
     time_minutes integer,
     CONSTRAINT recipestep_aud_pkey PRIMARY KEY (id, rev),
     CONSTRAINT fk_recipestep_ugc_aud_id FOREIGN KEY (id, rev)
@@ -76,13 +76,15 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.recipe 
     DROP directions,
+    ADD title VARCHAR(255),
     ADD description text,
-    ADD header_image bytea,
+    ADD image bytea,
     ADD published BOOLEAN;
 
 
 ALTER TABLE public.recipe_aud
-    DROP COLUMN directions,
-    ADD COLUMN description text,
-    ADD COLUMN header_image bytea,
-    ADD COLUMN published BOOLEAN;
+    DROP directions,
+    ADD title VARCHAR(255),
+    ADD description text,
+    ADD image bytea,
+    ADD published BOOLEAN;

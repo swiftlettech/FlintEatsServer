@@ -124,4 +124,14 @@ public abstract class UGC extends Entity {
         q.setParameter("when", when);
         return q.getResultList();
     }
+
+	// JavaBean.aj
+	public User getUsr() {
+        return this.usr;
+    }
+    
+    public void setUsr(User usr) {
+        this.usr = usr;
+    }
+
 }

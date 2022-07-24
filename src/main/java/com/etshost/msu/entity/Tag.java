@@ -254,4 +254,43 @@ public class Tag extends UGC {
 		List<?> result = jpaQuery.getResultList();
 		return (List<Tag>)result;
 	}
+
+    // Jpa_ActiveRecord.aj
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("name", "targets");
+    
+    public static long countTags() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Tag o", Long.class).getSingleResult();
+    }
+    
+    public static List<Tag> findAllTags() {
+        return entityManager().createQuery("SELECT o FROM Tag o", Tag.class).getResultList();
+    }
+    
+    public static List<Tag> findAllTags(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Tag o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Tag.class).getResultList();
+    }
+    
+    public static Tag findTag(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Tag.class, id);
+    }
+    
+    public static List<Tag> findTagEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Tag o", Tag.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    @Transactional
+    public Tag merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Tag merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
 }

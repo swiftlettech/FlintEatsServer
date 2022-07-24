@@ -288,4 +288,25 @@ public class Tip extends UGC {
 		List<?> result = jpaQuery.getResultList();
 		return (List<Tip>)result;
     }
+
+    // JavaBean.aj
+    public TipType getTipType() {
+        return this.tipType;
+    }
+    
+    public void setTipType(TipType tipType) {
+        this.tipType = tipType;
+    }
+    
+    public String getText() {
+        return this.text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 }
