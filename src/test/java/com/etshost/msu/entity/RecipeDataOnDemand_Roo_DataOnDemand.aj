@@ -32,7 +32,6 @@ privileged aspect RecipeDataOnDemand_Roo_DataOnDemand {
     public Recipe RecipeDataOnDemand.getNewTransientRecipe(int index) {
         Recipe obj = new Recipe();
         setCreated(obj, index);
-        setDirections(obj, index);
         setModified(obj, index);
         setServings(obj, index);
         setStatus(obj, index);
@@ -42,11 +41,6 @@ privileged aspect RecipeDataOnDemand_Roo_DataOnDemand {
     public void RecipeDataOnDemand.setCreated(Recipe obj, int index) {
         Instant created = null;
         obj.setCreated(created);
-    }
-    
-    public void RecipeDataOnDemand.setDirections(Recipe obj, int index) {
-        String directions = "directions_" + index;
-        obj.setDirections(directions);
     }
     
     public void RecipeDataOnDemand.setModified(Recipe obj, int index) {

@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 
 import flexjson.JSON;
 
@@ -42,6 +43,7 @@ import flexjson.JSON;
 @Transactional
 public class Recipe extends UGC {
     
+    @Size(min = 3, max = 255)
     private String title;
 
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
@@ -54,7 +56,8 @@ public class Recipe extends UGC {
 
     private boolean published;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="recipe")
+    @JSON(name = "steps")
     private Set<RecipeStep> steps = new HashSet<RecipeStep>();
 
 	@JsonCreator
@@ -157,6 +160,19 @@ public class Recipe extends UGC {
         this.published = published;
     }
 
+    public Set<RecipeStep> getSteps() {
+        return this.steps;
+    }
+
+    public void setSteps(Set<RecipeStep> steps) {
+        this.steps = steps;
+    }
+
+    public void removeStep(RecipeStep step) {
+        this.steps.remove(step);
+        step.setParent(null);
+    }
+
     // Jpa_ActiveRecord.aj
     public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("title","servings");
     
@@ -230,12 +246,12 @@ public class Recipe extends UGC {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class").serialize(collection);
+        .exclude("*.class", "*.logger", "steps.usr").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "*.logger", "steps.usr").serialize(collection);
     }
     
     public static Collection<Recipe> fromJsonArrayToRecipes(String json) {
