@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS public.recipestep
 (
     id bigint NOT NULL,
-    recipe_id bigint NOT NULL,
+    recipe_id bigint,
     step_order integer,
     title VARCHAR(45),
     instructions TEXT,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS public.recipestep_aud
 (
     id bigint NOT NULL,
     rev integer NOT NULL,
-    recipe_id bigint NOT NULL,
+    recipe_id bigint,
     step_order integer,
     title VARCHAR(45),
     instructions TEXT,
@@ -42,7 +42,7 @@ TABLESPACE pg_default;
 CREATE TABLE IF NOT EXISTS public.recipeingredient
 (
     id bigint NOT NULL,
-    recipe_id bigint NOT NULL,
+    recipe_id bigint,
     name VARCHAR(255) NOT NULL,
     measurement VARCHAR(45),
     CONSTRAINT recipeingredient_pkey PRIMARY KEY (id),
@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS public.recipeingredient_aud
 (
     id bigint NOT NULL,
     rev integer NOT NULL,
-    recipe_id bigint NOT NULL,
+    recipe_id bigint,
     name VARCHAR(255) NOT NULL,
     measurement VARCHAR(45),
     CONSTRAINT recipeingredient_aud_pkey PRIMARY KEY (id, rev),
