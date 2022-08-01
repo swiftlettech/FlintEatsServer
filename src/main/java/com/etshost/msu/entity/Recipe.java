@@ -60,6 +60,10 @@ public class Recipe extends UGC {
     @JSON(name = "steps")
     private Set<RecipeStep> steps = new HashSet<RecipeStep>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="recipe")
+    @JSON(name = "ingredients")
+    private Set<RecipeIngredient> ingredients = new HashSet<RecipeIngredient>();
+
 	@JsonCreator
 	public static Recipe factory(
         @JsonProperty("id") Long id,
@@ -173,6 +177,19 @@ public class Recipe extends UGC {
         step.setParent(null);
     }
 
+    public Set<RecipeIngredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    public void setIngredients(Set<RecipeIngredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public void removeIngredient(RecipeIngredient ingredient) {
+        this.ingredients.remove(ingredient);
+        ingredient.setParent(null);
+    }
+
     // Jpa_ActiveRecord.aj
     public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("title","servings");
     
@@ -231,12 +248,12 @@ public class Recipe extends UGC {
     // Json.aj
     public String toJson() {
         return new JSONSerializer()
-        .exclude("*.class").serialize(this);
+        .exclude("*.class", "*.logger", "steps.usr", "ingredients.usr").serialize(this);
     }
     
     public String toJson(String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(this);
+        .include(fields).exclude("*.class", "*.logger", "steps.usr", "ingredients.usr").serialize(this);
     }
     
     public static Recipe fromJsonToRecipe(String json) {
@@ -246,12 +263,12 @@ public class Recipe extends UGC {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class", "*.logger", "steps.usr").serialize(collection);
+        .exclude("*.class", "*.logger", "steps.usr", "ingredients.usr").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class", "*.logger", "steps.usr").serialize(collection);
+        .include(fields).exclude("*.class", "*.logger", "steps.usr", "ingredients.usr").serialize(collection);
     }
     
     public static Collection<Recipe> fromJsonArrayToRecipes(String json) {

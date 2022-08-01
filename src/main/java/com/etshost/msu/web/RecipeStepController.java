@@ -80,12 +80,11 @@ public class RecipeStepController {
      * Deletes the RecipeStep having the given ID
      *
      * @param id   ID of Recipe to Delete
-     * @param recipeStep updated RecipeStep
      * @return ID of updated RecipeStep
      */
     @PreAuthorize("@creatorChecker.check(#id)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public String update(@PathVariable("id") long id) {
+    public String delete(@PathVariable("id") long id) {
         RecipeStep step = RecipeStep.findRecipeStep(id);
 		if (step == null) {
 			return "ID error";

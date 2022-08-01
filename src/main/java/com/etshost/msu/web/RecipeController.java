@@ -72,6 +72,16 @@ public class RecipeController {
     }
 
     /**
+     * Gets the Recipe having the given ID
+     *
+     * @param id   ID of Recipe to update
+     * @return Recipe
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
+    public String getRecipe(@PathVariable("id") long id) {
+        return Recipe.findRecipe(id).toJson();
+    }
+    /**
      * Updates the Recipe having the given ID
      *
      * @param id   ID of Recipe to update
