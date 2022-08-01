@@ -3,21 +3,26 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 import flexjson.JSON;
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 /**
@@ -132,6 +137,125 @@ public abstract class UGC extends Entity {
     
     public void setUsr(User usr) {
         this.usr = usr;
+    }
+
+	// ToString.aj
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+	// Json.aj
+    public String toJson() {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(this);
+    }
+    
+    public String toJson(String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(this);
+    }
+    
+    public static UGC fromJsonToUGC(String json) {
+        return new JSONDeserializer<UGC>()
+        .use(null, UGC.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<UGC> fromJsonArrayToUGCS(String json) {
+        return new JSONDeserializer<List<UGC>>()
+        .use("values", UGC.class).deserialize(json);
+    }
+
+	// Jpa_ActiveRecord.aj
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("usr");
+    
+    public static long countUGCS() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM UGC o", Long.class).getSingleResult();
+    }
+    
+    public static List<UGC> findAllUGCS() {
+        return entityManager().createQuery("SELECT o FROM UGC o", UGC.class).getResultList();
+    }
+    
+    public static List<UGC> findAllUGCS(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM UGC o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, UGC.class).getResultList();
+    }
+    
+    public static UGC findUGC(Long id) {
+        if (id == null) return null;
+        return entityManager().find(UGC.class, id);
+    }
+    
+    public static List<UGC> findUGCEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM UGC o", UGC.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    public static List<UGC> findUGCEntries(int firstResult, int maxResults, String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM UGC o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, UGC.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    @Transactional
+    public UGC merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        UGC merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+
+	// Finder.aj
+    public static Long countFindUGCSByUsr(User usr) {
+        if (usr == null) throw new IllegalArgumentException("The usr argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM UGC AS o WHERE o.usr = :usr", Long.class);
+        q.setParameter("usr", usr);
+        return q.getSingleResult();
+    }
+    
+    public static TypedQuery<UGC> findUGCSByUsr(User usr) {
+        if (usr == null) throw new IllegalArgumentException("The usr argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<UGC> q = em.createQuery("SELECT o FROM UGC AS o WHERE o.usr = :usr", UGC.class);
+        q.setParameter("usr", usr);
+        return q;
+    }
+    
+    public static TypedQuery<UGC> findUGCSByUsr(User usr, String sortFieldName, String sortOrder) {
+        if (usr == null) throw new IllegalArgumentException("The usr argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM UGC AS o WHERE o.usr = :usr");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<UGC> q = em.createQuery(queryBuilder.toString(), UGC.class);
+        q.setParameter("usr", usr);
+        return q;
     }
 
 }
