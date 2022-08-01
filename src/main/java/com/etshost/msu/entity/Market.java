@@ -8,6 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
@@ -33,6 +38,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import flexjson.JSON;
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 /**
@@ -133,6 +139,77 @@ public class Market extends Entity {
     	String image64 = Base64.getEncoder().encodeToString(this.image);
         return image64;
     }
+
+    // JavaBean.aj
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getEmail() {
+        return this.email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getAddress() {
+        return this.address;
+    }
+    
+    public String getHours() {
+        return this.hours;
+    }
+    
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+    
+    public String getPhone() {
+        return this.phone;
+    }
+    
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    public String getUrl() {
+        return this.url;
+    }
+    
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    public Double getLat() {
+        return this.lat;
+    }
+    
+    public void setLat(Double lat) {
+        this.lat = lat;
+    }
+    
+    public Double getLng() {
+        return this.lng;
+    }
+    
+    public void setLng(Double lng) {
+        this.lng = lng;
+    }
+    
+    public byte[] getImage() {
+        return this.image;
+    }
+    
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+
 
     // set lat/lng from Google when changing address
     public void setAddress(String addr) {
@@ -284,6 +361,154 @@ public class Market extends Entity {
             entityManager()
             .createQuery("SELECT o FROM Market o", Market.class)
             .getResultList());        
+    }
+
+    // ToString.aj
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+
+    // Json.aj
+    public static Market fromJsonToMarket(String json) {
+        return new JSONDeserializer<Market>()
+        .use(null, Market.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<Market> fromJsonArrayToMarkets(String json) {
+        return new JSONDeserializer<List<Market>>()
+        .use("values", Market.class).deserialize(json);
+    }
+
+
+    // Jpa_ActiveRecord.aj
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("name", "email", "address", "hours", "phone", "url", "lat", "lng", "image");
+    
+    public static long countMarkets() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Market o", Long.class).getSingleResult();
+    }
+    
+    public static List<Market> findAllMarkets(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Market o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Market.class).getResultList();
+    }
+    
+    public static Market findMarket(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Market.class, id);
+    }
+    
+    public static List<Market> findMarketEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Market o", Market.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    @Transactional
+    public Market merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Market merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+
+    // Finder.aj
+    public static Long countFindMarketsByNameLike(String name) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        name = name.replace('*', '%');
+        if (name.charAt(0) != '%') {
+            name = "%" + name;
+        }
+        if (name.charAt(name.length() - 1) != '%') {
+            name = name + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Market AS o WHERE LOWER(o.name) LIKE LOWER(:name)", Long.class);
+        q.setParameter("name", name);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindMarketsByStatus(Status status) {
+        if (status == null) throw new IllegalArgumentException("The status argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Market AS o WHERE o.status = :status", Long.class);
+        q.setParameter("status", status);
+        return q.getSingleResult();
+    }
+    
+    public static TypedQuery<Market> findMarketsByNameLike(String name) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        name = name.replace('*', '%');
+        if (name.charAt(0) != '%') {
+            name = "%" + name;
+        }
+        if (name.charAt(name.length() - 1) != '%') {
+            name = name + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Market> q = em.createQuery("SELECT o FROM Market AS o WHERE LOWER(o.name) LIKE LOWER(:name)", Market.class);
+        q.setParameter("name", name);
+        return q;
+    }
+    
+    public static TypedQuery<Market> findMarketsByNameLike(String name, String sortFieldName, String sortOrder) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        name = name.replace('*', '%');
+        if (name.charAt(0) != '%') {
+            name = "%" + name;
+        }
+        if (name.charAt(name.length() - 1) != '%') {
+            name = name + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Market AS o WHERE LOWER(o.name) LIKE LOWER(:name)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Market> q = em.createQuery(queryBuilder.toString(), Market.class);
+        q.setParameter("name", name);
+        return q;
+    }
+    
+    public static TypedQuery<Market> findMarketsByStatus(Status status) {
+        if (status == null) throw new IllegalArgumentException("The status argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Market> q = em.createQuery("SELECT o FROM Market AS o WHERE o.status = :status", Market.class);
+        q.setParameter("status", status);
+        return q;
+    }
+    
+    public static TypedQuery<Market> findMarketsByStatus(Status status, String sortFieldName, String sortOrder) {
+        if (status == null) throw new IllegalArgumentException("The status argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Market AS o WHERE o.status = :status");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Market> q = em.createQuery(queryBuilder.toString(), Market.class);
+        q.setParameter("status", status);
+        return q;
     }
     
 }
