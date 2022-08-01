@@ -21,6 +21,8 @@ import javax.validation.constraints.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.OnDelete;
@@ -54,6 +56,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import flexjson.JSON;
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 import static java.util.Collections.*;
@@ -321,6 +324,140 @@ public class User extends Entity {
         if (this.getLastName() == null) this.setLastName("");
         return this.getFirstName() + " " + this.getLastName();
     }
+
+    // JavaBean.aj
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+    
+    public byte[] getBackground() {
+        return this.background;
+    }
+    
+    public void setBackground(byte[] background) {
+        this.background = background;
+    }
+    
+    public String getEmail() {
+        return this.email;
+    }
+    
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public String getFirstName() {
+        return this.firstName;
+    }
+    
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    
+    public String getLastName() {
+        return this.lastName;
+    }
+    
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    public String getPassword() {
+        return this.password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public String getPhone() {
+        return this.phone;
+    }
+    
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    public boolean isGisOn() {
+        return this.gisOn;
+    }
+    
+    public void setGisOn(boolean gisOn) {
+        this.gisOn = gisOn;
+    }
+    
+    public NotificationFrequency getNotificationFrequency() {
+        return this.notificationFrequency;
+    }
+    
+    public void setNotificationFrequency(NotificationFrequency notificationFrequency) {
+        this.notificationFrequency = notificationFrequency;
+    }
+    
+    public String getUsername() {
+        return this.username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public Instant getTermsAccept() {
+        return this.termsAccept;
+    }
+    
+    public void setTermsAccept(Instant termsAccept) {
+        this.termsAccept = termsAccept;
+    }
+    
+    public Instant getIrbAccept() {
+        return this.irbAccept;
+    }
+    
+    public void setIrbAccept(Instant irbAccept) {
+        this.irbAccept = irbAccept;
+    }
+    
+    public Set<User> getFollowees() {
+        return this.followees;
+    }
+    
+    public void setFollowees(Set<User> followees) {
+        this.followees = followees;
+    }
+    
+    public Set<User> getFollowers() {
+        return this.followers;
+    }
+    
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
+    
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+    
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+    
+    public Set<Badge> getBadges() {
+        return this.badges;
+    }
+    
+    public void setBadges(Set<Badge> badges) {
+        this.badges = badges;
+    }
+    
+    public Set<UGC> getUgc() {
+        return this.ugc;
+    }
+    
+    public void setUgc(Set<UGC> ugc) {
+        this.ugc = ugc;
+    }
+
 
     //TODO: change language
     public void reportLoginFailure() {
@@ -693,6 +830,422 @@ public class User extends Entity {
         if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
         EntityManager em = User.entityManager();
         TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.username) = LOWER(:username)", User.class);
+        q.setParameter("username", username);
+        return q;
+    }
+
+    // ToString.aj
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+
+    // Json.aj
+    public static User fromJsonToUser(String json) {
+        return new JSONDeserializer<User>()
+        .use(null, User.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<User> fromJsonArrayToUsers(String json) {
+        return new JSONDeserializer<List<User>>()
+        .use("values", User.class).deserialize(json);
+    }
+
+
+    // Jpa_ActiveRecord.aj
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("avatar", "background", "email", "firstName", "lastName", "password", "phone", "gisOn", "notificationFrequency", "username", "termsAccept", "irbAccept", "followees", "followers", "roles", "badges", "ugc");
+    
+    public static long countUsers() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM User o", Long.class).getSingleResult();
+    }
+    
+    public static List<User> findAllUsers() {
+        return entityManager().createQuery("SELECT o FROM User o", User.class).getResultList();
+    }
+    
+    public static List<User> findAllUsers(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM User o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, User.class).getResultList();
+    }
+    
+    public static User findUser(Long id) {
+        if (id == null) return null;
+        return entityManager().find(User.class, id);
+    }
+    
+    public static List<User> findUserEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM User o", User.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+
+    // Finder.aj
+    public static Long countFindUsersByEmailEquals(String email) {
+        if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE o.email = :email", Long.class);
+        q.setParameter("email", email);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByEmailLike(String email) {
+        if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
+        email = email.replace('*', '%');
+        if (email.charAt(0) != '%') {
+            email = "%" + email;
+        }
+        if (email.charAt(email.length() - 1) != '%') {
+            email = email + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE LOWER(o.email) LIKE LOWER(:email)", Long.class);
+        q.setParameter("email", email);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByFirstNameLike(String firstName) {
+        if (firstName == null || firstName.length() == 0) throw new IllegalArgumentException("The firstName argument is required");
+        firstName = firstName.replace('*', '%');
+        if (firstName.charAt(0) != '%') {
+            firstName = "%" + firstName;
+        }
+        if (firstName.charAt(firstName.length() - 1) != '%') {
+            firstName = firstName + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE LOWER(o.firstName) LIKE LOWER(:firstName)", Long.class);
+        q.setParameter("firstName", firstName);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByLastNameLike(String lastName) {
+        if (lastName == null || lastName.length() == 0) throw new IllegalArgumentException("The lastName argument is required");
+        lastName = lastName.replace('*', '%');
+        if (lastName.charAt(0) != '%') {
+            lastName = "%" + lastName;
+        }
+        if (lastName.charAt(lastName.length() - 1) != '%') {
+            lastName = lastName + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE LOWER(o.lastName) LIKE LOWER(:lastName)", Long.class);
+        q.setParameter("lastName", lastName);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByRoles(Set<Role> roles) {
+        if (roles == null) throw new IllegalArgumentException("The roles argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(o) FROM User AS o WHERE");
+        for (int i = 0; i < roles.size(); i++) {
+            if (i > 0) queryBuilder.append(" AND");
+            queryBuilder.append(" :roles_item").append(i).append(" MEMBER OF o.roles");
+        }
+        TypedQuery<Long> q = em.createQuery(queryBuilder.toString(), Long.class);
+        int rolesIndex = 0;
+        for (Role _role: roles) {
+            q.setParameter("roles_item" + rolesIndex++, _role);
+        }
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByStatus(Status status) {
+        if (status == null) throw new IllegalArgumentException("The status argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE o.status = :status", Long.class);
+        q.setParameter("status", status);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByUsernameEquals(String username) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE o.username = :username", Long.class);
+        q.setParameter("username", username);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindUsersByUsernameLike(String username) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        username = username.replace('*', '%');
+        if (username.charAt(0) != '%') {
+            username = "%" + username;
+        }
+        if (username.charAt(username.length() - 1) != '%') {
+            username = username + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM User AS o WHERE LOWER(o.username) LIKE LOWER(:username)", Long.class);
+        q.setParameter("username", username);
+        return q.getSingleResult();
+    }
+    
+    public static TypedQuery<User> findUsersByEmailEquals(String email) {
+        if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.email = :email", User.class);
+        q.setParameter("email", email);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByEmailEquals(String email, String sortFieldName, String sortOrder) {
+        if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE o.email = :email");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        q.setParameter("email", email);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByEmailLike(String email) {
+        if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
+        email = email.replace('*', '%');
+        if (email.charAt(0) != '%') {
+            email = "%" + email;
+        }
+        if (email.charAt(email.length() - 1) != '%') {
+            email = email + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.email) LIKE LOWER(:email)", User.class);
+        q.setParameter("email", email);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByEmailLike(String email, String sortFieldName, String sortOrder) {
+        if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
+        email = email.replace('*', '%');
+        if (email.charAt(0) != '%') {
+            email = "%" + email;
+        }
+        if (email.charAt(email.length() - 1) != '%') {
+            email = email + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE LOWER(o.email) LIKE LOWER(:email)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        q.setParameter("email", email);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByFirstNameLike(String firstName) {
+        if (firstName == null || firstName.length() == 0) throw new IllegalArgumentException("The firstName argument is required");
+        firstName = firstName.replace('*', '%');
+        if (firstName.charAt(0) != '%') {
+            firstName = "%" + firstName;
+        }
+        if (firstName.charAt(firstName.length() - 1) != '%') {
+            firstName = firstName + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.firstName) LIKE LOWER(:firstName)", User.class);
+        q.setParameter("firstName", firstName);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByFirstNameLike(String firstName, String sortFieldName, String sortOrder) {
+        if (firstName == null || firstName.length() == 0) throw new IllegalArgumentException("The firstName argument is required");
+        firstName = firstName.replace('*', '%');
+        if (firstName.charAt(0) != '%') {
+            firstName = "%" + firstName;
+        }
+        if (firstName.charAt(firstName.length() - 1) != '%') {
+            firstName = firstName + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE LOWER(o.firstName) LIKE LOWER(:firstName)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        q.setParameter("firstName", firstName);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByLastNameLike(String lastName) {
+        if (lastName == null || lastName.length() == 0) throw new IllegalArgumentException("The lastName argument is required");
+        lastName = lastName.replace('*', '%');
+        if (lastName.charAt(0) != '%') {
+            lastName = "%" + lastName;
+        }
+        if (lastName.charAt(lastName.length() - 1) != '%') {
+            lastName = lastName + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.lastName) LIKE LOWER(:lastName)", User.class);
+        q.setParameter("lastName", lastName);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByLastNameLike(String lastName, String sortFieldName, String sortOrder) {
+        if (lastName == null || lastName.length() == 0) throw new IllegalArgumentException("The lastName argument is required");
+        lastName = lastName.replace('*', '%');
+        if (lastName.charAt(0) != '%') {
+            lastName = "%" + lastName;
+        }
+        if (lastName.charAt(lastName.length() - 1) != '%') {
+            lastName = lastName + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE LOWER(o.lastName) LIKE LOWER(:lastName)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        q.setParameter("lastName", lastName);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByRoles(Set<Role> roles) {
+        if (roles == null) throw new IllegalArgumentException("The roles argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE");
+        for (int i = 0; i < roles.size(); i++) {
+            if (i > 0) queryBuilder.append(" AND");
+            queryBuilder.append(" :roles_item").append(i).append(" MEMBER OF o.roles");
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        int rolesIndex = 0;
+        for (Role _role: roles) {
+            q.setParameter("roles_item" + rolesIndex++, _role);
+        }
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByRoles(Set<Role> roles, String sortFieldName, String sortOrder) {
+        if (roles == null) throw new IllegalArgumentException("The roles argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE");
+        for (int i = 0; i < roles.size(); i++) {
+            if (i > 0) queryBuilder.append(" AND");
+            queryBuilder.append(" :roles_item").append(i).append(" MEMBER OF o.roles");
+        }
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" " + sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        int rolesIndex = 0;
+        for (Role _role: roles) {
+            q.setParameter("roles_item" + rolesIndex++, _role);
+        }
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByStatus(Status status) {
+        if (status == null) throw new IllegalArgumentException("The status argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.status = :status", User.class);
+        q.setParameter("status", status);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByStatus(Status status, String sortFieldName, String sortOrder) {
+        if (status == null) throw new IllegalArgumentException("The status argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE o.status = :status");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        q.setParameter("status", status);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByUsernameEquals(String username) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.username = :username", User.class);
+        q.setParameter("username", username);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByUsernameEquals(String username, String sortFieldName, String sortOrder) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE o.username = :username");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
+        q.setParameter("username", username);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByUsernameLike(String username) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        username = username.replace('*', '%');
+        if (username.charAt(0) != '%') {
+            username = "%" + username;
+        }
+        if (username.charAt(username.length() - 1) != '%') {
+            username = username + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.username) LIKE LOWER(:username)", User.class);
+        q.setParameter("username", username);
+        return q;
+    }
+    
+    public static TypedQuery<User> findUsersByUsernameLike(String username, String sortFieldName, String sortOrder) {
+        if (username == null || username.length() == 0) throw new IllegalArgumentException("The username argument is required");
+        username = username.replace('*', '%');
+        if (username.charAt(0) != '%') {
+            username = "%" + username;
+        }
+        if (username.charAt(username.length() - 1) != '%') {
+            username = username + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE LOWER(o.username) LIKE LOWER(:username)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
         q.setParameter("username", username);
         return q;
     }
