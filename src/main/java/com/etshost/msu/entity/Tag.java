@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 /**
@@ -91,6 +92,24 @@ public class Tag extends UGC {
 		});
 		return tags;
 	}
+
+    // JavaBean.aj
+    public String getName() {
+        return this.name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public Set<Entity> getTargets() {
+        return this.targets;
+    }
+    
+    public void setTargets(Set<Entity> targets) {
+        this.targets = targets;
+    }
+
     
 	@Override
 	public String toString() {
@@ -293,4 +312,102 @@ public class Tag extends UGC {
         this.entityManager.flush();
         return merged;
     }
+
+    // Json.aj
+    public static Tag fromJsonToTag(String json) {
+        return new JSONDeserializer<Tag>()
+        .use(null, Tag.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<Tag> fromJsonArrayToTags(String json) {
+        return new JSONDeserializer<List<Tag>>()
+        .use("values", Tag.class).deserialize(json);
+    }
+
+    // Finder.aj
+    public static Long countFindTagsByNameEquals(String name) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Tag AS o WHERE o.name = :name", Long.class);
+        q.setParameter("name", name);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindTagsByNameLike(String name) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        name = name.replace('*', '%');
+        if (name.charAt(0) != '%') {
+            name = "%" + name;
+        }
+        if (name.charAt(name.length() - 1) != '%') {
+            name = name + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Tag AS o WHERE LOWER(o.name) LIKE LOWER(:name)", Long.class);
+        q.setParameter("name", name);
+        return q.getSingleResult();
+    }
+    
+    public static TypedQuery<Tag> findTagsByNameEquals(String name, String sortFieldName, String sortOrder) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Tag AS o WHERE o.name = :name");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Tag> q = em.createQuery(queryBuilder.toString(), Tag.class);
+        q.setParameter("name", name);
+        return q;
+    }
+    
+    public static TypedQuery<Tag> findTagsByNameLike(String name) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        name = name.replace('*', '%');
+        if (name.charAt(0) != '%') {
+            name = "%" + name;
+        }
+        if (name.charAt(name.length() - 1) != '%') {
+            name = name + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Tag> q = em.createQuery("SELECT o FROM Tag AS o WHERE LOWER(o.name) LIKE LOWER(:name)", Tag.class);
+        q.setParameter("name", name);
+        return q;
+    }
+    
+    public static TypedQuery<Tag> findTagsByNameLike(String name, String sortFieldName, String sortOrder) {
+        if (name == null || name.length() == 0) throw new IllegalArgumentException("The name argument is required");
+        name = name.replace('*', '%');
+        if (name.charAt(0) != '%') {
+            name = "%" + name;
+        }
+        if (name.charAt(name.length() - 1) != '%') {
+            name = name + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Tag AS o WHERE LOWER(o.name) LIKE LOWER(:name)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Tag> q = em.createQuery(queryBuilder.toString(), Tag.class);
+        q.setParameter("name", name);
+        return q;
+    }
+
 }
