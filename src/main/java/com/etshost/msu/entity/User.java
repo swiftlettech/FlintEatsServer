@@ -8,7 +8,15 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
@@ -23,10 +31,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.hibernate.envers.Audited;
 import org.imgscalr.Scalr;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
@@ -58,8 +66,6 @@ import com.google.gson.JsonObject;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
-
-import static java.util.Collections.*;
 
 
 /**
@@ -528,7 +534,7 @@ public class User extends Entity {
             this.setPassword(password);
             this.merge();
         }
-        return EMPTY_LIST;
+        return errors;
     }
     
     public List<UGC> getFaves() {
