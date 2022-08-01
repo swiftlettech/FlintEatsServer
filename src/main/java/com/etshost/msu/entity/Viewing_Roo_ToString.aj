@@ -9,8 +9,5 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 privileged aspect Viewing_Roo_ToString {
     
-    public String Viewing.toString() {
-        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    }
     
 }

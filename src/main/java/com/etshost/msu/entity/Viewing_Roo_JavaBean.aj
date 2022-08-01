@@ -11,36 +11,5 @@ import java.time.Instant;
 
 privileged aspect Viewing_Roo_JavaBean {
     
-    public ViewingPk Viewing.getPk() {
-        return this.pk;
-    }
-    
-    public void Viewing.setPk(ViewingPk pk) {
-        this.pk = pk;
-    }
-    
-    public User Viewing.getUsr() {
-        return this.usr;
-    }
-    
-    public void Viewing.setUsr(User usr) {
-        this.usr = usr;
-    }
-    
-    public Entity Viewing.getTarget() {
-        return this.target;
-    }
-    
-    public void Viewing.setTarget(Entity target) {
-        this.target = target;
-    }
-    
-    public Instant Viewing.getEndTime() {
-        return this.endTime;
-    }
-    
-    public void Viewing.setEndTime(Instant endTime) {
-        this.endTime = endTime;
-    }
     
 }

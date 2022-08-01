@@ -9,20 +9,5 @@ import javax.persistence.Version;
 
 privileged aspect Viewing_Roo_Jpa_Entity {
     
-    @Version
-    @Column(name = "version")
-    private Integer Viewing.version;
-    
-    public Viewing.new() {
-        super();
-    }
-
-    public Integer Viewing.getVersion() {
-        return this.version;
-    }
-    
-    public void Viewing.setVersion(Integer version) {
-        this.version = version;
-    }
     
 }
