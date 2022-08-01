@@ -1,11 +1,5 @@
 package com.etshost.msu.bean;
 
-import com.etshost.msu.entity.Tip;
-import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Index;
-import org.hibernate.search.annotations.Store;
-
 import java.util.List;
 
 public class TipBean {
