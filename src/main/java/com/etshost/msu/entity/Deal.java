@@ -5,16 +5,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.TypedQuery;
 
-import org.apache.lucene.search.Explanation;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
-import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
@@ -40,6 +46,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import flexjson.JSON;
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 
@@ -330,7 +337,7 @@ public class Deal extends UGC {
 		javax.persistence.Query jpaQuery =
 		    fullTextEntityManager.createFullTextQuery(luceneQuery, Deal.class);
         logger.debug("jpaQuery: {}", jpaQuery.toString());
-        @SuppressWarnings("unchecked") List<Object[]> results = jpaQuery.getResultList();
+//        @SuppressWarnings("unchecked") List<Object[]> results = jpaQuery.getResultList();
 //        for (Object[] result : results) {
 //            Explanation e = (Explanation) result[1];
 //            logger.debug(e.toString());
@@ -342,4 +349,207 @@ public class Deal extends UGC {
         List<Deal> result = jpaQuery.getResultList();
         return result;
     }
+
+    // JavaBean.aj
+    public Market getMarket() {
+        return this.market;
+    }
+    
+    public void setMarket(Market market) {
+        this.market = market;
+    }
+    
+    public Instant getStartDate() {
+        return this.startDate;
+    }
+    
+    public void setStartDate(Instant startDate) {
+        this.startDate = startDate;
+    }
+    
+    public Instant getEndDate() {
+        return this.endDate;
+    }
+    
+    public void setEndDate(Instant endDate) {
+        this.endDate = endDate;
+    }
+    
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+    
+    public String getTitle() {
+        return this.title;
+    }
+    
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    public String getPrice() {
+        return this.price;
+    }
+    
+    public void setPrice(String price) {
+        this.price = price;
+    }
+    
+    public String getText() {
+        return this.text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    // ToString.aj
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+    
+    // Json.aj
+    public static Deal fromJsonToDeal(String json) {
+        return new JSONDeserializer<Deal>()
+        .use(null, Deal.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<Deal> fromJsonArrayToDeals(String json) {
+        return new JSONDeserializer<List<Deal>>()
+        .use("values", Deal.class).deserialize(json);
+    }
+    
+    // Jpa_ActiveRecord.aj
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("market", "startDate", "endDate", "image", "title", "price", "text");
+    
+    public static long countDeals() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Deal o", Long.class).getSingleResult();
+    }
+    
+    public static List<Deal> findAllDeals() {
+        return entityManager().createQuery("SELECT o FROM Deal o", Deal.class).getResultList();
+    }
+    
+    public static List<Deal> findAllDeals(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Deal o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Deal.class).getResultList();
+    }
+    
+    public static Deal findDeal(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Deal.class, id);
+    }
+    
+    public static List<Deal> findDealEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Deal o", Deal.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    @Transactional
+    public Deal merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Deal merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+    // Finder.aj
+    public static Long countFindDealsByMarket(Market market) {
+        if (market == null) throw new IllegalArgumentException("The market argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Deal AS o WHERE o.market = :market", Long.class);
+        q.setParameter("market", market);
+        return q.getSingleResult();
+    }
+    
+    public static Long countFindDealsByTextLike(String text) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("The text argument is required");
+        text = text.replace('*', '%');
+        if (text.charAt(0) != '%') {
+            text = "%" + text;
+        }
+        if (text.charAt(text.length() - 1) != '%') {
+            text = text + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Deal AS o WHERE LOWER(o.text) LIKE LOWER(:text)", Long.class);
+        q.setParameter("text", text);
+        return q.getSingleResult();
+    }
+    
+    public static TypedQuery<Deal> findDealsByMarket(Market market) {
+        if (market == null) throw new IllegalArgumentException("The market argument is required");
+        EntityManager em = entityManager();
+        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE o.market = :market", Deal.class);
+        q.setParameter("market", market);
+        return q;
+    }
+    
+    public static TypedQuery<Deal> findDealsByMarket(Market market, String sortFieldName, String sortOrder) {
+        if (market == null) throw new IllegalArgumentException("The market argument is required");
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Deal AS o WHERE o.market = :market");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Deal> q = em.createQuery(queryBuilder.toString(), Deal.class);
+        q.setParameter("market", market);
+        return q;
+    }
+    
+    public static TypedQuery<Deal> findDealsByTextLike(String text) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("The text argument is required");
+        text = text.replace('*', '%');
+        if (text.charAt(0) != '%') {
+            text = "%" + text;
+        }
+        if (text.charAt(text.length() - 1) != '%') {
+            text = text + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE LOWER(o.text) LIKE LOWER(:text)", Deal.class);
+        q.setParameter("text", text);
+        return q;
+    }
+    
+    public static TypedQuery<Deal> findDealsByTextLike(String text, String sortFieldName, String sortOrder) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("The text argument is required");
+        text = text.replace('*', '%');
+        if (text.charAt(0) != '%') {
+            text = "%" + text;
+        }
+        if (text.charAt(text.length() - 1) != '%') {
+            text = text + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Deal AS o WHERE LOWER(o.text) LIKE LOWER(:text)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Deal> q = em.createQuery(queryBuilder.toString(), Deal.class);
+        q.setParameter("text", text);
+        return q;
+    }
+
 }
