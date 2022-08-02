@@ -40,8 +40,6 @@ public class RecipeIngredientController {
     public String create(@PathVariable("recipeId") long recipeId, @RequestBody RecipeIngredient recipeIngredient) {
         this.logger.debug("landed at /ugc/recipes/{recipeId}/ingredients/create");
 
-        recipeIngredient.setUsr(User.getLoggedInUser());
-
         // Check for base recipe
         if(Recipe.findRecipe(recipeId) == null) {
             return "Recipe ID error";
@@ -77,15 +75,19 @@ public class RecipeIngredientController {
      * @param id   ID of RecipeIngredient to Delete
      * @return ID of updated RecipeIngredient
      */
-    @PreAuthorize("@creatorChecker.check(#id)")
+    @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public String delete(@PathVariable("id") long id) {
+    public String delete(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id) {
         RecipeIngredient ingredient = RecipeIngredient.findRecipeIngredient(id);
 		if (ingredient == null) {
 			return "ID error";
 		}
 
         Recipe parent = ingredient.getParent();
+
+        if (parent.getId() != recipeId) {
+            return "Mismatched Parent";
+        }
 
         ingredient.delete();
 
@@ -102,14 +104,18 @@ public class RecipeIngredientController {
      * @param recipeIngredient updated RecipeIngredient
      * @return ID of updated RecipeIngredient
      */
-    @PreAuthorize("@creatorChecker.check(#id)")
+    @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
-    public String update(@PathVariable("id") long id, @RequestBody RecipeIngredientBean recipeIngredient) {
+    public String update(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id, @RequestBody RecipeIngredientBean recipeIngredient) {
 		if (recipeIngredient.getId() != id || RecipeIngredient.findRecipeIngredient(recipeIngredient.getId())==null) {
 			return "ID error";
 		}
 
 		final RecipeIngredient oldRecipeIngredient = RecipeIngredient.findRecipeIngredient(recipeIngredient.getId());
+
+        if (oldRecipeIngredient.getParent().getId() != recipeId) {
+            return "Mismatched Parent";
+        }
 
 		if (recipeIngredient.getName() != null && !recipeIngredient.getName().equals(oldRecipeIngredient.getName())) {
 			oldRecipeIngredient.setName(recipeIngredient.getName());

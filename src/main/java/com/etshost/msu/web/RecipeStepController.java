@@ -41,8 +41,6 @@ public class RecipeStepController {
     public String create(@PathVariable("recipeId") long recipeId, @RequestBody RecipeStep recipeStep) {
         this.logger.debug("landed at /ugc/recipes/{recipeId}/step/create");
 
-        recipeStep.setUsr(User.getLoggedInUser());
-
         // Check for base recipe
         if(Recipe.findRecipe(recipeId) == null) {
             return "Recipe ID error";
@@ -82,16 +80,19 @@ public class RecipeStepController {
      * @param id   ID of Recipe to Delete
      * @return ID of updated RecipeStep
      */
-    @PreAuthorize("@creatorChecker.check(#id)")
+    @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
-    public String delete(@PathVariable("id") long id) {
+    public String delete(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id) {
         RecipeStep step = RecipeStep.findRecipeStep(id);
 		if (step == null) {
 			return "ID error";
 		}
 
         Recipe parent = step.getParent();
-        //parent.removeStep(step);
+
+        if (parent.getId() != recipeId) {
+            return "Mismatched Parent";
+        }
 
         step.delete();
 
@@ -108,14 +109,18 @@ public class RecipeStepController {
      * @param recipeStep updated RecipeStep
      * @return ID of updated RecipeStep
      */
-    @PreAuthorize("@creatorChecker.check(#id)")
+    @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
-    public String update(@PathVariable("id") long id, @RequestBody RecipeStepBean recipeStep) {
+    public String update(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id, @RequestBody RecipeStepBean recipeStep) {
 		if (recipeStep.getId() != id || RecipeStep.findRecipeStep(recipeStep.getId())==null) {
 			return "ID error";
 		}
 
 		final RecipeStep oldRecipeStep = RecipeStep.findRecipeStep(recipeStep.getId());
+
+        if (oldRecipeStep.getParent().getId() != recipeId) {
+            return "Mismatched Parent";
+        }
 
 		if (recipeStep.getTitle() != null && !recipeStep.getTitle().equals(oldRecipeStep.getTitle())) {
 			oldRecipeStep.setTitle(recipeStep.getTitle());

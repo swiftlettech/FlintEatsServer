@@ -31,7 +31,7 @@ import flexjson.JSONSerializer;
 @RooJson
 @RooToString
 @Transactional
-public class RecipeIngredient extends UGC {
+public class RecipeIngredient extends Entity {
 
     @ManyToOne
     @JSON(include = false)
