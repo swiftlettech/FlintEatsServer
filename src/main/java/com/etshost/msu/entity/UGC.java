@@ -13,10 +13,6 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,10 +28,7 @@ import flexjson.JSONSerializer;
 @Configurable
 @javax.persistence.Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@RooJavaBean
-@RooJson
-@RooToString
-@RooJpaActiveRecord(finders = { "findUGCSByUsr" })
+@Transactional
 public abstract class UGC extends Entity {
 	
 	@JsonCreator

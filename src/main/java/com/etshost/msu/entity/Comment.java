@@ -6,19 +6,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.TypedQuery;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 
 /**
@@ -29,11 +30,7 @@ import flexjson.JSONSerializer;
 @Audited
 @javax.persistence.Entity
 @Configurable
-@RooJavaBean
-@RooJson
-@RooToString
 @Transactional
-@RooJpaActiveRecord(finders = { "findCommentsByTextLike" })
 public class Comment extends UGC {
     
     @ManyToOne
@@ -42,6 +39,45 @@ public class Comment extends UGC {
     private String text;
 
     
+    // JavaBean.aj
+    public Entity getTarget() {
+        return this.target;
+    }
+    
+    public void setTarget(Entity target) {
+        this.target = target;
+    }
+    
+    public String getText() {
+        return this.text;
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    // Json.aj
+    public static Comment fromJsonToComment(String json) {
+        return new JSONDeserializer<Comment>()
+        .use(null, Comment.class).deserialize(json);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection) {
+        return new JSONSerializer()
+        .exclude("*.class").serialize(collection);
+    }
+    
+    public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
+        return new JSONSerializer()
+        .include(fields).exclude("*.class").serialize(collection);
+    }
+    
+    public static Collection<Comment> fromJsonArrayToComments(String json) {
+        return new JSONDeserializer<List<Comment>>()
+        .use("values", Comment.class).deserialize(json);
+    }
+
+
     public String toJson() {
         return new JSONSerializer()
         		.exclude("logger").serialize(this);
@@ -140,5 +176,104 @@ public class Comment extends UGC {
         }
         return entityManager().createQuery(jpaQuery, Comment.class)
         		.setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+
+    // ToString.aj
+    public String toString() {
+        return ReflectionToStringBuilder.toString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+
+    // Jpa_ActiveRecord.aj
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("target", "text");
+    
+    public static long countComments() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Comment o", Long.class).getSingleResult();
+    }
+    
+    public static List<Comment> findAllComments() {
+        return entityManager().createQuery("SELECT o FROM Comment o", Comment.class).getResultList();
+    }
+    
+    public static List<Comment> findAllComments(String sortFieldName, String sortOrder) {
+        String jpaQuery = "SELECT o FROM Comment o";
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                jpaQuery = jpaQuery + " " + sortOrder;
+            }
+        }
+        return entityManager().createQuery(jpaQuery, Comment.class).getResultList();
+    }
+    
+    public static Comment findComment(Long id) {
+        if (id == null) return null;
+        return entityManager().find(Comment.class, id);
+    }
+    
+    public static List<Comment> findCommentEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Comment o", Comment.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    }
+    
+    @Transactional
+    public Comment merge() {
+        if (this.entityManager == null) this.entityManager = entityManager();
+        Comment merged = this.entityManager.merge(this);
+        this.entityManager.flush();
+        return merged;
+    }
+
+
+    // Finder.aj
+    public static Long countFindCommentsByTextLike(String text) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("The text argument is required");
+        text = text.replace('*', '%');
+        if (text.charAt(0) != '%') {
+            text = "%" + text;
+        }
+        if (text.charAt(text.length() - 1) != '%') {
+            text = text + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Comment AS o WHERE LOWER(o.text) LIKE LOWER(:text)", Long.class);
+        q.setParameter("text", text);
+        return q.getSingleResult();
+    }
+    
+    public static TypedQuery<Comment> findCommentsByTextLike(String text) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("The text argument is required");
+        text = text.replace('*', '%');
+        if (text.charAt(0) != '%') {
+            text = "%" + text;
+        }
+        if (text.charAt(text.length() - 1) != '%') {
+            text = text + "%";
+        }
+        EntityManager em = entityManager();
+        TypedQuery<Comment> q = em.createQuery("SELECT o FROM Comment AS o WHERE LOWER(o.text) LIKE LOWER(:text)", Comment.class);
+        q.setParameter("text", text);
+        return q;
+    }
+    
+    public static TypedQuery<Comment> findCommentsByTextLike(String text, String sortFieldName, String sortOrder) {
+        if (text == null || text.length() == 0) throw new IllegalArgumentException("The text argument is required");
+        text = text.replace('*', '%');
+        if (text.charAt(0) != '%') {
+            text = "%" + text;
+        }
+        if (text.charAt(text.length() - 1) != '%') {
+            text = text + "%";
+        }
+        EntityManager em = entityManager();
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Comment AS o WHERE LOWER(o.text) LIKE LOWER(:text)");
+        if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
+            queryBuilder.append(" ORDER BY ").append(sortFieldName);
+            if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
+                queryBuilder.append(" ").append(sortOrder);
+            }
+        }
+        TypedQuery<Comment> q = em.createQuery(queryBuilder.toString(), Comment.class);
+        q.setParameter("text", text);
+        return q;
     }
 }
