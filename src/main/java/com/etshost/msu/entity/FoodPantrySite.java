@@ -3,19 +3,8 @@ package com.etshost.msu.entity;
 import java.util.Collection;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvNumber;
-
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
@@ -23,6 +12,8 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -31,8 +22,14 @@ import org.springframework.roo.addon.json.RooJson;
 import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvNumber;
+
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import net.sf.ehcache.CacheManager;
 
 @Analyzer(impl = org.apache.lucene.analysis.standard.StandardAnalyzer.class)
 @Audited
@@ -229,7 +226,7 @@ public class FoodPantrySite extends Entity {
     }
 
     @Transactional
-    public static List<FoodPantrySite> replaceFoodPantrySiteEntries(List<FoodPantrySite> sites) {
+    public List<FoodPantrySite> replaceFoodPantrySiteEntries(List<FoodPantrySite> sites) {
         Logger logger = LoggerFactory.getLogger(FoodPantrySite.class);
         List<FoodPantrySite> existing = findAllFoodPantrySites();
         existing.forEach((site) -> {
@@ -237,6 +234,7 @@ public class FoodPantrySite extends Entity {
             site.delete();
             //site.persist();
         });
+        rebuildCache();
         sites.forEach((site) -> {
             logger.debug(site.toString());
             site.persist();
@@ -244,11 +242,20 @@ public class FoodPantrySite extends Entity {
         return findAllFoodPantrySites();
     }
 
+    private void rebuildCache() {
+        try {
+            //CacheManager cacheManager = ehCacheManager.getObject();
+            CacheManager.getInstance().getEhcache("foodPantrySitesCache").removeAll();
+            findAllFoodPantrySitesJson();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // Finders
     public List<FoodPantrySite> findFoodPantrySiteEntries(int firstResult, int maxResults,
     		String sortFieldName, String sortOrder) {
-        Logger logger = LoggerFactory.getLogger(FoodPantrySite.class);
         String jpaQuery = "SELECT o FROM FoodPantrySite o";
         if (maxResults < 0) {
         	return entityManager().createQuery(jpaQuery, FoodPantrySite.class)

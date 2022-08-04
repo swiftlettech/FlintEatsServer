@@ -91,18 +91,20 @@ public class FoodPantrySiteController {
     public ModelAndView upload(@RequestParam("file") MultipartFile file) {
         List<FoodPantrySite> sites;
         try(InputStreamReader isr = new InputStreamReader(file.getInputStream())) {
-            sites = new CsvToBeanBuilder(isr)
-                .withType(FoodPantrySite.class).build().parse();
-			FoodPantrySite.replaceFoodPantrySiteEntries(sites);
+            sites = new CsvToBeanBuilder<FoodPantrySite>(isr)
+				.withType(FoodPantrySite.class)
+                .build().parse();
+			repository.replaceFoodPantrySiteEntries(sites);
         } catch (Exception e) {
             //TODO: handle exception
             logger.error(e.toString());
-        } finally {
-			ModelAndView mav = new ModelAndView("foodpantrysites/list");
-			mav.addObject("foodpantrysites", FoodPantrySite.findAllFoodPantrySites());
-			return mav;
 		}
-    }
+		ModelAndView mav = new ModelAndView("foodpantrysites/list");
+		mav.addObject("foodpantrysites", FoodPantrySite.findAllFoodPantrySites());
+		return mav;
+	}
+
+
 	@PreAuthorize("hasAuthority('admin')")
 	@RequestMapping(
 		value = { "/upload"}, 
