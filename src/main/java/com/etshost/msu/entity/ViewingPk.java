@@ -25,13 +25,13 @@ public class ViewingPk implements Serializable {
 		this.setStartTime(startTime);
 	}
 
-	@Column(name = "userId")
+	@Column(name = "user_id")
     private Long userId;
     
-    @Column(name = "targetId")
+    @Column(name = "target_id")
     private Long targetId;
 
-    @Column(name = "startTime")
+    @Column(name = "starttime")
     private Instant startTime;
     
     public long getUserId() {

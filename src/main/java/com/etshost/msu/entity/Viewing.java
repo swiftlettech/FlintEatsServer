@@ -64,10 +64,8 @@ public class Viewing {
     @JoinColumn(name = "target_id")
     private Entity target;
     
-//	@DateTimeFormat(style = "MM")
-//	private Instant startTime;
-	
 	@DateTimeFormat(style = "MM")
+    @Column(name = "endtime")
 	private Instant endTime;
 
     public static List<Viewing> findRecentViewings(Instant when) {

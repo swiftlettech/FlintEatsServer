@@ -14,7 +14,7 @@
 		http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/cache 
         http://www.springframework.org/schema/cache/spring-cache.xsd
-		http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/jee
 		http://www.springframework.org/schema/jee/spring-jee.xsd
@@ -109,5 +109,9 @@
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache"/>
 
     <!-- EhCache library setup -->
-    <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:config-location="classpath:ehcache.xml"/>
+    <bean 
+        id="ehcache" 
+        class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" 
+        p:config-location="classpath:ehcache.xml"
+        p:shared="true" />
 </beans>

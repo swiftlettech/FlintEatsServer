@@ -70,10 +70,8 @@ public class Reaction {
     @JoinColumn(name = "target_id")
     private UGC target;
     
-//	@DateTimeFormat(style = "MM")
-//	private Instant startTime;
-	
 	@DateTimeFormat(style = "MM")
+    @Column(name = "endtime")
 	private Instant endTime;
 	
 	private int value;
@@ -137,9 +135,9 @@ public class Reaction {
         if (target == null) throw new IllegalArgumentException("The target argument is required");
         EntityManager em = Reaction.entityManager();
         TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Reaction AS o "
-        		+ "WHERE o.target = :target AND o.endTime IS NULL) ", Long.class);
+        		+ "WHERE o.target = :target AND o.endTime IS NULL ", Long.class);
         q.setParameter("target", target);
-        return ((Long) q.getSingleResult());
+        return q.getSingleResult();
     }
 
     // JavaBean.aj

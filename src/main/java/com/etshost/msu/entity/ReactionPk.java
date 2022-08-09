@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- * Primary key of a {@link Preference}.
+ * Primary key of a {@link Reaction}.
  */
 @Embeddable
 public class ReactionPk implements Serializable { 
@@ -31,13 +31,13 @@ public class ReactionPk implements Serializable {
 		this.setStartTime(startTime);
 	}
 	
-	@Column(name = "userId")
+	@Column(name = "user_id")
     private Long userId;
     
-    @Column(name = "targetId")
+    @Column(name = "target_id")
     private Long targetId;
     
-    @Column(name = "startTime")
+    @Column(name = "starttime")
     private Instant startTime;
     
     public long getUserId() {

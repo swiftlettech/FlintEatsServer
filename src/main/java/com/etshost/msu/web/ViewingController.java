@@ -2,6 +2,8 @@ package com.etshost.msu.web;
 import java.time.Instant;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import com.etshost.msu.entity.Viewing;
  */
 @RequestMapping("/viewings")
 @RestController
+@Transactional
 public class ViewingController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 

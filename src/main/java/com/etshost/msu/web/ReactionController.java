@@ -2,6 +2,8 @@ package com.etshost.msu.web;
 import java.time.Instant;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,7 @@ public class ReactionController {
 	 * @param reaction	Reaction to create
 	 * @return		hashcode of created Reaction
 	 */
+	@Transactional
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
 	public String create(@RequestBody Reaction reaction) {
 		User user = User.getLoggedInUser();
@@ -62,6 +65,7 @@ public class ReactionController {
 	 * @param orderDir		order direction (ASC or DESC)
 	 * @return				JSON array of results
 	 */
+	@Transactional
 	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = "application/json")
 	public String list(
 			@RequestParam(name = "start", defaultValue = "0") int start,
@@ -73,6 +77,7 @@ public class ReactionController {
 		return Reaction.toJsonArray(results);
 	}
 	
+	@Transactional
 	@RequestMapping(value = "/recent", method = RequestMethod.GET, produces = "application/json")
 	public String recent(@RequestParam(name = "epoch") long epoch) {
 		Instant then = Instant.ofEpochSecond(epoch);
