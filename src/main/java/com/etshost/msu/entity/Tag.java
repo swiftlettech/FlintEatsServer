@@ -122,7 +122,7 @@ public class Tag extends UGC {
     
     public String toJson() {
         return new JSONSerializer()
-        		.exclude("logger").serialize(this);
+        		.exclude("logger", "usr").serialize(this);
     }
     
     public static String toJsonArrayTag(Collection<Tag> collection) {
@@ -321,12 +321,12 @@ public class Tag extends UGC {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class").serialize(collection);
+        .exclude("*.class", "usr").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "usr").serialize(collection);
     }
     
     public static Collection<Tag> fromJsonArrayToTags(String json) {

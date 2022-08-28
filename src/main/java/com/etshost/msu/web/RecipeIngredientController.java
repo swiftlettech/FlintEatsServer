@@ -2,6 +2,8 @@ package com.etshost.msu.web;
 import java.time.Instant;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,7 @@ public class RecipeIngredientController {
      * @param recipeIngredient Recipe to create
      * @return ID of created RecipeIngredient
      */
+	@Transactional
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
     public String create(@PathVariable("recipeId") long recipeId, @RequestBody RecipeIngredient recipeIngredient) {
         this.logger.debug("landed at /ugc/recipes/{recipeId}/ingredients/create");
@@ -75,6 +78,7 @@ public class RecipeIngredientController {
      * @param id   ID of RecipeIngredient to Delete
      * @return ID of updated RecipeIngredient
      */
+	@Transactional
     @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public String delete(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id) {
@@ -90,6 +94,7 @@ public class RecipeIngredientController {
         }
 
         ingredient.delete();
+        parent.removeIngredient(ingredient);
 
         parent.setModified(Instant.now());
         parent.persist();
@@ -104,6 +109,7 @@ public class RecipeIngredientController {
      * @param recipeIngredient updated RecipeIngredient
      * @return ID of updated RecipeIngredient
      */
+	@Transactional
     @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
     public String update(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id, @RequestBody RecipeIngredientBean recipeIngredient) {

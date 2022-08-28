@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS public.recipeingredient_aud
     id bigint NOT NULL,
     rev integer NOT NULL,
     recipe_id bigint,
-    name VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
     measurement VARCHAR(45),
     CONSTRAINT recipeingredient_aud_pkey PRIMARY KEY (id, rev),
     CONSTRAINT fk_recipeingredient_entity_aud_id FOREIGN KEY (id, rev)

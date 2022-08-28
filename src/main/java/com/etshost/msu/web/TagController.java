@@ -116,7 +116,7 @@ public class TagController {
 	@RequestMapping(value = "/sublist/{letter}", method = RequestMethod.GET, produces = "application/json")
 	public String list(@PathVariable(name = "letter") String letter) {
 		// make sure arg is not an id
-		if (NumberUtils.isNumber(letter)) {
+		if (NumberUtils.isCreatable(letter)) {
 			Long id = Long.parseLong(letter);
 			if (id > 0) {
 				return this.list(id);

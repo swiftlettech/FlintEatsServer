@@ -3,6 +3,8 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,7 @@ public class RecipeStepController {
      * @param recipeStep Recipe to create
      * @return ID of created RecipeStep
      */
+	@Transactional
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
     public String create(@PathVariable("recipeId") long recipeId, @RequestBody RecipeStep recipeStep) {
         this.logger.debug("landed at /ugc/recipes/{recipeId}/step/create");
@@ -80,6 +83,7 @@ public class RecipeStepController {
      * @param id   ID of Recipe to Delete
      * @return ID of updated RecipeStep
      */
+	@Transactional
     @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, produces = "application/json")
     public String delete(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id) {
@@ -109,6 +113,7 @@ public class RecipeStepController {
      * @param recipeStep updated RecipeStep
      * @return ID of updated RecipeStep
      */
+	@Transactional
     @PreAuthorize("@creatorChecker.check(#recipeId)")
     @RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
     public String update(@PathVariable("recipeId") long recipeId, @PathVariable("id") long id, @RequestBody RecipeStepBean recipeStep) {
