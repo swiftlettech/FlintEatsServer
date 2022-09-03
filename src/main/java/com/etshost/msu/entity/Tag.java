@@ -127,7 +127,7 @@ public class Tag extends UGC {
     
     public static String toJsonArrayTag(Collection<Tag> collection) {
         return new JSONSerializer()
-        		.include("class", "name", "usr.id", "usr.name")
+        		.include("class", "name")
 		        .exclude("*.class", "*.logger", "usr")
 		        .serialize(collection);
     }
