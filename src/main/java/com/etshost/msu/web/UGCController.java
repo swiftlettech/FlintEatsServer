@@ -133,6 +133,26 @@ public class 	UGCController {
 			}
 		}
 
+		if (types==null || types.contains("recipe")) {
+			if (q!=null) {
+				ugcResultSet.addAll(Recipe.search(q));
+			} else {
+				ugcResultSet.addAll(Recipe.findAllPublishedRecipes());
+			}
+		}
+
+		if (types==null || types.contains("review")) {
+			if (q!=null) {
+				ugcResultSet.addAll(Review.search(q));
+			} else {
+				ugcResultSet.addAll(Review.findAllReviews());
+			}
+		
+			if (!markets.isEmpty()) {
+				ugcResultSet.removeIf(r -> !markets.contains(((Review)r).getTarget()));
+			}
+		}
+
 		if (!tags.isEmpty()) {
 			ugcResultSet.removeIf(d -> {
 				Set<Tag> hastags = new HashSet<>(d.getTags());

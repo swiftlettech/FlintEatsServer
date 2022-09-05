@@ -29,6 +29,7 @@ import com.etshost.msu.entity.Deal;
 import com.etshost.msu.entity.Entity;
 import com.etshost.msu.entity.Market;
 import com.etshost.msu.entity.Policy;
+import com.etshost.msu.entity.Recipe;
 import com.etshost.msu.entity.Review;
 import com.etshost.msu.entity.Role;
 import com.etshost.msu.entity.Tag;
@@ -218,7 +219,7 @@ public class AuthController {
 		EntityManager em = Entity.entityManager();
 		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
 		try {
-			fullTextEntityManager.createIndexer(Market.class, Tag.class, Deal.class, Tip.class).startAndWait();
+			fullTextEntityManager.createIndexer(Market.class, Tag.class, Deal.class, Tip.class, Recipe.class, Review.class).startAndWait();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

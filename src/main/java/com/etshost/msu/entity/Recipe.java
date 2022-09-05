@@ -1,9 +1,16 @@
 package com.etshost.msu.entity;
 import org.hibernate.envers.Audited;
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -16,6 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.TermQuery;
+
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import java.util.Base64;
@@ -25,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
@@ -33,6 +44,8 @@ import flexjson.JSON;
 /**
  * Represents a recipe for a culinary dish.
  */
+@Analyzer(impl = org.apache.lucene.analysis.standard.StandardAnalyzer.class)
+@Indexed
 @Audited
 @javax.persistence.Entity
 @Configurable
@@ -44,6 +57,7 @@ import flexjson.JSON;
 public class Recipe extends UGC {
     
     @Size(min = 3, max = 255)
+	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)	
     private String title;
 
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
@@ -54,6 +68,7 @@ public class Recipe extends UGC {
 	
     private int servings;
 
+    @Field(index=Index.YES, store=Store.NO)
     private boolean published;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy="recipe")
@@ -104,6 +119,57 @@ public class Recipe extends UGC {
 		return recipe;
 	}
 
+
+    @SuppressWarnings("unchecked")
+	public static List<Recipe> search(String q) {
+        Logger logger = LoggerFactory.getLogger(Recipe.class);
+        EntityManager em = Entity.entityManager();
+        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(em);
+
+        logger.debug("searching Recipes for: {}", q);
+
+        QueryBuilder qb = fullTextEntityManager
+                .getSearchFactory()
+                .buildQueryBuilder()
+                .forEntity(Recipe.class)
+                .get();
+        org.apache.lucene.search.Query luceneQuery = qb.bool()
+            .must(qb
+                .keyword()
+                .fuzzy()
+                .withPrefixLength(3)
+                .onFields("title", "description")
+                .matching(q)
+                .createQuery())
+            .filteredBy(new TermQuery(new Term("published", "true")))
+            .createQuery();
+
+        logger.debug("luceneQuery: {}", luceneQuery.toString());
+
+        //the is for debugging only
+//        org.hibernate.search.jpa.FullTextQuery jpaQuery =
+//                fullTextEntityManager.createFullTextQuery(luceneQuery, Deal.class).setProjection(
+//                        FullTextQuery.DOCUMENT_ID,
+//                        FullTextQuery.EXPLANATION,
+//                        FullTextQuery.THIS
+//                );
+
+        // wrap Lucene query in a javax.persistence.Query
+		javax.persistence.Query jpaQuery =
+		    fullTextEntityManager.createFullTextQuery(luceneQuery, Recipe.class);
+        logger.debug("jpaQuery: {}", jpaQuery.toString());
+//        @SuppressWarnings("unchecked") List<Object[]> results = jpaQuery.getResultList();
+//        for (Object[] result : results) {
+//            Explanation e = (Explanation) result[1];
+//            logger.debug(e.toString());
+//        }
+
+
+        // execute search
+        logger.debug("results size: {}", jpaQuery.getResultList().size());
+        List<Recipe> result = jpaQuery.getResultList();
+        return result;
+    }
 
     // JavaBean.aj
     public int getServings() {
@@ -200,8 +266,11 @@ public class Recipe extends UGC {
     public static List<Recipe> findAllRecipes() {
         return entityManager().createQuery("SELECT o FROM Recipe o", Recipe.class).getResultList();
     }
+    public static List<Recipe> findAllPublishedRecipes() {
+        return entityManager().createQuery("SELECT o FROM Recipe o WHERE o.published = true", Recipe.class).getResultList();
+    }
     
-    public static List<Recipe> findAllRecipes(String sortFieldName, String sortOrder) {
+    public static List<Recipe> findAllPublishedRecipes(String sortFieldName, String sortOrder) {
         String jpaQuery = "SELECT o FROM Recipe o";
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             jpaQuery = jpaQuery + " ORDER BY " + sortFieldName;
@@ -209,6 +278,7 @@ public class Recipe extends UGC {
                 jpaQuery = jpaQuery + " " + sortOrder;
             }
         }
+        jpaQuery = jpaQuery + " WHERE o.published = true";
         return entityManager().createQuery(jpaQuery, Recipe.class).getResultList();
     }
     
