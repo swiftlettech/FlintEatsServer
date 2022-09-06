@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.etshost.msu.entity.Entity;
 import com.etshost.msu.entity.Review;
 import com.etshost.msu.entity.User;
 import com.etshost.msu.entity.Viewing;
@@ -32,16 +33,14 @@ public class ReviewController {
 	 * @param review	Review to create
 	 * @return		ID of created Review
 	 */
-	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public String create(@RequestBody Review review) {
 		review.setUsr(User.getLoggedInUser());
 		
-		/*
-		JsonArray errors = new JsonArray();
-		if (errors.size() > 0) {
-			return errors.toString();
-		}
-		*/
+		// Set parent on properties
+		review.getProperties().forEach(prop -> {
+			prop.setReview(review);
+		});
 
 		// persist and return id
 		review.persist();
@@ -146,5 +145,20 @@ public class ReviewController {
 		User user = User.getLoggedInUser();
 		new Viewing(user, review).persist();
 		return review.toJson();
+	}
+	
+	/**
+	 * Returns Reviews targeted to the given ID
+	 * @param targetId	ID of UGC under review 
+	 * @return			JSON of Reviews
+	 */
+	@RequestMapping(value = "/target/{targetId}", method = RequestMethod.GET, produces = "application/json")
+	public String byTarget(@PathVariable("targetId") long targetId) {
+		Entity target = Entity.findEntity(targetId);
+		List<Review> reviews = Review.findReviewsByTarget(target);
+		if (reviews == null) {
+			return "[]";
+		}
+		return Review.toJsonArray(reviews);
 	}
 }
