@@ -19,6 +19,10 @@
         <put-attribute name="body" value="/WEB-INF/views/uncaughtException.jspx"/>
     </definition>
 
+    <definition extends="public" name="genericException">
+        <put-attribute name="body" value="/WEB-INF/views/genericException.jspx"/>
+    </definition>
+
     <definition extends="public" name="welcome">
         <put-attribute name="body" value="/WEB-INF/views/welcome.jsp"/>
     </definition>
