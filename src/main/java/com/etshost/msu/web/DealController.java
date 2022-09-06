@@ -1,25 +1,21 @@
 package com.etshost.msu.web;
 
-import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.etshost.msu.bean.DealBean;
-import com.etshost.msu.bean.IndexedUGCBean;
-import com.etshost.msu.bean.UGCCreatorCheck;
-import com.etshost.msu.entity.*;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.etshost.msu.bean.DealBean;
+import com.etshost.msu.bean.IndexedUGCBean;
+import com.etshost.msu.bean.UGCCreatorCheck;
+import com.etshost.msu.entity.Deal;
+import com.etshost.msu.entity.Market;
+import com.etshost.msu.entity.Tag;
+import com.etshost.msu.entity.User;
+import com.etshost.msu.entity.Viewing;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.Deal} class.

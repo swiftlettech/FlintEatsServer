@@ -120,6 +120,18 @@ public abstract class Entity {
 		return 0L;
 	}
 
+	@JSON(name = "reviewsCount")
+	public Long getReviewsCount() {
+		Long count = Review.countReviewsByTarget(this);
+		return count;
+	}
+	
+	@JSON(name = "reviewsRating")
+	public Double getReviewsRating() {
+		Double rating = Review.averageValueOfReviewsByTarget(this);
+		return rating;
+	}
+	
 	@Transactional
 	public void clear() {
 		if (this.entityManager == null) {

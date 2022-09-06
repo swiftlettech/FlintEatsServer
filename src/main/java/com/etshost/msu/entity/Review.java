@@ -57,22 +57,49 @@ public class Review extends UGC {
     private Entity target;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "review")
+    @JSON(name = "properties")
     private Set<ReviewProperty> properties = new HashSet<ReviewProperty>();
 
     private String text;
     
-    public String toJson() {
-        return new JSONSerializer()
-        		.exclude("logger").serialize(this);
-    }
-    
-    public static String toJsonArrayReview(Collection<Review> collection) {
-        return new JSONSerializer()
-        		.include("class", "usr.id", "usr.name", "usr.avatar")
-		        .exclude("*.class", "*.logger", "usr")
-		        .serialize(collection);
-    }
-    
+	@JSON(name = "rating")
+	public Double getRating() {
+		Double rating = averageValueOfPropertiesByReview(this);
+		return rating;
+	}
+	
+	@JsonCreator
+	public static Review factory(
+        @JsonProperty("id") Long id,
+        @JsonProperty("targetId") Long targetId,
+        @JsonProperty("text") String text,
+        @JsonProperty("properties") Set<ReviewProperty> properties,
+        @JsonProperty("tags") Set<Tag> tags
+        ) {
+		Review review = null;
+		if (id != null) {
+			review = Review.findReview(id);
+			if (review == null) {
+				return review;
+			}
+		} else {
+			review = new Review();
+		}
+		if (text != null) {
+			review.setText(text);
+		}
+		if (targetId != null) {
+			review.setTarget(UGC.findEntity(targetId));
+		}
+        if (properties != null) {
+            review.setProperties(properties);
+        }
+        if (tags != null) {
+            review.setTags(tags);
+        }
+		return review;
+	}
+
     public static String generateDataTables(final int draw, final int start, final int length,
     		final String orderColumnName, final String orderDir) {
         long count = Review.countReviews();

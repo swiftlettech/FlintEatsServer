@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.etshost.msu.entity.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.NamedStoredProcedureQuery;
+import com.etshost.msu.entity.Deal;
+import com.etshost.msu.entity.Market;
+import com.etshost.msu.entity.Recipe;
+import com.etshost.msu.entity.Review;
+import com.etshost.msu.entity.Tag;
+import com.etshost.msu.entity.Tip;
+import com.etshost.msu.entity.UGC;
+import com.etshost.msu.entity.User;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.UGC} class.

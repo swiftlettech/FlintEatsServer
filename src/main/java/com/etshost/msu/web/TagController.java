@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -31,6 +32,7 @@ import com.etshost.msu.entity.User;
  */
 @RequestMapping("/tags")
 @RestController
+@Transactional
 public class TagController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
