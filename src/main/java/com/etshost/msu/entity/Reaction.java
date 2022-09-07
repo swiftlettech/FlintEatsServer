@@ -191,12 +191,12 @@ public class Reaction {
     // Json.aj
     public String toJson() {
         return new JSONSerializer()
-        .exclude("*.class").serialize(this);
+        .exclude("*.class", "usr.email", "usr.phone").serialize(this);
     }
     
     public String toJson(String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(this);
+        .include(fields).exclude("*.class", "usr.email", "usr.phone").serialize(this);
     }
     
     public static Reaction fromJsonToReaction(String json) {
@@ -206,12 +206,12 @@ public class Reaction {
     
     public static String toJsonArray(Collection<Reaction> collection) {
         return new JSONSerializer()
-        .exclude("*.class").serialize(collection);
+        .exclude("*.class", "usr.email", "usr.phone").serialize(collection);
     }
     
     public static String toJsonArray(Collection<Reaction> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "usr.email", "usr.phone").serialize(collection);
     }
     
     public static Collection<Reaction> fromJsonArrayToReactions(String json) {

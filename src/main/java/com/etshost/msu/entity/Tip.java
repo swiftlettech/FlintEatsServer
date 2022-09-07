@@ -100,13 +100,13 @@ public class Tip extends UGC {
     public String toJson() {
         return new JSONSerializer()
 				.include("tags.id", "tags.name", "tipType")
-        		.exclude("logger", "tags.*").serialize(this);
+        		.exclude("logger", "tags.*", "usr.email", "usr.phone").serialize(this);
     }
     
     public static String toJsonArrayTip(Collection<Tip> collection) {
         return new JSONSerializer()
-        		.include("class", "usr.id", "usr.name", "usr.username", "usr.avatar64", "tags.id", "tags.name")
-		        .exclude("*.class", "*.logger", "tags.*")
+        		.include("class", "tags.id", "tags.name")
+		        .exclude("*.class", "*.logger", "tags.*", "usr.email", "usr.phone")
 		        .serialize(collection);
     }
     
@@ -328,12 +328,12 @@ public class Tip extends UGC {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class").serialize(collection);
+        .exclude("*.class", "usr.email", "usr.phone").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "usr.email", "usr.phone").serialize(collection);
     }
     
     public static Collection<Tip> fromJsonArrayToTips(String json) {

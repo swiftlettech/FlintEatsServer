@@ -86,12 +86,12 @@ public class ReviewProperty extends Entity {
 	// Json.aj
     public String toJson() {
         return new JSONSerializer()
-        .exclude("*.class").serialize(this);
+        .exclude("*.class", "usr").serialize(this);
     }
     
     public String toJson(String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(this);
+        .include(fields).exclude("*.class", "usr").serialize(this);
     }
     
     public static ReviewProperty fromJsonToReviewProperty(String json) {
@@ -101,12 +101,12 @@ public class ReviewProperty extends Entity {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class").serialize(collection);
+        .exclude("*.class", "usr").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "usr").serialize(collection);
     }
     
     public static Collection<ReviewProperty> fromJsonArrayToReviewPropertys(String json) {

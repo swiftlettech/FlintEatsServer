@@ -64,12 +64,12 @@ public class Comment extends UGC {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class").serialize(collection);
+        .exclude("*.class", "usr.email", "usr.phone").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude("*.class", "usr.email", "usr.phone").serialize(collection);
     }
     
     public static Collection<Comment> fromJsonArrayToComments(String json) {
@@ -80,13 +80,13 @@ public class Comment extends UGC {
 
     public String toJson() {
         return new JSONSerializer()
-        		.exclude("logger").serialize(this);
+        		.exclude("logger", "usr.email", "usr.phone").serialize(this);
     }
     
     public static String toJsonArrayComment(Collection<Comment> collection) {
         return new JSONSerializer()
-        		.include("class", "usr.id", "usr.name", "usr.avatar")
-		        .exclude("*.class", "*.logger", "usr")
+        		.include("class")
+		        .exclude("*.class", "*.logger", "usr.email", "usr.phone")
 		        .serialize(collection);
     }
     

@@ -267,8 +267,8 @@ public class Review extends UGC {
     // Json.aj
     public String toJson() {
         return new JSONSerializer()
-            .include("class", "usr.id", "usr.name", "usr.avatar")
-        	.exclude("logger", "*.logger", "target.image", "usr.*").serialize(this);
+            .include("class")
+        	.exclude("logger", "*.logger", "target.image", "usr.email", "usr.phone").serialize(this);
     }
     
     public static Review fromJsonToReview(String json) {
@@ -278,8 +278,8 @@ public class Review extends UGC {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-            .include("class", "usr.id", "usr.name", "usr.avatar")
-            .exclude("*.class", "*.logger", "usr")
+            .include("class")
+            .exclude("*.class", "*.logger", "usr", "target.image", "usr.email", "usr.phone")
             .serialize(collection);
     }
     
