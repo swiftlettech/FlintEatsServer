@@ -71,7 +71,7 @@ public abstract class UGC extends Entity {
     public static String toJsonArrayUGC(Collection<? extends UGC> collection) {
         return new JSONSerializer()
         		.include("class", "market.id", "market.name","tags.name","tags.id")
-		        .exclude("*.class", "*.logger", "market.*", "usr.email", "usr.phone","tags.*")
+		        .exclude("*.logger", "market.*", "usr.email", "usr.phone","tags.*")
 		        .serialize(collection);
     }
     
@@ -140,12 +140,12 @@ public abstract class UGC extends Entity {
 	// Json.aj
     public String toJson() {
         return new JSONSerializer()
-        .exclude("*.class", "usr.email", "usr.phone").serialize(this);
+        .exclude("usr.email", "usr.phone").serialize(this);
     }
     
     public String toJson(String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class", "usr.email", "usr.phone").serialize(this);
+        .include(fields).exclude("usr.email", "usr.phone").serialize(this);
     }
     
     public static UGC fromJsonToUGC(String json) {
@@ -155,12 +155,12 @@ public abstract class UGC extends Entity {
     
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
-        .exclude("*.class", "usr.email", "usr.phone").serialize(collection);
+        .exclude("usr.email", "usr.phone").serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class", "usr.email", "usr.phone").serialize(collection);
+        .include(fields).exclude("usr.email", "usr.phone").serialize(collection);
     }
     
     public static Collection<UGC> fromJsonArrayToUGCS(String json) {

@@ -127,7 +127,7 @@ public class 	UGCController {
 			}
 
 			if (!markets.isEmpty()) {
-				ugcResultSet.removeIf(d -> !markets.contains(((Deal)d).getMarket()));
+				ugcResultSet.removeIf(d -> d.getClass().equals(Deal.class) && !markets.contains(((Deal)d).getMarket()));
 			}
 		}
 
@@ -155,7 +155,7 @@ public class 	UGCController {
 			}
 		
 			if (!markets.isEmpty()) {
-				ugcResultSet.removeIf(r -> !markets.contains(((Review)r).getTarget()));
+				ugcResultSet.removeIf(r -> r.getClass().equals(Review.class) && !markets.contains(((Review)r).getTarget()));
 			}
 		}
 

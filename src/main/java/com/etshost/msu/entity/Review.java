@@ -279,13 +279,13 @@ public class Review extends UGC {
     public static String toJsonArray(Collection<? extends Entity> collection) {
         return new JSONSerializer()
             .include("class")
-            .exclude("*.class", "*.logger", "usr", "target.image", "usr.email", "usr.phone")
+            .exclude("*.logger", "usr", "target.image", "usr.email", "usr.phone")
             .serialize(collection);
     }
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()
-        .include(fields).exclude("*.class").serialize(collection);
+        .include(fields).exclude().serialize(collection);
     }
     
     public static Collection<Review> fromJsonArrayToReviews(String json) {
