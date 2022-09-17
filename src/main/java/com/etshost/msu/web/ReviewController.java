@@ -1,12 +1,16 @@
 package com.etshost.msu.web;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.etshost.msu.bean.IndexedUGCBean;
+import com.etshost.msu.bean.ReviewBean;
+import com.etshost.msu.bean.UGCCreatorCheck;
 import com.etshost.msu.entity.Entity;
 import com.etshost.msu.entity.Review;
+import com.etshost.msu.entity.ReviewProperty;
+import com.etshost.msu.entity.Tag;
 import com.etshost.msu.entity.User;
 import com.etshost.msu.entity.Viewing;
 
@@ -28,6 +37,9 @@ import com.etshost.msu.entity.Viewing;
 @RestController
 @Transactional
 public class ReviewController {
+	@Autowired
+	protected UGCCreatorCheck creatorChecker;
+
 	/**
 	 * Creates a new Review from the JSON description
 	 * @param review	Review to create
@@ -110,24 +122,40 @@ public class ReviewController {
 	 * @param review	updated Review
 	 * @return		ID of updated Review
 	 */
-	@PreAuthorize("hasAuthority('admin')")
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public String update(@PathVariable("id") long id, @RequestBody Review review) {
-		if (review.getId() != id) {
+    @PreAuthorize("@creatorChecker.check(#id)")
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST, produces = "application/json")
+	public String update(@PathVariable("id") long id, @RequestBody ReviewBean review) {
+		if (review.getId() != id || Review.findReview(review.getId())==null) {
 			return "ID error";
 		}
-		/*
-		JsonArray errors = new JsonArray();
-		if (errors.size() > 0) {
-			return errors.toString();
+
+		final Review oldReview = Review.findReview(review.getId());
+		ReviewProperty.deleteReviewPropertiesByParent(oldReview);
+
+		if (review.getText() != null && !review.getText().equals(oldReview.getText())) {
+			oldReview.setText(review.getText());
 		}
-		*/
-        final Review oldReview = Review.findReview(review.getId());
-        review.setVersion(oldReview.getVersion());
-        review.setCreated(oldReview.getCreated());
-        review.setStatus(oldReview.getStatus());
-		// merge and return id
-		review.merge();
+		if (review.getTargetId() != null && !review.getTargetId().equals(oldReview.getTarget().getId())) {
+			oldReview.setTargetById(review.getTargetId());
+		}
+		if (review.getProperties() != null) {
+			review.getProperties().forEach(prop -> {
+				prop.setReviewById(review.id);
+			});
+			oldReview.setProperties(review.getProperties());
+		}
+		if (review.getTags() != null) {
+			Set<Tag> tags = new HashSet<Tag>();
+			for (IndexedUGCBean u : review.getTags()) {
+				tags.add(Tag.findTag(u.id));
+			}
+			if (!tags.equals(oldReview.getTags())) {
+				oldReview.setTags(tags);
+			}
+		}
+
+		oldReview.setModified(Instant.now());
+		oldReview.persist();
 		return review.getId().toString();
 	}
 	

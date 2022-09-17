@@ -59,6 +59,10 @@ public class ReviewProperty extends Entity {
     public void setReview(Review review) {
         this.review = review;
     }
+
+    public void setReviewById(Long id) {
+        this.review = Review.findReview(id);
+    }
     
     public PropertyType getPropertyType() {
         return this.propertyType;
@@ -140,6 +144,13 @@ public class ReviewProperty extends Entity {
     public static ReviewProperty findReviewProperty(Long id) {
         if (id == null) return null;
         return entityManager().find(ReviewProperty.class, id);
+    }
+    
+    public static void deleteReviewPropertiesByParent(Review parent) {
+        entityManager()
+            .createQuery("DELETE FROM ReviewProperty o WHERE o.review = :review")
+            .setParameter("review", parent)
+            .executeUpdate();
     }
     
     public static List<ReviewProperty> findReviewPropertyEntries(int firstResult, int maxResults) {

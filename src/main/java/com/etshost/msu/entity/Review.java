@@ -246,6 +246,10 @@ public class Review extends UGC {
     public void setTarget(Entity target) {
         this.target = target;
     }
+
+    public void setTargetById(Long id) {
+        this.target = Entity.findEntity(id);
+    }
     
     public Set<ReviewProperty> getProperties() {
         return this.properties;
