@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
@@ -224,6 +223,22 @@ public class AuthController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * For testing purposes.
+	 * XXX: REMOVE FOR PRODUCTION
+	 * @exclude
+	 * @return
+	 */
+	@RequestMapping(value = "/versions", method = RequestMethod.GET, produces = "application/json")
+	public String versions() {
+		String javaVersion = getClass().getPackage().getImplementationVersion();
+		String schemaVersion = Entity.entityManager()
+			.createNativeQuery("SELECT version FROM public.flyway_schema_history ORDER BY installed_rank DESC LIMIT 1")
+			.getSingleResult()
+			.toString();
+		return String.format("{ \"javaVersion\": \"%s\", \"schemaVersion\": \"%s\" }", javaVersion, schemaVersion);
 	}
 	
 	/**
