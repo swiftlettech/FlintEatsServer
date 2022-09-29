@@ -15,8 +15,12 @@ import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
+import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
@@ -60,6 +64,7 @@ public class Review extends UGC {
     @JSON(name = "properties")
     private Set<ReviewProperty> properties = new HashSet<ReviewProperty>();
 
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
     private String text;
     
 	@JSON(name = "rating")
@@ -183,7 +188,7 @@ public class Review extends UGC {
                 .keyword()
                 .fuzzy()
                 .withPrefixLength(3)
-                .onFields("title", "description")
+                .onFields("text")
                 .matching(q)
                 .createQuery();
 
