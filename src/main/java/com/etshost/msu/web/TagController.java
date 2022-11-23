@@ -2,8 +2,8 @@ package com.etshost.msu.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -240,9 +240,9 @@ public class TagController {
 				.get();
 		org.apache.lucene.search.Query luceneQuery = qb
 			    .keyword()
-			    .fuzzy()
+			    .wildcard()
 			    .onField("name")
-				.matching(q)
+				.matching(q + "*")
 				.createQuery();
 		
 		this.logger.debug("luceneQuery: {}", luceneQuery.toString());
@@ -261,5 +261,29 @@ public class TagController {
 			return "[]";
 		}
 		return Tag.toJsonArrayTag((List<Tag>)result);
+	}
+
+	/**
+	 * Consolidates an extra Tag into a base Tag
+	 * @param baseId	ID of Tag that will receive Entities
+	 * @param extraId	ID of Tag that will be deleted
+	 * @return			Updated Tag
+	 */
+	//@PreAuthorize("hasAuthority('admin')")
+	@RequestMapping(value = "/consolidate", method = RequestMethod.GET, produces = "application/json")
+	public String consolidate(@RequestParam(name = "baseId", required = true) Long baseId, @RequestParam(name = "extraId", required = true) Long extraId) {
+		Tag baseTag = Tag.findTag(baseId);
+		Tag extraTag = Tag.findTag(extraId);
+
+		for (Entity target : extraTag.getTargets()) {
+			target.getTags().add(baseTag);
+			target.getTags().remove(extraTag);
+			target.merge();
+		}
+		extraTag.setTargets(new HashSet<>());
+		extraTag.merge();
+		extraTag.delete();
+
+		return baseTag.toJson();
 	}
 }
