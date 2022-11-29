@@ -59,18 +59,22 @@ public class TagController {
 	 */
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
 	public String create(@RequestBody Tag tag) {
+		this.logger.debug("Creating Tag \"{}\"", tag.getName());
 		
 		tag.setUsr(User.getLoggedInUser());
-		/*
-		JsonArray errors = new JsonArray();
-		if (errors.size() > 0) {
-			return errors.toString();
-		}
-		*/
+		tag.setName(tag.getName()
+			.replaceAll("[^a-zA-Z0-9]", "")
+			.toLowerCase());
 
-		// persist and return id
-		tag.persist();
-		return tag.getId().toString();
+		List<Tag> matches = Tag.findTagsByNameEquals(tag.getName()).getResultList();
+		if(matches.size() == 0) {
+			// Create new tag
+			tag.persist();
+			return tag.getId().toString();
+		} else {
+			// Return matching tag
+			return matches.get(0).getId().toString();
+		}
 	}
 	
 	/**
@@ -141,33 +145,33 @@ public class TagController {
 	@PreAuthorize("hasAuthority('admin')")	
 	@RequestMapping(value = "/datatables", method = RequestMethod.GET, produces = "application/json")
 	public void list(HttpServletRequest request, HttpServletResponse response) throws IOException {
-			    PrintWriter out = response.getWriter();
-				
-				List<String> error = new ArrayList<String>();
-			
-				int draw = 1;
-				int start = 0;
-				int length = 10;
-				String orderColumn = null;
-				String orderColumnName = null;			
-				String orderDir = "asc";
-				String query = null;
-				try {
-					draw = Integer.valueOf(request.getParameter("draw"));
-					start = Integer.valueOf(request.getParameter("start"));
-					length = Integer.valueOf(request.getParameter("length"));	
-					orderColumn = request.getParameter("order[0][column]");
-					orderColumnName = request.getParameter("columns["+orderColumn+"][name]");
-					orderDir = request.getParameter("order[0][dir]");
-					query = request.getParameter("search[value]");
-				} catch (Exception e) {
-					error.add(e.toString());
-				}
-				
-				String results = Tag.generateDataTables(draw, start, length,
-						orderColumnName, orderDir, query);
-			
-			    out.print(results);
+		PrintWriter out = response.getWriter();
+
+		List<String> error = new ArrayList<String>();
+
+		int draw = 1;
+		int start = 0;
+		int length = 10;
+		String orderColumn = null;
+		String orderColumnName = null;			
+		String orderDir = "asc";
+		String query = null;
+		try {
+			draw = Integer.valueOf(request.getParameter("draw"));
+			start = Integer.valueOf(request.getParameter("start"));
+			length = Integer.valueOf(request.getParameter("length"));	
+			orderColumn = request.getParameter("order[0][column]");
+			orderColumnName = request.getParameter("columns["+orderColumn+"][name]");
+			orderDir = request.getParameter("order[0][dir]");
+			query = request.getParameter("search[value]");
+		} catch (Exception e) {
+			error.add(e.toString());
+		}
+
+		String results = Tag.generateDataTables(draw, start, length,
+				orderColumnName, orderDir, query);
+
+		out.print(results);
 	}
 	
 	/**

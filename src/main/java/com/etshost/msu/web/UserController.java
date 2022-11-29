@@ -45,7 +45,7 @@ public class UserController {
 	@RequestMapping(value = "/me", method = RequestMethod.GET, produces = "application/json")
 	public String profile() {
 		User user = User.getLoggedInUser();
-		return user.toJson();
+		return user.toJsonSelf();
 	}	
 	
 	/**
