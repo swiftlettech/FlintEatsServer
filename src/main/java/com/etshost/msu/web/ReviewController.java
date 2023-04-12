@@ -170,8 +170,8 @@ public class ReviewController {
 		if (review == null) {
 			return "0";
 		}
-		User user = User.getLoggedInUser();
-		new Viewing(user, review).persist();
+
+		new Viewing(User.getLoggedInUser(), review.getId()).persist();
 		return review.toJson();
 	}
 	

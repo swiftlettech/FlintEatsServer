@@ -4,6 +4,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import com.etshost.msu.entity.FoodPantrySite;
+import com.etshost.msu.entity.User;
+import com.etshost.msu.entity.Viewing;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import org.slf4j.Logger;
@@ -73,6 +75,8 @@ public class FoodPantrySiteController {
 		if (fps == null) {
 			return "0";
 		}
+
+		new Viewing(User.getLoggedInUser(), fps.getId()).persist();
 		return fps.toJson();
 	}
 		

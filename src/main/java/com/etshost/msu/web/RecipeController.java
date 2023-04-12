@@ -24,6 +24,7 @@ import com.etshost.msu.bean.UGCCreatorCheck;
 import com.etshost.msu.entity.Recipe;
 import com.etshost.msu.entity.Tag;
 import com.etshost.msu.entity.User;
+import com.etshost.msu.entity.Viewing;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.Recipe} class.
@@ -82,7 +83,13 @@ public class RecipeController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = "application/json")
     public String getRecipe(@PathVariable("id") long id) {
-        return Recipe.findRecipe(id).toJson();
+		Recipe recipe = Recipe.findRecipe(id);
+		if (recipe == null) {
+			return "0";
+		}
+
+        new Viewing(User.getLoggedInUser(), recipe.getId()).persist();
+        return recipe.toJson();
     }
     /**
      * Updates the Recipe having the given ID

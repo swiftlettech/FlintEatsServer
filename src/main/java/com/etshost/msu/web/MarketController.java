@@ -28,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.etshost.msu.entity.Deal;
 import com.etshost.msu.entity.Entity;
 import com.etshost.msu.entity.Market;
+import com.etshost.msu.entity.User;
+import com.etshost.msu.entity.Viewing;
 
 /**
  * Controller for the {@link com.etshost.msu.entity.Market} class.
@@ -293,6 +295,8 @@ public class MarketController {
 		if (market == null) {
 			return "0";
 		}
+
+		new Viewing(User.getLoggedInUser(), market.getId()).persist();
 		return market.toJson();
 	}
 	

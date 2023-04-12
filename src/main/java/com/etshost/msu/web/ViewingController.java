@@ -30,9 +30,9 @@ public class ViewingController {
 		this.logger.debug("open view of {}", id);
 		Entity e = Entity.findEntity(id);
 		User user = User.getLoggedInUser();
-		Viewing viewing = new Viewing(user, e);
+		Viewing viewing = new Viewing(user, e.getId());
 		viewing.persist();
-		return String.valueOf(viewing.getPk().getTargetId());
+		return String.valueOf(viewing.getTargetId());
 	}
 	
 	@RequestMapping(value = "/close", method = RequestMethod.POST, produces = "application/json")
@@ -47,7 +47,7 @@ public class ViewingController {
 		Viewing viewing = viewings.get(0);
 		viewing.setEndTime(Instant.now());
 		viewing.merge();
-		return String.valueOf(viewing.getPk().getTargetId());
+		return String.valueOf(viewing.getTargetId());
 	}
 	
 	@RequestMapping(value = "/recent", method = RequestMethod.GET, produces = "application/json")

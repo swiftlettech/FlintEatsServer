@@ -5,8 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
@@ -41,28 +43,26 @@ import flexjson.JSONSerializer;
 @Transactional
 public class Viewing {
 	
-	public Viewing() {
-		this.setPk(new ViewingPk());
+	public Viewing(User user, long targetId) {
+		this.setUsr(usr);
+		this.setTargetId(targetId);
+        this.setStartTime(Instant.now());
 	}
+
+    @Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 	
-	@EmbeddedId
-	private ViewingPk pk;
-	
-	public Viewing(User user, Entity target) {
-		this.pk = new ViewingPk();
-		this.usr = user;
-		this.target = target;
-	}
-	
-    @ManyToOne
+    @ManyToOne(optional = true)
     @MapsId("userId")
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
     private User usr;
 
-    @ManyToOne
-    @MapsId("targetId")
-    @JoinColumn(name = "target_id")
-    private Entity target;
+    private long target_id;
+    
+	@DateTimeFormat(style = "MM")
+    @Column(name = "starttime")
+    private Instant startTime;
     
 	@DateTimeFormat(style = "MM")
     @Column(name = "endtime")
@@ -70,7 +70,7 @@ public class Viewing {
 
     public static List<Viewing> findRecentViewings(Instant when) {
         TypedQuery<Viewing> q = entityManager().createQuery("SELECT o FROM Viewing AS o "
-        		+ "WHERE o.pk.startTime > :when", Viewing.class);
+        		+ "WHERE o.startTime > :when", Viewing.class);
         q.setParameter("when", when);
         return q.getResultList();
     }
@@ -87,10 +87,10 @@ public class Viewing {
 
         EntityManager em = entityManager();
         TypedQuery<Viewing> q = em.createQuery("SELECT o FROM Viewing AS o "
-        		+ "WHERE o.usr = :usr AND o.target = :target "
-        		+ "ORDER BY o.pk.startTime DESC", Viewing.class);
+        		+ "WHERE o.usr = :usr AND o.target_id = :target "
+        		+ "ORDER BY o.startTime DESC", Viewing.class);
         q.setParameter("usr", usr);
-        q.setParameter("target", target);
+        q.setParameter("target", target.getId());
         return q;
     }
     
@@ -124,12 +124,12 @@ public class Viewing {
 
 
     // JavaBean.aj
-    public ViewingPk getPk() {
-        return this.pk;
+    public long getId() {
+        return this.id;
     }
     
-    public void setPk(ViewingPk pk) {
-        this.pk = pk;
+    public void setId(long id) {
+        this.id = id;
     }
     
     public User getUsr() {
@@ -140,12 +140,20 @@ public class Viewing {
         this.usr = usr;
     }
     
-    public Entity getTarget() {
-        return this.target;
+    public long getTargetId() {
+        return this.target_id;
     }
     
-    public void setTarget(Entity target) {
-        this.target = target;
+    public void setTargetId(long target_id) {
+        this.target_id = target_id;
+    }
+    
+    public Instant getStartTime() {
+        return this.startTime;
+    }
+
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
     }
     
     public Instant getEndTime() {
@@ -199,10 +207,10 @@ public class Viewing {
     @PersistenceContext
     transient EntityManager entityManager;
     
-    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("pk", "usr", "target", "endTime");
+    public static final List<String> fieldNames4OrderClauseFilter = java.util.Arrays.asList("id", "usr", "target", "endTime");
     
     public static final EntityManager entityManager() {
-        EntityManager em = new Viewing().entityManager;
+        EntityManager em = Entity.entityManager();
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
@@ -226,9 +234,8 @@ public class Viewing {
         return entityManager().createQuery(jpaQuery, Viewing.class).getResultList();
     }
     
-    public static Viewing findViewing(ViewingPk pk) {
-        if (pk == null) return null;
-        return entityManager().find(Viewing.class, pk);
+    public static Viewing findViewing(long id) {
+        return entityManager().find(Viewing.class, id);
     }
     
     public static List<Viewing> findViewingEntries(int firstResult, int maxResults) {
@@ -247,7 +254,7 @@ public class Viewing {
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Viewing attached = findViewing(this.pk);
+            Viewing attached = findViewing(this.id);
             this.entityManager.remove(attached);
         }
     }
@@ -277,8 +284,8 @@ public class Viewing {
     public static Long countFindViewingsByTarget(Entity target) {
         if (target == null) throw new IllegalArgumentException("The target argument is required");
         EntityManager em = entityManager();
-        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Viewing AS o WHERE o.target = :target", Long.class);
-        q.setParameter("target", target);
+        TypedQuery<Long> q = em.createQuery("SELECT COUNT(o) FROM Viewing AS o WHERE o.target_id = :target", Long.class);
+        q.setParameter("target", target.getId());
         return q.getSingleResult();
     }
     
@@ -293,15 +300,15 @@ public class Viewing {
     public static TypedQuery<Viewing> findViewingsByTarget(Entity target) {
         if (target == null) throw new IllegalArgumentException("The target argument is required");
         EntityManager em = entityManager();
-        TypedQuery<Viewing> q = em.createQuery("SELECT o FROM Viewing AS o WHERE o.target = :target", Viewing.class);
-        q.setParameter("target", target);
+        TypedQuery<Viewing> q = em.createQuery("SELECT o FROM Viewing AS o WHERE o.target_id = :target", Viewing.class);
+        q.setParameter("target", target.getId());
         return q;
     }
     
     public static TypedQuery<Viewing> findViewingsByTarget(Entity target, String sortFieldName, String sortOrder) {
         if (target == null) throw new IllegalArgumentException("The target argument is required");
         EntityManager em = entityManager();
-        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Viewing AS o WHERE o.target = :target");
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM Viewing AS o WHERE o.target_id = :target");
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             queryBuilder.append(" ORDER BY ").append(sortFieldName);
             if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {
@@ -309,7 +316,7 @@ public class Viewing {
             }
         }
         TypedQuery<Viewing> q = em.createQuery(queryBuilder.toString(), Viewing.class);
-        q.setParameter("target", target);
+        q.setParameter("target", target.getId());
         return q;
     }
     
