@@ -21,6 +21,8 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -40,6 +42,8 @@ import com.google.gson.JsonObject;
 import flexjson.JSON;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * Represents a physical location selling {@link Food}s.
@@ -258,7 +262,7 @@ public class Market extends Entity {
     
     public static String toJsonArrayMarket(Collection<Market> collection) {
         return new JSONSerializer()
-        		.include("image64").exclude("logger").serialize(collection);
+        		.exclude("logger", "image64", "image", "created", "modified").serialize(collection);
     }
 
     public static String generateDataTables(final int draw, final int start, final int length,
@@ -357,10 +361,34 @@ public class Market extends Entity {
 
     @Cacheable(value = "marketsCache")
     public String findAllMarketsJson() {
-        return toJsonArrayMarket(
-            entityManager()
-            .createQuery("SELECT o FROM Market o", Market.class)
-            .getResultList());        
+        List<Market> markets = entityManager()
+        .createQuery("SELECT o FROM Market o", Market.class)
+        .getResultList();
+        markets.forEach((x) -> x.image = new byte[0]);
+        return toJsonArrayMarket(markets);        
+    }
+
+    private void rebuildCache() {
+        try {
+            //CacheManager cacheManager = ehCacheManager.getObject();
+            this.logger.debug("Market Cache: Refreshing");
+            List<Object> keys = CacheManager.getInstance().getEhcache("marketsCache").getKeys();
+            // CacheManager.getInstance().getEhcache("marketsCache").removeAll();
+            Element el = new Element(keys.get(0), findAllMarketsJson());
+            CacheManager.getInstance().getEhcache("marketsCache").replace(el);
+            this.logger.debug("Market Cache: Finished Refreshing");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void backgroundRefreshMarketCache() {
+        new Thread(new Runnable(){  
+            @Override   
+            public void run(){  
+                rebuildCache();
+            }   
+          }).start();
     }
 
     // ToString.aj

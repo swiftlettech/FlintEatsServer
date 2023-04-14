@@ -24,6 +24,7 @@ import com.etshost.msu.bean.IndexedUGCBean;
 import com.etshost.msu.bean.ReviewBean;
 import com.etshost.msu.bean.UGCCreatorCheck;
 import com.etshost.msu.entity.Entity;
+import com.etshost.msu.entity.Market;
 import com.etshost.msu.entity.Review;
 import com.etshost.msu.entity.ReviewProperty;
 import com.etshost.msu.entity.Tag;
@@ -39,6 +40,9 @@ import com.etshost.msu.entity.Viewing;
 public class ReviewController {
 	@Autowired
 	protected UGCCreatorCheck creatorChecker;
+
+	@Autowired
+	private Market marketRepository;
 
 	/**
 	 * Creates a new Review from the JSON description
@@ -56,6 +60,7 @@ public class ReviewController {
 
 		// persist and return id
 		review.persist();
+		marketRepository.backgroundRefreshMarketCache();
 		return review.getId().toString();
 	}
 	
@@ -156,6 +161,9 @@ public class ReviewController {
 
 		oldReview.setModified(Instant.now());
 		oldReview.persist();
+
+		marketRepository.backgroundRefreshMarketCache();
+
 		return review.getId().toString();
 	}
 	
