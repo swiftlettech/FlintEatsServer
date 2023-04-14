@@ -76,7 +76,7 @@ public class FoodPantrySiteController {
 			return "0";
 		}
 
-		new Viewing(User.getLoggedInUser(), fps.getId()).persist();
+		new Viewing(User.getLoggedInUserId(), fps.getId()).persist();
 		return fps.toJson();
 	}
 		

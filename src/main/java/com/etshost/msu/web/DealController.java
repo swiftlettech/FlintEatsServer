@@ -197,7 +197,7 @@ public class DealController {
         if (deal == null) {
             return "0";
         }
-        new Viewing(User.getLoggedInUser(), deal.getId()).persist();
+        new Viewing(User.getLoggedInUserId(), deal.getId()).persist();
         deal.merge(); // update updated time
         return deal.toJson();
     }

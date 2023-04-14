@@ -154,7 +154,7 @@ public class User extends Entity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usr")
     private Set<Reaction> reactions = new HashSet<Reaction>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usr")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Viewing> views = new HashSet<Viewing>();
 
@@ -671,6 +671,15 @@ public class User extends Entity {
         }
 
         return User.findUsersByUsernameEqualsNoCase(authentication.getName()).getSingleResult();
+    }
+
+    public static Long getLoggedInUserId() {
+        User usr = getLoggedInUser();
+        if(usr == null) {
+            return null;
+        } else {
+            return usr.getId();
+        }
     }
     
 	/**

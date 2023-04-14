@@ -296,7 +296,7 @@ public class MarketController {
 			return "0";
 		}
 
-		new Viewing(User.getLoggedInUser(), market.getId()).persist();
+		new Viewing(User.getLoggedInUserId(), market.getId()).persist();
 		return market.toJson();
 	}
 	

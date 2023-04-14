@@ -88,7 +88,7 @@ public class RecipeController {
 			return "0";
 		}
 
-        new Viewing(User.getLoggedInUser(), recipe.getId()).persist();
+        new Viewing(User.getLoggedInUserId(), recipe.getId()).persist();
         return recipe.toJson();
     }
     /**

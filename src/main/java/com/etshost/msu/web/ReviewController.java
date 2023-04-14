@@ -171,7 +171,7 @@ public class ReviewController {
 			return "0";
 		}
 
-		new Viewing(User.getLoggedInUser(), review.getId()).persist();
+		new Viewing(User.getLoggedInUserId(), review.getId()).persist();
 		return review.toJson();
 	}
 	

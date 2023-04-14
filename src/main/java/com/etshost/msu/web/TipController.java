@@ -154,7 +154,7 @@ public class TipController {
 		if (tip == null) {
 			return "0";
 		}
-		new Viewing(User.getLoggedInUser(), tip.getId()).persist();
+		new Viewing(User.getLoggedInUserId(), tip.getId()).persist();
 		// tip.merge(); //update updated time
 		return tip.toJson();
 	}

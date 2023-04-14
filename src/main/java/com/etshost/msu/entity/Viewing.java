@@ -9,16 +9,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.envers.Audited;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -42,21 +42,21 @@ import flexjson.JSONSerializer;
 @RooToString
 @Transactional
 public class Viewing {
+    @Transient
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public Viewing(User user, long targetId) {
-		this.setUsr(usr);
+	public Viewing(Long userId, long targetId) {
+        this.setUserId(userId);
 		this.setTargetId(targetId);
         this.setStartTime(Instant.now());
+        this.logger.debug("Viewing created: {} {}", targetId, userId);
 	}
 
     @Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 	
-    @ManyToOne(optional = true)
-    @MapsId("userId")
-    @JoinColumn(name = "user_id", nullable = true)
-    private User usr;
+    private Long user_id;
 
     private long target_id;
     
@@ -132,12 +132,12 @@ public class Viewing {
         this.id = id;
     }
     
-    public User getUsr() {
-        return this.usr;
+    public Long getUserId() {
+        return this.user_id;
     }
     
-    public void setUsr(User usr) {
-        this.usr = usr;
+    public void setUserId(Long user_id) {
+        this.user_id = user_id;
     }
     
     public long getTargetId() {

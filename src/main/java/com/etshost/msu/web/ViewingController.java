@@ -30,7 +30,7 @@ public class ViewingController {
 		this.logger.debug("open view of {}", id);
 		Entity e = Entity.findEntity(id);
 		User user = User.getLoggedInUser();
-		Viewing viewing = new Viewing(user, e.getId());
+		Viewing viewing = new Viewing(user.getId(), e.getId());
 		viewing.persist();
 		return String.valueOf(viewing.getTargetId());
 	}
