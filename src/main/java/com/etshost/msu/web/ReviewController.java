@@ -49,6 +49,7 @@ public class ReviewController {
 	 * @param review	Review to create
 	 * @return		ID of created Review
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/create", method = RequestMethod.POST, consumes="application/json", produces = "application/json")
 	public String create(@RequestBody Review review) {
 		review.setUsr(User.getLoggedInUser());

@@ -42,6 +42,7 @@ public class UserController {
 	 * Returns the User account associated with the current session
 	 * @return JSON User
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me", method = RequestMethod.GET, produces = "application/json")
 	public String profile() {
 		User user = User.getLoggedInUser();
@@ -52,6 +53,7 @@ public class UserController {
 	 * Deletes a user and all of their data
 	 * @return Boolean success or failure
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me", method = RequestMethod.DELETE, produces = "application/json")
 	public boolean delete() {
 		User user = User.getLoggedInUser();
@@ -66,6 +68,7 @@ public class UserController {
 	 * @param avatar64	base64-encoded avatar
 	 * @return		ID of updated User
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/avatar", method = RequestMethod.PUT, produces = "application/json")
 	public String setAvatar(@RequestBody String avatar64) {
 		User user = User.getLoggedInUser();
@@ -79,6 +82,7 @@ public class UserController {
 	 * Returns the User account associated with the current session
 	 * @return JSON User
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/consent", method = RequestMethod.POST, produces = "application/json")
 	public String consent(@RequestBody int consent) {
 		User user = User.getLoggedInUser();
@@ -95,6 +99,7 @@ public class UserController {
 	 * Changes the password of the User account associated with the current session
 	 * @return ID if success; error if failed
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/password", method = RequestMethod.POST, produces = "application/json")
 	public List<String> passwordChange(@RequestBody String password) {
 		//TODO  Fix the passwordChange logic to return consistent stuff.
@@ -114,14 +119,10 @@ public class UserController {
 	 * Returns UGC of the User account associated with the current session
 	 * @return JSON array of UGC
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/mine", method = RequestMethod.GET, produces = "application/json")
 	public String ugc() {
 		User user = User.getLoggedInUser();
-		/*
-		Set<UGC> ugcSet = user.getUgc();
-		List<UGC> ugcList = new ArrayList<UGC>();
-		ugcList.addAll(ugcSet);
-		*/
 		List<UGC> ugcList = UGC.findAllFeedUGCs(user);
 		// sort by create date, most recent first
 		ugcList.sort((ugc1, ugc2) -> ugc2.getCreated().compareTo(ugc1.getCreated()));
@@ -132,14 +133,10 @@ public class UserController {
 	 * Returns UGC of the User account associated with the current session
 	 * @return JSON array of UGC
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/faves", method = RequestMethod.GET, produces = "application/json")
 	public String ugcFaves() {
 		User user = User.getLoggedInUser();
-		/*
-		Set<UGC> ugcSet = user.getUgc();
-		List<UGC> ugcList = new ArrayList<UGC>();
-		ugcList.addAll(ugcSet);
-		*/
 		List<Reaction> reactions = Reaction.findReactionsByUsr(user).getResultList();
 		List<UGC> ugcList = new ArrayList<UGC>();
 		for (Reaction reaction : reactions) {
@@ -156,14 +153,13 @@ public class UserController {
 	 * Returns Users the User account associated with the current session is following
 	 * @return JSON array of Users
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/followees", method = RequestMethod.GET, produces = "application/json")
 	public String myFollowees() {
 		this.logger.debug("landed at /me/followees");
 
 		User user = User.getLoggedInUser();
 		Set<User> followees = user.getFollowees();
-//		this.logger.debug(followees.toString());
-//		this.logger.debug(User.toJsonArray(followees));
 		return User.toJsonArray(followees);
 	}
 	
@@ -171,6 +167,7 @@ public class UserController {
 	 * Returns Users following the User account associated with the current session
 	 * @return JSON array of Users
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/followers", method = RequestMethod.GET, produces = "application/json")
 	public String myFollowers() {
 		this.logger.debug("landed at /me/followers");
@@ -183,6 +180,7 @@ public class UserController {
 	 * Returns preferences of the User account associated with the current session
 	 * @return JSON array of Preferences
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/preferences", method = RequestMethod.GET, produces = "application/json")
 	public String preferences() {
 		this.logger.debug("landed at /me/preferences");
@@ -213,6 +211,7 @@ public class UserController {
 	 * Returns reactions of the User account associated with the current session
 	 * @return JSON array of Reactions
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/me/reactions", method = RequestMethod.GET, produces = "application/json")
 	public String reactions() {
 		this.logger.debug("landed at /me/reactions");

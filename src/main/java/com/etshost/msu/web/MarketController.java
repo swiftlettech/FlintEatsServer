@@ -59,6 +59,7 @@ public class MarketController {
 
 		// persist and return id
 		market.persist();
+		repository.backgroundRefreshMarketCache();
 		return market.getId().toString();
 	}
 	
@@ -91,6 +92,7 @@ public class MarketController {
 	 * @param response
 	 * @throws IOException
 	 */
+	@PreAuthorize("hasAuthority('admin')")
 	@RequestMapping(value = "/datatables", method = RequestMethod.GET, produces = "application/json")
 	public void list(HttpServletRequest request, HttpServletResponse response) throws IOException {
 			    PrintWriter out = response.getWriter();

@@ -44,10 +44,9 @@ public class RecipeController {
      * @param recipe Recipe to create
      * @return ID of created Recipe
      */
+	@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
     public String create(@RequestBody Recipe recipe) {
-        this.logger.debug("landed at /ugc/recipes/create");
-
         recipe.setUsr(User.getLoggedInUser());
 
         // persist and return id

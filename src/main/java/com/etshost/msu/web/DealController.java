@@ -51,6 +51,7 @@ public class DealController {
      * @param deal Deal to create
      * @return ID of created Deal
      */
+	@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
     public String create(@RequestBody Deal deal) {
         this.logger.debug("landed at /ugc/deals/create");

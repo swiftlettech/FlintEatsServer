@@ -1,6 +1,5 @@
 package com.etshost.msu.bean;
 
-import com.etshost.msu.entity.AuthenticationRecord;
 import com.etshost.msu.entity.UGC;
 import com.etshost.msu.entity.User;
 import org.slf4j.Logger;

@@ -42,6 +42,7 @@ public class TagController {
 	 * @param id	ID of target
 	 * @return		ID of Tag
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/add/{id}", method = RequestMethod.POST, produces = "application/json")
 	public String add(@RequestBody long tagId, @PathVariable("id") long id) {
 		Entity e = Entity.findEntity(id);
@@ -57,6 +58,7 @@ public class TagController {
 	 * @param tag	Tag to create
 	 * @return		ID of created Tag
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
 	public String create(@RequestBody Tag tag) {
 		this.logger.debug("Creating Tag \"{}\"", tag.getName());
@@ -273,7 +275,7 @@ public class TagController {
 	 * @param extraId	ID of Tag that will be deleted
 	 * @return			Updated Tag
 	 */
-	//@PreAuthorize("hasAuthority('admin')")
+	@PreAuthorize("hasAuthority('admin')")
 	@RequestMapping(value = "/consolidate", method = RequestMethod.GET, produces = "application/json")
 	public String consolidate(@RequestParam(name = "baseId", required = true) Long baseId, @RequestParam(name = "extraId", required = true) Long extraId) {
 		Tag baseTag = Tag.findTag(baseId);

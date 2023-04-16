@@ -39,6 +39,7 @@ public class RecipeIngredientController {
      * @return ID of created RecipeIngredient
      */
 	@Transactional
+	@PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
     public String create(@PathVariable("recipeId") long recipeId, @RequestBody RecipeIngredient recipeIngredient) {
         this.logger.debug("landed at /ugc/recipes/{recipeId}/ingredients/create");

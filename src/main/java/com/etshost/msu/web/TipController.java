@@ -7,7 +7,6 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.etshost.msu.bean.DealBean;
 import com.etshost.msu.bean.IndexedUGCBean;
 import com.etshost.msu.bean.TipBean;
 import com.etshost.msu.bean.UGCCreatorCheck;
@@ -41,6 +40,7 @@ public class TipController {
 	 * @param tip	Tip to create
 	 * @return		ID of created Tip
 	 */
+	@PreAuthorize("isAuthenticated()")
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json")
 	public String create(@RequestBody Tip tip) {
 		this.logger.debug("landed at /ugc/tips/create");
