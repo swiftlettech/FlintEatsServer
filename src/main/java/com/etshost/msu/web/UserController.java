@@ -13,7 +13,10 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +40,7 @@ import com.google.gson.JsonObject;
 @Transactional
 public class UserController {
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	/**
 	 * Returns the User account associated with the current session
 	 * @return JSON User
@@ -500,7 +503,7 @@ public class UserController {
 		if (user == null) {
 			return "0";
 		}
-		if(User.getLoggedInUser().getUsername() == user.getUsername()) {
+		if(User.getLoggedInUser() != null && User.getLoggedInUser().getUsername() == user.getUsername()) {
 			return user.toJsonSelf();
 		} else {
 			return user.toJson();
