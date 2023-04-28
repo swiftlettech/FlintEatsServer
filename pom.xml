@@ -29,6 +29,7 @@
 		</profile>
 	</profiles>
 	<properties>
+	    <warName>${project.artifactId}-${project.version}</warName>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<aspectj.version>1.9.0</aspectj.version>
@@ -532,6 +533,7 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<finalName>${warName}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
