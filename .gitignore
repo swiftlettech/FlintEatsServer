@@ -1,7 +1,3 @@
 .DS_Store
-database.properties
-application.properties
-javaMail.xml
-oauth.properties
-applicationContext-security.xml
 /target/
+.secrets

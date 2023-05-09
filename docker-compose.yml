@@ -1,0 +1,18 @@
+version: "3.6"
+
+services:
+
+  fea:
+    image: dantheman2865/flint-eats-server:production
+    # entrypoint: "cat /run/secrets/my_secret"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://host.docker.internal:5432/eats
+      - DATABASE_USER=eats
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+    secrets:
+      - DATABASE_PASSWORD
+
+secrets:
+  DATABASE_PASSWORD:
+    file: ./.secrets/DATABASE_PASSWORD.txt
