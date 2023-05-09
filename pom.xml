@@ -7,7 +7,7 @@
 	<groupId>com.etshost.msu</groupId>
 	<artifactId>msu</artifactId>
 	<packaging>war</packaging>
-	<version>1.4.1.20230427</version>
+	<version>1.4.3.20230509</version>
 	<name>msu</name>
 	<profiles>
 		<profile>
