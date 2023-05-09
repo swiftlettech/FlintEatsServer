@@ -12,6 +12,8 @@ services:
       - MAIL_PORT=587
     secrets:
       - DATABASE_PASSWORD
+    ports:
+      - 8080:8080
 
 secrets:
   DATABASE_PASSWORD:
