@@ -47,10 +47,6 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -74,19 +70,6 @@ import flexjson.JSONSerializer;
 @Audited
 @Configurable
 @javax.persistence.Entity
-@RooJavaBean
-@RooJpaActiveRecord(finders = {
-		"findUsersByEmailEquals",
-		"findUsersByEmailLike",
-		"findUsersByFirstNameLike",
-		"findUsersByLastNameLike",
-		"findUsersByRoles",
-		"findUsersByStatus",
-		"findUsersByUsernameEquals",
-		"findUsersByUsernameLike"
-})
-@RooJson
-@RooToString
 @Table(name = "usr")
 @Transactional
 @TypeDef(name = "encryptedString",
@@ -1013,7 +996,7 @@ public class User extends Entity {
     public static TypedQuery<User> findUsersByEmailEquals(String email) {
         if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
         EntityManager em = entityManager();
-        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.email = :email", User.class);
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE LOWER(o.email) = LOWER(:email)", User.class);
         q.setParameter("email", email);
         return q;
     }
@@ -1021,7 +1004,7 @@ public class User extends Entity {
     public static TypedQuery<User> findUsersByEmailEquals(String email, String sortFieldName, String sortOrder) {
         if (email == null || email.length() == 0) throw new IllegalArgumentException("The email argument is required");
         EntityManager em = entityManager();
-        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE o.email = :email");
+        StringBuilder queryBuilder = new StringBuilder("SELECT o FROM User AS o WHERE LOWER(o.email) = LOWER(:email)");
         if (fieldNames4OrderClauseFilter.contains(sortFieldName)) {
             queryBuilder.append(" ORDER BY ").append(sortFieldName);
             if ("ASC".equalsIgnoreCase(sortOrder) || "DESC".equalsIgnoreCase(sortOrder)) {

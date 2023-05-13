@@ -22,6 +22,7 @@
 		<!-- <sec:intercept-url pattern="/users/**" access="hasAuthority('login')" />
 		<sec:intercept-url pattern="/markets/**" access="hasAuthority('login')" />
 		<sec:intercept-url pattern="/foodpantrysites/**" access="hasAuthority('login')" /> -->
+		<sec:intercept-url pattern="/password-reset" access="permitAll" />
 		<sec:intercept-url pattern="/password**" access="hasAuthority('admin')" />
 		<sec:intercept-url pattern="/auth**" access="permitAll" />
 		<sec:intercept-url pattern="/oauth**" access="permitAll" />
