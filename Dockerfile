@@ -1,4 +1,4 @@
-FROM maven:3.9.1-amazoncorretto-11 as maven
+FROM maven:3.9.6-amazoncorretto-11 as maven
 LABEL COMPANY="Flint Innovative Solutions"
 LABEL MAINTAINER="dkurin@swiftlet.technology"
 LABEL APPLICATION="Flint Eats Server App"
