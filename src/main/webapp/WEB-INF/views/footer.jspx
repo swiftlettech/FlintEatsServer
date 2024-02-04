@@ -27,4 +27,11 @@
       </a>
     </span>
   </c:if>
+  <spring:url value="/privacy-policy.html" var="pp_link"/>
+  <c:out value=" | "/>
+  <span>
+    <a href="${pp_link}">
+      <spring:message code="button_privacypolicy"/>
+    </a>
+  </span>
 </div>
