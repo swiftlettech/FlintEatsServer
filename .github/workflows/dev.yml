@@ -28,6 +28,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             dantheman2865/flint-eats-server:dev
             dantheman2865/flint-eats-server:${{ github.sha }}
