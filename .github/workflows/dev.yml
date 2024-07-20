@@ -33,3 +33,11 @@ jobs:
           tags: |
             dantheman2865/flint-eats-server:dev
             dantheman2865/flint-eats-server:${{ github.sha }}
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: echo ${{ github.sha }} > dev/ver
