@@ -38,6 +38,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.DEV_HOST }}
+          username: github-actions
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: echo ${{ github.sha }} > dev/ver
