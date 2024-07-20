@@ -33,4 +33,4 @@ ADD ./loadSecrets.sh /usr/local/tomcat/bin
 #RUN dos2unix /usr/local/tomcat/bin/loadSecrets.sh
 
 EXPOSE 8080
-ENTRYPOINT ["loadSecrets.sh"]
+ENTRYPOINT ["/usr/local/tomcat/bin/loadSecrets.sh"]
