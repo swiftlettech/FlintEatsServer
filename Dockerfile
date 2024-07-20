@@ -30,7 +30,7 @@ COPY --from=maven /usr/src/app/target/eats-1.war /usr/local/tomcat/webapps/eats-
 WORKDIR $APP_DATA_FOLDER
 
 ADD ./loadSecrets.sh /usr/local/tomcat/bin
-RUN dos2unix /usr/local/tomcat/bin/loadSecrets.sh
+#RUN dos2unix /usr/local/tomcat/bin/loadSecrets.sh
 
 EXPOSE 8080
 ENTRYPOINT ["loadSecrets.sh"]
