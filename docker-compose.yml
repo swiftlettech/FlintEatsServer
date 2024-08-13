@@ -1,7 +1,4 @@
-version: "3.6"
-
 services:
-
   fea:
     image: dantheman2865/flint-eats-server:production
     environment:
