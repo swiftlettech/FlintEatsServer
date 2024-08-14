@@ -43,4 +43,5 @@ jobs:
           port: 22
           script: |
             echo IMAGE_VER=${{ github.sha }} > dev/ver
+            docker compose -f dev-docker-compose.yml down
             docker compose -f dev-docker-compose.yml --env-file=dev/ver up -d
