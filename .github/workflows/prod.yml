@@ -31,7 +31,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            dantheman2865/flint-eats-server:prod
+            dantheman2865/flint-eats-server:production
             dantheman2865/flint-eats-server:${{ github.sha }}
 
       - name: executing remote ssh commands using password
