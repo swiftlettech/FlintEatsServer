@@ -1,4 +1,4 @@
-name: ci
+name: Prod Deploy
 
 on:
   push:
@@ -7,6 +7,7 @@ on:
 
 jobs:
   docker:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
