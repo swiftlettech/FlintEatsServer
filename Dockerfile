@@ -19,7 +19,7 @@ ENV APP_DATA_FOLDER=/var/lib/eats-1
 	
 ENV CATALINA_OPTS="-Xms1024m -Xmx4096m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m -Xss512k"
 
-RUN yum install -y dos2unix
+#RUN yum install -y dos2unix
 
 #Move over the War file from previous build step
 WORKDIR /usr/local/tomcat/webapps/
@@ -30,7 +30,8 @@ COPY --from=maven /usr/src/app/target/eats-1.war /usr/local/tomcat/webapps/eats-
 WORKDIR $APP_DATA_FOLDER
 
 ADD ./loadSecrets.sh /usr/local/tomcat/bin
-RUN dos2unix /usr/local/tomcat/bin/loadSecrets.sh
+#RUN dos2unix /usr/local/tomcat/bin/loadSecrets.sh
+RUN ["chmod", "+x", "/usr/local/tomcat/bin/loadSecrets.sh"]
 
 EXPOSE 8080
-ENTRYPOINT ["loadSecrets.sh"]
+ENTRYPOINT ["/usr/local/tomcat/bin/loadSecrets.sh"]
