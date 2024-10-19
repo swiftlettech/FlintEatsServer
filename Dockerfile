@@ -1,4 +1,4 @@
-FROM maven:3.9.6-amazoncorretto-11 as maven
+FROM maven:3.9.6-amazoncorretto-17 AS maven
 LABEL COMPANY="Flint Innovative Solutions"
 LABEL MAINTAINER="dkurin@swiftlet.technology"
 LABEL APPLICATION="Flint Eats Server App"
@@ -10,7 +10,7 @@ RUN mvn dependency:resolve
 ADD . /usr/src/app
 RUN mvn package -Dmaven.test.skip=true -DwarName=eats-1
 
-FROM tomcat:9.0-jdk11-corretto-al2 as tomcat
+FROM tomcat:9.0-jdk17-corretto-al2 AS tomcat
 ARG TOMCAT_FILE_PATH=/docker 
 
 #Data & Config - Persistent Mount Point

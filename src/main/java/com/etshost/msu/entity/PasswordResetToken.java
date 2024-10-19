@@ -18,9 +18,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
 import org.springframework.transaction.annotation.Transactional;
 
 import flexjson.JSONDeserializer;
@@ -30,9 +27,6 @@ import flexjson.JSONSerializer;
  * A token for facilitating secure handling of {@link User} password reset requests.
  */
 @javax.persistence.Entity
-@RooJavaBean
-@RooJpaActiveRecord(finders = { "findPasswordResetTokensByTokenEquals" })
-@RooJson
 @Configurable
 public class PasswordResetToken extends Entity {
 

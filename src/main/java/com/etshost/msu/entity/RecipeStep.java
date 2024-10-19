@@ -15,10 +15,6 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Store;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,10 +27,6 @@ import flexjson.JSONSerializer;
 @Audited
 @javax.persistence.Entity
 @Configurable
-@RooJavaBean
-@RooJpaActiveRecord
-@RooJson
-@RooToString
 @Transactional
 public class RecipeStep extends Entity {
 

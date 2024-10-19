@@ -1,6 +1,7 @@
 services:
   fea:
-    image: dantheman2865/flint-eats-server:production
+    image: flint-eats-server
+    build: ./
     environment:
       - DATABASE_URL=jdbc:postgresql://host.docker.internal:5432/eats
       - DATABASE_USER=eats
