@@ -45,4 +45,5 @@ jobs:
           script: |
             echo IMAGE_VER=${{ github.sha }} > dev/ver
             docker compose -f dev-docker-compose.yml down
+            cp -f deploy/dev-docker-compose.yml dev-docker-compose.yml
             docker compose -f dev-docker-compose.yml --env-file=dev/ver up -d

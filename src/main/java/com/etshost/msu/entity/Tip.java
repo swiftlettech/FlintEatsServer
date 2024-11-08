@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 import flexjson.JSON;
@@ -30,9 +31,13 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
+import com.etshost.msu.service.ImageStorageService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
@@ -50,6 +55,10 @@ import flexjson.JSONSerializer;
 @Indexed
 @Transactional
 public class Tip extends UGC {
+    
+	@Autowired
+    @Transient
+	ImageStorageService storage;
 
 	public enum TipType {
 		BUYING, FOOD, STORAGE
@@ -305,6 +314,13 @@ public class Tip extends UGC {
 
     public void setImage(byte[] image) {
         this.image = image;
+        MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        try {
+            String path = storage.saveImageToServer(f, "tip_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            this.setImagePath(path);
+        } catch (IOException e) {
+            this.logger.error(e.toString());
+        }
     }
 
     // ToString.aj
@@ -422,6 +438,21 @@ public class Tip extends UGC {
         }
         TypedQuery<Tip> q = em.createQuery(queryBuilder.toString(), Tip.class);
         q.setParameter("text", text);
+        return q;
+    }
+
+    private String image_path;
+    public String getImagePath() {
+        return this.image_path;
+    }
+    public void setImagePath(String image_path) {
+        this.image_path = image_path;
+    }
+    
+    public static TypedQuery<Tip> findToMigrate(int limit) {
+        EntityManager em = entityManager();
+        TypedQuery<Tip> q = em.createQuery("SELECT o FROM Tip AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Tip.class);
+        q.setMaxResults(limit);
         return q;
     }
 }

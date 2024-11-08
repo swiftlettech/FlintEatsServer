@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -33,9 +34,13 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
+import com.etshost.msu.service.ImageStorageService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
@@ -56,6 +61,10 @@ import flexjson.JSONSerializer;
 @Indexed
 @Transactional
 public class Deal extends UGC {
+    
+	@Autowired
+    @Transient
+	ImageStorageService storage;
 
     @ManyToOne
     private Market market;
@@ -368,6 +377,13 @@ public class Deal extends UGC {
     
     public void setImage(byte[] image) {
         this.image = image;
+        MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        try {
+            String path = storage.saveImageToServer(f, "deal_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            this.setImagePath(path);
+        } catch (IOException e) {
+            this.logger.error(e.toString());
+        }
     }
     
     public String getTitle() {
@@ -540,6 +556,21 @@ public class Deal extends UGC {
         }
         TypedQuery<Deal> q = em.createQuery(queryBuilder.toString(), Deal.class);
         q.setParameter("text", text);
+        return q;
+    }
+
+    private String image_path;
+    public String getImagePath() {
+        return this.image_path;
+    }
+    public void setImagePath(String image_path) {
+        this.image_path = image_path;
+    }
+    
+    public static TypedQuery<Deal> findToMigrate(int limit) {
+        EntityManager em = entityManager();
+        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Deal.class);
+        q.setMaxResults(limit);
         return q;
     }
 

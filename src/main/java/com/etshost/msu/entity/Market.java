@@ -1,4 +1,5 @@
 package com.etshost.msu.entity;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -20,10 +22,14 @@ import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
+import com.etshost.msu.service.ImageStorageService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.code.geocoder.Geocoder;
@@ -49,6 +55,10 @@ import net.sf.ehcache.Element;
 @Indexed
 @Transactional
 public class Market extends Entity {
+    
+	@Autowired
+    @Transient
+	ImageStorageService storage;
 	
 	@JsonCreator
 	public static Market factory(
@@ -201,6 +211,13 @@ public class Market extends Entity {
     
     public void setImage(byte[] image) {
         this.image = image;
+        MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        try {
+            String path = storage.saveImageToServer(f, "market_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            this.setImagePath(path);
+        } catch (IOException e) {
+            this.logger.error(e.toString());
+        }
     }
 
 
@@ -526,6 +543,21 @@ public class Market extends Entity {
         }
         TypedQuery<Market> q = em.createQuery(queryBuilder.toString(), Market.class);
         q.setParameter("status", status);
+        return q;
+    }
+
+    private String image_path;
+    public String getImagePath() {
+        return this.image_path;
+    }
+    public void setImagePath(String image_path) {
+        this.image_path = image_path;
+    }
+    
+    public static TypedQuery<Market> findToMigrate(int limit) {
+        EntityManager em = entityManager();
+        TypedQuery<Market> q = em.createQuery("SELECT o FROM Market AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Market.class);
+        q.setMaxResults(limit);
         return q;
     }
     

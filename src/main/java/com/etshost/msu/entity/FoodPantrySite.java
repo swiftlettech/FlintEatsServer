@@ -25,6 +25,9 @@ import com.opencsv.bean.CsvNumber;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.filter.PropertyFilter;
+
 import net.sf.ehcache.CacheManager;
 
 @Analyzer(impl = org.apache.lucene.analysis.standard.StandardAnalyzer.class)
@@ -183,10 +186,13 @@ public class FoodPantrySite extends Entity {
 
     @Cacheable("foodPantrySitesCache")
     public String findAllFoodPantrySitesJson() {
-        return toJsonArray(
-                entityManager()
-                .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
-                .getResultList());
+        return JSON.toJSONString(entityManager()
+            .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
+            .getResultList(), filter);
+        // return toJsonArray(
+        //         entityManager()
+        //         .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
+        //         .getResultList());
     }
 
     public static List<FoodPantrySite> findAllFoodPantrySites(String sortFieldName, String sortOrder) {
@@ -279,6 +285,43 @@ public class FoodPantrySite extends Entity {
         .include("name", "address", "phone", "schedule", "notes", "lat", "lng", "class")
         .exclude("*.class", "*.logger").serialize(collection);
     }
+    static PropertyFilter filter = new PropertyFilter() {
+        public boolean apply(Object source, String name, Object value) {
+            // System.out.println("FoodPantrySite JSON Property: " + name);
+            if("name".equals(name)) {
+                return true;
+            }
+            if("address".equals(name)) {
+                return true;
+            }
+            if("phone".equals(name)) {
+                return true;
+            }
+            if("schedule".equals(name)) {
+                return true;
+            }
+            if("notes".equals(name)) {
+                return true;
+            }
+            if("lat".equals(name)) {
+                return true;
+            }
+            if("lng".equals(name)) {
+                return true;
+            }
+            if("class".equals(name)) {
+                return true;
+            }
+            // if(FoodPantrySite.includeJsonFields.contains(name)) {
+            //     return true;
+            // }
+            return false;
+        }
+    };
+
+    private static List<String> includeJsonFields = java.util.Arrays.asList(
+        "id", "name", "address", "phone", "schedule", "notes", "lat", "lng", "class", "reviewsRating"
+    );
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()

@@ -81,12 +81,12 @@ public class 	UGCController {
 	
 	@RequestMapping(value = "/feed", method = RequestMethod.GET, produces = "application/json")
 	public String feed(
-			@RequestParam(name = "q", required = false) String q,
-			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name= "length", defaultValue = "10") int length,
-			@RequestParam(name = "kind", required = false) List<String> types,
-			@RequestParam(name="tags",required = false) List<String> tag_ids,
-			@RequestParam(name="markets",required = false) List<String> market_ids)
+			@RequestParam(name="q", required = false) String q,
+			@RequestParam(name="page", defaultValue = "0") int page,
+			@RequestParam(name="length", defaultValue = "10") int length,
+			@RequestParam(name="kind", required = false) List<String> types,
+			@RequestParam(name="tags", required = false) List<String> tag_ids,
+			@RequestParam(name="markets", required = false) List<String> market_ids)
 	{
 
 		List<Market> markets = new ArrayList<Market>();
@@ -119,8 +119,8 @@ public class 	UGCController {
 		Set<UGC> ugcResultSet = new HashSet<UGC>();
 
 
-		if (types==null || types.contains("deal")) {
-			if (q!=null) {
+		if (types == null || types.contains("deal")) {
+			if (q != null) {
 				ugcResultSet.addAll(Deal.search(q));
 			} else {
 				ugcResultSet.addAll(Deal.findAllDeals());
@@ -131,24 +131,24 @@ public class 	UGCController {
 			}
 		}
 
-		if (types==null || types.contains("tip")) {
-			if (q!=null) {
+		if (types == null || types.contains("tip")) {
+			if (q != null) {
 				ugcResultSet.addAll(Tip.search(q));
 			} else {
 				ugcResultSet.addAll(Tip.findAllTips());
 			}
 		}
 
-		if (types==null || types.contains("recipe")) {
-			if (q!=null) {
+		if (types == null || types.contains("recipe")) {
+			if (q != null) {
 				ugcResultSet.addAll(Recipe.search(q));
 			} else {
 				ugcResultSet.addAll(Recipe.findAllPublishedRecipes());
 			}
 		}
 
-		if (types==null || types.contains("review")) {
-			if (q!=null) {
+		if (types == null || types.contains("review")) {
+			if (q != null) {
 				ugcResultSet.addAll(Review.search(q));
 			} else {
 				ugcResultSet.addAll(Review.findAllReviews());
@@ -182,6 +182,7 @@ public class 	UGCController {
 
 		this.logger.debug("serializing {} items", length);
 		String ugcJson = UGC.toJsonArrayUGC(subList);
+		this.logger.debug("done Serializing");
 
 		return ugcJson;
 

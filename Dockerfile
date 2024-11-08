@@ -9,8 +9,11 @@ RUN mvn dependency:resolve
 #RUN mvn dependency:resolve-plugins
 ADD . /usr/src/app
 RUN mvn package -Dmaven.test.skip=true -DwarName=eats-1
+RUN mkdir /usr/src/app-jakarta
+RUN java -jar tools/jakartaee-migration-1.0.8-shaded.jar /usr/src/app/target/eats-1.war /usr/src/app-jakarta/eats-1.war
 
-FROM tomcat:9.0-jdk17-corretto-al2 AS tomcat
+#9.0-jdk17-corretto-al2
+FROM pilotfishtechnology/tomcat:10.1-jdk17-graalvm-ce AS tomcat
 ARG TOMCAT_FILE_PATH=/docker 
 
 #Data & Config - Persistent Mount Point
@@ -23,13 +26,14 @@ ENV CATALINA_OPTS="-Xms1024m -Xmx4096m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSi
 
 #Move over the War file from previous build step
 WORKDIR /usr/local/tomcat/webapps/
-COPY --from=maven /usr/src/app/target/eats-1.war /usr/local/tomcat/webapps/eats-1.war
+COPY --from=maven /usr/src/app-jakarta/eats-1.war /usr/local/tomcat/webapps/eats-1.war
 
 #COPY ${TOMCAT_FILE_PATH}/* ${CATALINA_HOME}/conf/
 
 WORKDIR $APP_DATA_FOLDER
 
 ADD ./loadSecrets.sh /usr/local/tomcat/bin
+ENV AWS_JAVA_V1_DISABLE_DEPRECATION_ANNOUNCEMENT=true
 #RUN dos2unix /usr/local/tomcat/bin/loadSecrets.sh
 RUN ["chmod", "+x", "/usr/local/tomcat/bin/loadSecrets.sh"]
 
