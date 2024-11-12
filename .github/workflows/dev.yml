@@ -35,6 +35,17 @@ jobs:
             dantheman2865/flint-eats-server:dev
             dantheman2865/flint-eats-server:${{ github.sha }}
 
+      - name: copy deploy file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: github-actions
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "deploy/dev-docker-compose.yml"
+          target: dev-docker-compose.yml
+          overwrite: true
+
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
         with:

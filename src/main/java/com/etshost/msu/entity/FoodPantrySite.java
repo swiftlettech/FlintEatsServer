@@ -186,13 +186,10 @@ public class FoodPantrySite extends Entity {
 
     @Cacheable("foodPantrySitesCache")
     public String findAllFoodPantrySitesJson() {
-        return JSON.toJSONString(entityManager()
+        return toJsonArray(
+            entityManager()
             .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
-            .getResultList(), filter);
-        // return toJsonArray(
-        //         entityManager()
-        //         .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
-        //         .getResultList());
+            .getResultList());
     }
 
     public static List<FoodPantrySite> findAllFoodPantrySites(String sortFieldName, String sortOrder) {
