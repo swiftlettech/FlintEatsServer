@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: "deploy/dev-docker-compose.yml"
-          target: dev-docker-compose.yml
+          target: ./
           overwrite: true
 
       - name: executing remote ssh commands using password
