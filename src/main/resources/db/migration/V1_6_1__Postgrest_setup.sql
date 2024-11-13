@@ -116,9 +116,9 @@ CREATE POLICY "Anyone can SELECT" ON public.viewing_aud AS PERMISSIVE FOR SELECT
 CREATE ROLE web_anon NOLOGIN;
 CREATE ROLE api_user NOLOGIN;
 
-GRANT usage ON SCHEMA api TO web_anon;
+GRANT usage ON SCHEMA public TO web_anon;
 GRANT web_anon TO authenticator;
-GRANT usage ON SCHEMA api TO api_user;
+GRANT usage ON SCHEMA public TO api_user;
 GRANT api_user TO authenticator;
 
 
