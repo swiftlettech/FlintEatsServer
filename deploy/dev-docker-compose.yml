@@ -46,4 +46,4 @@ secrets:
   DO_SPACE_SECRET:
     file: secrets/S3_SECRET.txt
   PGRST_DB_URI:
-    file: secrets/DEV_PGRST_URI.txt
+    environment: secrets/DEV_PGRST_URI.txt
