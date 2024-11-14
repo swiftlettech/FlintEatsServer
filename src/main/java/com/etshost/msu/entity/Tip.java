@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
@@ -55,6 +56,7 @@ import flexjson.JSONSerializer;
 @Configurable
 @Indexed
 @Transactional
+@Table(name = "tip")
 public class Tip extends UGC {
     
 	@Autowired
