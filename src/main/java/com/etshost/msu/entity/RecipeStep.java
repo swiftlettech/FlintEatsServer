@@ -240,7 +240,7 @@ public class RecipeStep extends Entity {
     
     public static TypedQuery<RecipeStep> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<RecipeStep> q = em.createQuery("SELECT o FROM RecipeStep AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", RecipeStep.class);
+        TypedQuery<RecipeStep> q = em.createQuery("SELECT o FROM RecipeStep AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", RecipeStep.class);
         q.setMaxResults(limit);
         return q;
     }

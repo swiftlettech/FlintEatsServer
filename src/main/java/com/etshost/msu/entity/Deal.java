@@ -569,7 +569,7 @@ public class Deal extends UGC {
     
     public static TypedQuery<Deal> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Deal.class);
+        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Deal.class);
         q.setMaxResults(limit);
         return q;
     }

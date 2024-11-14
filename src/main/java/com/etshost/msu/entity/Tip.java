@@ -453,7 +453,7 @@ public class Tip extends UGC {
     
     public static TypedQuery<Tip> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Tip> q = em.createQuery("SELECT o FROM Tip AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Tip.class);
+        TypedQuery<Tip> q = em.createQuery("SELECT o FROM Tip AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Tip.class);
         q.setMaxResults(limit);
         return q;
     }

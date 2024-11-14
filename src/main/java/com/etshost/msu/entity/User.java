@@ -1260,17 +1260,17 @@ public class User extends Entity {
         return q;
     }
 
-    private String image_path;
+    private String imagePath;
     public String getImagePath() {
-        return this.image_path;
+        return this.imagePath;
     }
     public void setImagePath(String image_path) {
-        this.image_path = image_path;
+        this.imagePath = image_path;
     }
     
     public static TypedQuery<User> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.avatar IS NOT NULL AND o.image_path IS NULL", User.class);
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.avatar IS NOT NULL AND o.imagePath IS NULL", User.class);
         q.setMaxResults(limit);
         return q;
     }

@@ -367,7 +367,7 @@ public class Recipe extends UGC {
     
     public static TypedQuery<Recipe> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Recipe> q = em.createQuery("SELECT o FROM Recipe AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Recipe.class);
+        TypedQuery<Recipe> q = em.createQuery("SELECT o FROM Recipe AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Recipe.class);
         q.setMaxResults(limit);
         return q;
     }
