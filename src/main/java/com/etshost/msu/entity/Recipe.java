@@ -357,12 +357,12 @@ public class Recipe extends UGC {
         .use("values", Recipe.class).deserialize(json);
     }
 
-    private String image_path;
+    private String imagePath;
     public String getImagePath() {
-        return this.image_path;
+        return this.imagePath;
     }
     public void setImagePath(String image_path) {
-        this.image_path = image_path;
+        this.imagePath = image_path;
     }
     
     public static TypedQuery<Recipe> findToMigrate(int limit) {

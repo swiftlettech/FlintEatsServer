@@ -77,13 +77,15 @@ public class Tip extends UGC {
 	public static Tip factory(
 	        @JsonProperty("text") String text,
             @JsonProperty("tags") Set<Tag> tags,
-            @JsonProperty("image") String image64) {
+            @JsonProperty("image") String image64,
+            @JsonProperty("image_path") String image_path) {
 		Logger logger = LoggerFactory.getLogger(Tip.class);
 		logger.debug("factory. tags: {}", tags);
 		Tip tip = new Tip();
         tip.setImageBase64(image64);
 		tip.setText(text);
 		tip.setTags(tags);
+        tip.setImagePath(image_path);
 		return tip;
 	}
 	
@@ -441,12 +443,12 @@ public class Tip extends UGC {
         return q;
     }
 
-    private String image_path;
+    private String imagePath;
     public String getImagePath() {
-        return this.image_path;
+        return this.imagePath;
     }
     public void setImagePath(String image_path) {
-        this.image_path = image_path;
+        this.imagePath = image_path;
     }
     
     public static TypedQuery<Tip> findToMigrate(int limit) {
