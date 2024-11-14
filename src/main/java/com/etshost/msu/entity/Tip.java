@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -443,17 +444,18 @@ public class Tip extends UGC {
         return q;
     }
 
-    private String imagePath;
+    @Column(name="image_path")
+    private String image_path;
     public String getImagePath() {
-        return this.imagePath;
+        return this.image_path;
     }
     public void setImagePath(String image_path) {
-        this.imagePath = image_path;
+        this.image_path = image_path;
     }
     
     public static TypedQuery<Tip> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Tip> q = em.createQuery("SELECT o FROM Tip AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Tip.class);
+        TypedQuery<Tip> q = em.createQuery("SELECT o FROM Tip AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Tip.class);
         q.setMaxResults(limit);
         return q;
     }

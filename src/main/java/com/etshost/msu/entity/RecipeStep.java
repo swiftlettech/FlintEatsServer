@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -230,17 +231,18 @@ public class RecipeStep extends Entity {
         .use("values", Recipe.class).deserialize(json);
     }
 
-    private String imagePath;
+    @Column(name="image_path")
+    private String image_path;
     public String getImagePath() {
-        return this.imagePath;
+        return this.image_path;
     }
     public void setImagePath(String image_path) {
-        this.imagePath = image_path;
+        this.image_path = image_path;
     }
     
     public static TypedQuery<RecipeStep> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<RecipeStep> q = em.createQuery("SELECT o FROM RecipeStep AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", RecipeStep.class);
+        TypedQuery<RecipeStep> q = em.createQuery("SELECT o FROM RecipeStep AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", RecipeStep.class);
         q.setMaxResults(limit);
         return q;
     }

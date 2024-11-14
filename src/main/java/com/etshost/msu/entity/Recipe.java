@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
@@ -357,17 +358,18 @@ public class Recipe extends UGC {
         .use("values", Recipe.class).deserialize(json);
     }
 
-    private String imagePath;
+    @Column(name="image_path")
+    private String image_path;
     public String getImagePath() {
-        return this.imagePath;
+        return this.image_path;
     }
     public void setImagePath(String image_path) {
-        this.imagePath = image_path;
+        this.image_path = image_path;
     }
     
     public static TypedQuery<Recipe> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Recipe> q = em.createQuery("SELECT o FROM Recipe AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Recipe.class);
+        TypedQuery<Recipe> q = em.createQuery("SELECT o FROM Recipe AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Recipe.class);
         q.setMaxResults(limit);
         return q;
     }

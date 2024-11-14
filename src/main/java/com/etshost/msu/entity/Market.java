@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
@@ -546,17 +547,18 @@ public class Market extends Entity {
         return q;
     }
 
-    private String imagePath;
+    @Column(name="image_path")
+    private String image_path;
     public String getImagePath() {
-        return this.imagePath;
+        return this.image_path;
     }
     public void setImagePath(String image_path) {
-        this.imagePath = image_path;
+        this.image_path = image_path;
     }
     
     public static TypedQuery<Market> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Market> q = em.createQuery("SELECT o FROM Market AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Market.class);
+        TypedQuery<Market> q = em.createQuery("SELECT o FROM Market AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Market.class);
         q.setMaxResults(limit);
         return q;
     }

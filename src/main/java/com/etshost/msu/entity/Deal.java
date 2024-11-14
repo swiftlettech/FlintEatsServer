@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
@@ -559,17 +560,18 @@ public class Deal extends UGC {
         return q;
     }
 
-    private String imagePath;
+    @Column(name="image_path")
+    private String image_path;
     public String getImagePath() {
-        return this.imagePath;
+        return this.image_path;
     }
     public void setImagePath(String image_path) {
-        this.imagePath = image_path;
+        this.image_path = image_path;
     }
     
     public static TypedQuery<Deal> findToMigrate(int limit) {
         EntityManager em = entityManager();
-        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE o.image IS NOT NULL AND o.imagePath IS NULL", Deal.class);
+        TypedQuery<Deal> q = em.createQuery("SELECT o FROM Deal AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Deal.class);
         q.setMaxResults(limit);
         return q;
     }
