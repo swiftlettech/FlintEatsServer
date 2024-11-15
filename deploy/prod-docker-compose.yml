@@ -23,7 +23,7 @@ services:
     container_name: postgrest
     image: postgrest/postgrest:v12.2.3
     ports:
-      - "3001:3000"
+      - "3000:3000"
     # Available environment variables documented here:
     # https://postgrest.org/en/latest/configuration.html#environment-variables
     environment:
