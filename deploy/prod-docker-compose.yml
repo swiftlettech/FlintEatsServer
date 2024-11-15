@@ -11,7 +11,7 @@ services:
       - DO_SPACE_ENDPOINT=https://nyc3.digitaloceanspaces.com
       - DO_SPACE_REGION=nyc3
       - DO_SPACE_BUCKET=flinteats
-      - DO_SPACE_PREFIX=dev/
+      - DO_SPACE_PREFIX=prod/
     restart: always
     secrets:
       - DATABASE_PASSWORD
