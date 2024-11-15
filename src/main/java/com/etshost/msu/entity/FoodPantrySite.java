@@ -16,10 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,6 +25,9 @@ import com.opencsv.bean.CsvNumber;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.filter.PropertyFilter;
+
 import net.sf.ehcache.CacheManager;
 
 @Analyzer(impl = org.apache.lucene.analysis.standard.StandardAnalyzer.class)
@@ -36,11 +35,7 @@ import net.sf.ehcache.CacheManager;
 @javax.persistence.Entity
 @Configurable
 @Indexed
-@RooJavaBean
-@RooJson
-@RooToString
 @Transactional
-@RooJpaActiveRecord
 public class FoodPantrySite extends Entity {
 
 	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)
@@ -192,9 +187,9 @@ public class FoodPantrySite extends Entity {
     @Cacheable("foodPantrySitesCache")
     public String findAllFoodPantrySitesJson() {
         return toJsonArray(
-                entityManager()
-                .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
-                .getResultList());
+            entityManager()
+            .createQuery("SELECT o FROM FoodPantrySite o", FoodPantrySite.class)
+            .getResultList());
     }
 
     public static List<FoodPantrySite> findAllFoodPantrySites(String sortFieldName, String sortOrder) {
@@ -287,6 +282,43 @@ public class FoodPantrySite extends Entity {
         .include("name", "address", "phone", "schedule", "notes", "lat", "lng", "class")
         .exclude("*.class", "*.logger").serialize(collection);
     }
+    static PropertyFilter filter = new PropertyFilter() {
+        public boolean apply(Object source, String name, Object value) {
+            // System.out.println("FoodPantrySite JSON Property: " + name);
+            if("name".equals(name)) {
+                return true;
+            }
+            if("address".equals(name)) {
+                return true;
+            }
+            if("phone".equals(name)) {
+                return true;
+            }
+            if("schedule".equals(name)) {
+                return true;
+            }
+            if("notes".equals(name)) {
+                return true;
+            }
+            if("lat".equals(name)) {
+                return true;
+            }
+            if("lng".equals(name)) {
+                return true;
+            }
+            if("class".equals(name)) {
+                return true;
+            }
+            // if(FoodPantrySite.includeJsonFields.contains(name)) {
+            //     return true;
+            // }
+            return false;
+        }
+    };
+
+    private static List<String> includeJsonFields = java.util.Arrays.asList(
+        "id", "name", "address", "phone", "schedule", "notes", "lat", "lng", "class", "reviewsRating"
+    );
     
     public static String toJsonArray(Collection<? extends Entity> collection, String[] fields) {
         return new JSONSerializer()

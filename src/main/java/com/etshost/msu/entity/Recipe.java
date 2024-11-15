@@ -11,13 +11,13 @@ import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
+import com.etshost.msu.service.ImageStorageService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -28,6 +28,8 @@ import org.apache.lucene.search.TermQuery;
 
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.HashSet;
@@ -35,8 +37,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
 import flexjson.JSON;
@@ -49,12 +54,12 @@ import flexjson.JSON;
 @Audited
 @javax.persistence.Entity
 @Configurable
-@RooJavaBean
-@RooJpaActiveRecord
-@RooJson
-@RooToString
 @Transactional
 public class Recipe extends UGC {
+    
+	@Autowired
+    @Transient
+	ImageStorageService storage;
     
     @Size(min = 3, max = 255)
 	@Field(index=Index.YES, analyze=Analyze.YES, store=Store.NO)	
@@ -202,6 +207,13 @@ public class Recipe extends UGC {
     
     public void setImage(byte[] image) {
         this.image = image;
+        MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        try {
+            String path = storage.saveImageToServer(f, "recipe_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            this.setImagePath(path);
+        } catch (IOException e) {
+            this.logger.error(e.toString());
+        }
     }
     
     @JSON(name = "image64")
@@ -344,6 +356,22 @@ public class Recipe extends UGC {
     public static Collection<Recipe> fromJsonArrayToRecipes(String json) {
         return new JSONDeserializer<List<Recipe>>()
         .use("values", Recipe.class).deserialize(json);
+    }
+
+    @Column(name="image_path")
+    private String image_path;
+    public String getImagePath() {
+        return this.image_path;
+    }
+    public void setImagePath(String image_path) {
+        this.image_path = image_path;
+    }
+    
+    public static TypedQuery<Recipe> findToMigrate(int limit) {
+        EntityManager em = entityManager();
+        TypedQuery<Recipe> q = em.createQuery("SELECT o FROM Recipe AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Recipe.class);
+        q.setMaxResults(limit);
+        return q;
     }
     
 }

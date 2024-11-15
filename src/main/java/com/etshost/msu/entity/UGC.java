@@ -1,5 +1,6 @@
 package com.etshost.msu.entity;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -73,6 +74,24 @@ public abstract class UGC extends Entity {
         		.include("class", "market.id", "market.name","tags.name","tags.id")
 		        .exclude("*.logger", "market.*", "usr.email", "usr.phone","tags.*")
 		        .serialize(collection);
+    }
+    
+    public static String toJsonArrayUGCFeed(Collection<? extends UGC> collection, boolean excludeImages) {
+        // return new JSONSerializer()
+        //     .include("class", "market.id", "market.name","tags.name","tags.id")
+        //     .exclude("*.logger", "market.*", "usr.email", "usr.phone","tags.*", "steps", "ingredients", "properties")
+        //     .serialize(collection);
+        if(excludeImages) {
+            return new JSONSerializer()
+                .include("class", "market.id", "market.name","tags.name","tags.id")
+                .exclude("*.logger", "market.*", "usr.email", "usr.phone","tags.*", "steps", "ingredients", "properties", "image64", "avatar64")
+                .serialize(collection);
+        } else {
+            return new JSONSerializer()
+                .include("class", "market.id", "market.name","tags.name","tags.id", "image64", "avatar64")
+                .exclude("*.logger", "market.*", "usr.email", "usr.phone","tags.*", "steps", "ingredients", "properties")
+                .serialize(collection);
+        }
     }
     
     public static Long countFeedUGCs() {

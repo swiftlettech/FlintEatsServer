@@ -7,9 +7,12 @@ import java.io.InputStream;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 import flexjson.JSON;
@@ -30,13 +33,13 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.imgscalr.Scalr;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
+import com.etshost.msu.service.ImageStorageService;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.JsonArray;
@@ -52,12 +55,13 @@ import flexjson.JSONSerializer;
 @javax.persistence.Entity
 @Configurable
 @Indexed
-@RooJavaBean
-@RooJson
-@RooToString
 @Transactional
-@RooJpaActiveRecord(finders = { "findTipsByTextLike" })
+@Table(name = "tip")
 public class Tip extends UGC {
+    
+	@Autowired
+    @Transient
+	ImageStorageService storage;
 
 	public enum TipType {
 		BUYING, FOOD, STORAGE
@@ -76,13 +80,15 @@ public class Tip extends UGC {
 	public static Tip factory(
 	        @JsonProperty("text") String text,
             @JsonProperty("tags") Set<Tag> tags,
-            @JsonProperty("image") String image64) {
+            @JsonProperty("image") String image64,
+            @JsonProperty("image_path") String image_path) {
 		Logger logger = LoggerFactory.getLogger(Tip.class);
 		logger.debug("factory. tags: {}", tags);
 		Tip tip = new Tip();
         tip.setImageBase64(image64);
 		tip.setText(text);
 		tip.setTags(tags);
+        tip.setImagePath(image_path);
 		return tip;
 	}
 	
@@ -313,6 +319,13 @@ public class Tip extends UGC {
 
     public void setImage(byte[] image) {
         this.image = image;
+        MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        try {
+            String path = storage.saveImageToServer(f, "tip_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            this.setImagePath(path);
+        } catch (IOException e) {
+            this.logger.error(e.toString());
+        }
     }
 
     // ToString.aj
@@ -430,6 +443,22 @@ public class Tip extends UGC {
         }
         TypedQuery<Tip> q = em.createQuery(queryBuilder.toString(), Tip.class);
         q.setParameter("text", text);
+        return q;
+    }
+
+    @Column(name="image_path")
+    private String image_path;
+    public String getImagePath() {
+        return this.image_path;
+    }
+    public void setImagePath(String image_path) {
+        this.image_path = image_path;
+    }
+    
+    public static TypedQuery<Tip> findToMigrate(int limit) {
+        EntityManager em = entityManager();
+        TypedQuery<Tip> q = em.createQuery("SELECT o FROM Tip AS o WHERE o.image IS NOT NULL AND o.image_path IS NULL", Tip.class);
+        q.setMaxResults(limit);
         return q;
     }
 }

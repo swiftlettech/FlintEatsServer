@@ -27,10 +27,6 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -50,11 +46,7 @@ import flexjson.JSONSerializer;
 @Audited
 @javax.persistence.Entity
 @Configurable
-@RooJavaBean
-@RooJson
-@RooToString
 @Transactional
-@RooJpaActiveRecord(finders = { "findReviewsByTextLike" })
 public class Review extends UGC {
 
     @ManyToOne

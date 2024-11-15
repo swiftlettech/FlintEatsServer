@@ -1,4 +1,5 @@
 package com.etshost.msu.auth;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,18 +24,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
 import com.etshost.msu.bean.UserDetailsServiceImpl;
 import com.etshost.msu.entity.Deal;
 import com.etshost.msu.entity.Entity;
 import com.etshost.msu.entity.Market;
 import com.etshost.msu.entity.Policy;
 import com.etshost.msu.entity.Recipe;
+import com.etshost.msu.entity.RecipeStep;
 import com.etshost.msu.entity.Review;
 import com.etshost.msu.entity.Role;
 import com.etshost.msu.entity.Tag;
 import com.etshost.msu.entity.Tip;
 import com.etshost.msu.entity.User;
+import com.etshost.msu.service.ImageStorageService;
 
 /**
  * Controller to handle logins based on whether successful.
@@ -239,6 +245,104 @@ public class AuthController {
 			.getSingleResult()
 			.toString();
 		return String.format("{ \"javaVersion\": \"%s\", \"schemaVersion\": \"%s\" }", javaVersion, schemaVersion);
+	}
+	@Autowired
+	ImageStorageService storage;
+	
+	@RequestMapping(value = "/migrate", method = RequestMethod.GET, produces = "application/json")
+	public String migrate() {
+		int limit = 200;
+		// Tips
+		List<Tip> tips = Tip.findToMigrate(limit).getResultList();
+		for (Tip item : tips) {
+			logger.debug("Migrating Tip " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getImage(), "photo.jpg");
+			try {
+				String path = storage.saveImageToServer(f, "tip_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
+			} catch (IOException e) {
+				return e.toString();
+			}
+		}
+		limit = limit - tips.size();
+		
+		// Deals
+		List<Deal> deals = Deal.findToMigrate(limit).getResultList();
+		for (Deal item : deals) {
+			logger.debug("Migrating Deal " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getImage(), "photo.jpg");
+			try {
+				String path = storage.saveImageToServer(f, "deal_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
+			} catch (IOException e) {
+				return e.toString();
+			}
+		}
+		limit = limit - deals.size();
+		
+		// Market
+		List<Market> markets = Market.findToMigrate(limit).getResultList();
+		for (Market item : markets) {
+			logger.debug("Migrating Market " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getImage(), "photo.jpg");
+			try {
+				String path = storage.saveImageToServer(f, "market_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
+			} catch (IOException e) {
+				return e.toString();
+			}
+		}
+		limit = limit - markets.size();
+		
+		// Recipes
+		List<Recipe> recipes = Recipe.findToMigrate(limit).getResultList();
+		for (Recipe item : recipes) {
+			logger.debug("Migrating Recipe " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getImage(), "photo.jpg");
+			try {
+				String path = storage.saveImageToServer(f, "recipe_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
+			} catch (IOException e) {
+				return e.toString();
+			}
+		}
+		limit = limit - recipes.size();
+		
+		// RecipeSteps
+		List<RecipeStep> recipeSteps = RecipeStep.findToMigrate(limit).getResultList();
+		for (RecipeStep item : recipeSteps) {
+			logger.debug("Migrating RecipeStep " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getImage(), "photo.jpg");
+			try {
+				String path = storage.saveImageToServer(f, "recipeStep_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
+			} catch (IOException e) {
+				return e.toString();
+			}
+		}
+		limit = limit - recipeSteps.size();
+		
+		// Users
+		List<User> users = User.findToMigrate(limit).getResultList();
+		for (User item : users) {
+			logger.debug("Migrating User " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getAvatar(), "photo.jpg");
+			try {
+				String path = storage.saveImageToServer(f, "user_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
+			} catch (IOException e) {
+				return e.toString();
+			}
+		}
+		limit = limit - users.size();
+
+		return Integer.toString(limit);
 	}
 	
 	/**

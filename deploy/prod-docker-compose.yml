@@ -1,10 +1,9 @@
 services:
-  fea:
-    image: flint-eats-server
-    build: ./
+  fea-prod:
+    image: "dantheman2865/flint-eats-server:${IMAGE_VER}"
     environment:
-      - DATABASE_URL=jdbc:postgresql://host.docker.internal:5432/eats
-      - DATABASE_USER=eats
+      - DATABASE_URL=jdbc:postgresql://private-flinteats-do-user-3442489-0.b.db.ondigitalocean.com:25060/flinteats-prod
+      - DATABASE_USER=flinteats-prod
       - MAIL_HOST=smtp.gmail.com
       - MAIL_PORT=587
       - MAIL_USER=dkurin@swiftlet.technology
@@ -12,7 +11,8 @@ services:
       - DO_SPACE_ENDPOINT=https://nyc3.digitaloceanspaces.com
       - DO_SPACE_REGION=nyc3
       - DO_SPACE_BUCKET=flinteats
-      - DO_SPACE_PREFIX=local/
+      - DO_SPACE_PREFIX=prod/
+    restart: always
     secrets:
       - DATABASE_PASSWORD
       - MAIL_PASS
@@ -23,25 +23,26 @@ services:
     container_name: postgrest
     image: postgrest/postgrest:v12.2.3
     ports:
-      - "3000:3000"
+      - "3001:3000"
     # Available environment variables documented here:
     # https://postgrest.org/en/latest/configuration.html#environment-variables
     environment:
-      # The standard connection URI format, documented at
-      # https://www.postgresql.org/docs/current/static/libpq-connect.html#LIBPQ-CONNSTRING
-      - PGRST_DB_URI=postgres://eats:o1z1k6hdq2enry6e@host.docker.internal:5432/eats
       # The name of which database schema to expose to REST clients
       - PGRST_DB_SCHEMA=public
       # The database role to use when no client authentication is provided
       - PGRST_DB_ANON_ROLE=web_anon
       # Overrides the base URL used within the OpenAPI self-documentation hosted at the API root path
-      - PGRST_OPENAPI_SERVER_PROXY_URI=http://localhost:3000
+      - PGRST_OPENAPI_SERVER_PROXY_URI=https://app.flinteats.org/pg
+    secrets:
+      - PGRST_DB_URI
     restart: always
 
 secrets:
   DATABASE_PASSWORD:
-    file: ./.secrets/DATABASE_PASSWORD.txt
+    file: secrets/PROD_DATABASE_PASSWORD.txt
   MAIL_PASS:
-    file: ./.secrets/MAIL_PASS.txt
+    file: secrets/MAIL_PASS.txt
   DO_SPACE_SECRET:
-    file: ./.secrets/DO_SPACE_SECRET.txt
+    file: secrets/S3_SECRET.txt
+  PGRST_DB_URI:
+    environment: secrets/PROD_PGRST_URI.txt

@@ -101,9 +101,12 @@
         <property name="persistenceUnitName" value="persistenceUnit"/>
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    <bean id="entityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 
-    <cache:annotation-driven cache-manager="cacheManager"/>
+    <cache:annotation-driven cache-manager="cacheManager" />
     <bean id="market" class="com.etshost.msu.entity.Market"/>
     <bean id="foodpantrysite" class="com.etshost.msu.entity.FoodPantrySite"/>
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache"/>

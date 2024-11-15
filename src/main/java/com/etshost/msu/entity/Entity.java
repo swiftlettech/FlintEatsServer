@@ -31,12 +31,9 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.RevisionTimestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
-import org.springframework.roo.addon.json.RooJson;
-import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -54,16 +51,13 @@ import flexjson.JSONSerializer;
 @Configurable
 @javax.persistence.Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@RooJavaBean
-@RooJpaActiveRecord
-@RooJson
-@RooToString
 public abstract class Entity {
 
 	@Transient
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@PersistenceContext
+	// @Autowired
 	transient EntityManager entityManager;
 
 	@Id

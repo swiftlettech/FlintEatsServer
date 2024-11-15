@@ -20,10 +20,12 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.EntityManager;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Pattern;
 
@@ -41,6 +43,7 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.EnvironmentPBEConfig;
 import org.jasypt.hibernate5.encryptor.HibernatePBEEncryptorRegistry;
 import org.jasypt.hibernate5.type.EncryptedStringType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.mail.MailException;
@@ -53,8 +56,11 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.etshost.msu.auth.OAuthProvider;
+import com.etshost.msu.bean.BASE64DecodedMultipartFile;
+import com.etshost.msu.service.ImageStorageService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -81,11 +87,11 @@ import flexjson.JSONSerializer;
 	}
 )
 public class User extends Entity {
-
-//    @ManyToOne
-//    private Avatar avatar;
+    
+	@Autowired
+    @Transient
+	ImageStorageService storage;
 	
-	// going to try a simpler approach
 	@JSON(include = false)
 	private byte[] avatar;
 	
@@ -317,6 +323,13 @@ public class User extends Entity {
     // JavaBean.aj
     public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
+        MultipartFile f = new BASE64DecodedMultipartFile(avatar, "photo.jpg");
+        try {
+            String path = storage.saveImageToServer(f, "user_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            this.setImagePath(path);
+        } catch (IOException e) {
+            this.logger.error(e.toString());
+        }
     }
     
     public byte[] getBackground() {
@@ -1245,6 +1258,22 @@ public class User extends Entity {
         }
         TypedQuery<User> q = em.createQuery(queryBuilder.toString(), User.class);
         q.setParameter("username", username);
+        return q;
+    }
+
+    @Column(name="image_path")
+    private String image_path;
+    public String getImagePath() {
+        return this.image_path;
+    }
+    public void setImagePath(String image_path) {
+        this.image_path = image_path;
+    }
+    
+    public static TypedQuery<User> findToMigrate(int limit) {
+        EntityManager em = entityManager();
+        TypedQuery<User> q = em.createQuery("SELECT o FROM User AS o WHERE o.avatar IS NOT NULL AND o.image_path IS NULL", User.class);
+        q.setMaxResults(limit);
         return q;
     }
 
