@@ -19,13 +19,13 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 	@Autowired
 	DoConfig s3Config;
 	
-	@Value("${do.space.endpoint}")
+	@Value("${DO_SPACE_ENDPOINT}")
 	private String doEndpoint;
 	
-	@Value("${do.space.bucket}")
+	@Value("${DO_SPACE_BUCKET}")
 	private String doSpaceBucket;
 
-	@Value("${do.space.prefix}")
+	@Value("${DO_SPACE_PREFIX}")
 	String FOLDER = "files/";
 
 	public String saveImageToServer(MultipartFile multipartFile, String key) throws IOException {
