@@ -19,7 +19,7 @@ services:
       - DO_SPACE_SECRET
     ports:
       - 8080:8080
-  postgrest:
+  postgrest-prod:
     container_name: postgrest
     image: postgrest/postgrest:v12.2.3
     ports:
