@@ -13,16 +13,16 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 @Configuration
 public class DoConfig {
 
-	@Value("${do.space.key}")
+	@Value("${DO_SPACE_KEY}")
 	private String doSpaceKey;
 
-	@Value("${do.space.secret}")
+	@Value("${DO_SPACE_SECRET}")
 	private String doSpaceSecret;
 
-	@Value("${do.space.endpoint}")
+	@Value("${DO_SPACE_ENDPOINT}")
 	private String doSpaceEndpoint;
 
-	@Value("${do.space.region}")
+	@Value("${DO_SPACE_REGION}")
 	private String doSpaceRegion;
 
 	@Bean
