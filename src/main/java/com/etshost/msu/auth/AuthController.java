@@ -254,13 +254,13 @@ public class AuthController {
 		int limit = 200;
 		// Tips
 		List<Tip> tips = Tip.findToMigrate(limit).getResultList();
-		for (Tip tip : tips) {
-			logger.debug("Migrating Tip " + tip.getId());
-			MultipartFile f = new BASE64DecodedMultipartFile(tip.getImage(), "photo.jpg");
+		for (Tip item : tips) {
+			logger.debug("Migrating Tip " + item.getId());
+			MultipartFile f = new BASE64DecodedMultipartFile(item.getImage(), "photo.jpg");
 			try {
-				String path = storage.saveImageToServer(f, "tip_" + Long.toString(tip.getId()) + ".png");
-				tip.setImagePath(path);
-				tip.persist();
+				String path = storage.saveImageToServer(f, "tip_" + Long.toString(item.getId()) + ".png");
+				item.setImagePath(path);
+				item.merge();
 			} catch (IOException e) {
 				return e.toString();
 			}
@@ -275,7 +275,7 @@ public class AuthController {
 			try {
 				String path = storage.saveImageToServer(f, "deal_" + Long.toString(item.getId()) + ".png");
 				item.setImagePath(path);
-				item.persist();
+				item.merge();
 			} catch (IOException e) {
 				return e.toString();
 			}
@@ -290,7 +290,7 @@ public class AuthController {
 			try {
 				String path = storage.saveImageToServer(f, "market_" + Long.toString(item.getId()) + ".png");
 				item.setImagePath(path);
-				item.persist();
+				item.merge();
 			} catch (IOException e) {
 				return e.toString();
 			}
@@ -305,7 +305,7 @@ public class AuthController {
 			try {
 				String path = storage.saveImageToServer(f, "recipe_" + Long.toString(item.getId()) + ".png");
 				item.setImagePath(path);
-				item.persist();
+				item.merge();
 			} catch (IOException e) {
 				return e.toString();
 			}
@@ -320,7 +320,7 @@ public class AuthController {
 			try {
 				String path = storage.saveImageToServer(f, "recipeStep_" + Long.toString(item.getId()) + ".png");
 				item.setImagePath(path);
-				item.persist();
+				item.merge();
 			} catch (IOException e) {
 				return e.toString();
 			}
@@ -335,7 +335,7 @@ public class AuthController {
 			try {
 				String path = storage.saveImageToServer(f, "user_" + Long.toString(item.getId()) + ".png");
 				item.setImagePath(path);
-				item.persist();
+				item.merge();
 			} catch (IOException e) {
 				return e.toString();
 			}
