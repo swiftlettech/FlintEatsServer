@@ -208,8 +208,15 @@ public class Recipe extends UGC {
     public void setImage(byte[] image) {
         this.image = image;
         MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        String inputPath;
         try {
-            String path = storage.saveImageToServer(f, "recipe_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            inputPath = "recipe_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png";
+        } catch (Exception e) {
+            inputPath = "recipe_" + System.currentTimeMillis() + ".png";
+        }
+        
+        try {
+            String path = storage.saveImageToServer(f, inputPath);
             this.setImagePath(path);
         } catch (IOException e) {
             this.logger.error(e.toString());
