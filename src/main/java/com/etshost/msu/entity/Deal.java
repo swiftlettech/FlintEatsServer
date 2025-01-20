@@ -379,8 +379,15 @@ public class Deal extends UGC {
     public void setImage(byte[] image) {
         this.image = image;
         MultipartFile f = new BASE64DecodedMultipartFile(image, "photo.jpg");
+        String inputPath;
         try {
-            String path = storage.saveImageToServer(f, "deal_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png");
+            inputPath = "deal_" + Long.toString(this.getId()) + "_" + System.currentTimeMillis() + ".png";
+        } catch (Exception e) {
+            inputPath = "deal_" + System.currentTimeMillis() + ".png";
+        }
+        
+        try {
+            String path = storage.saveImageToServer(f, inputPath);
             this.setImagePath(path);
         } catch (IOException e) {
             this.logger.error(e.toString());

@@ -19,7 +19,7 @@ services:
       - DO_SPACE_SECRET
     ports:
       - 8081:8080
-  postgrest:
+  postgrest-dev:
     container_name: postgrest
     image: postgrest/postgrest:v12.2.3
     ports:
@@ -33,7 +33,6 @@ services:
       - PGRST_DB_ANON_ROLE=web_anon
       # Overrides the base URL used within the OpenAPI self-documentation hosted at the API root path
       - PGRST_OPENAPI_SERVER_PROXY_URI=https://fea.swiftlet.dev/pg
-      - PGRST_LOG_LEVEL=debug
     secrets:
       - PGRST_DB_URI
     restart: always
